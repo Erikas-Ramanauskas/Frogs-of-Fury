@@ -26,7 +26,9 @@ const PLATFORM_HEIGHT = 32;
 const PLATFORM_GAP = 200; // Vertical gap between platforms
 const WALL_WIDTH = 64; // Width of the side walls
 const UNIT_TO_METERS = 0.1; // Conversion factor: 1 game unit = 0.1 meters
-const MAX_SECTIONS = 10; // Number of sections to maintain
+const CAMERA_SPEED = 120; // Camera upward speed
+const CAMERA_THRESHOLD = height() / 3; // Height threshold to start moving camera
+const DELETE_THRESHOLD = 600; // Distance below the camera to delete objects
 
 let lastY = height(); // Track the last Y position where platforms were generated
 let sections = []; // Array to keep track of current sections
