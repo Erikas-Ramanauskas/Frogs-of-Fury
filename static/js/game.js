@@ -13,6 +13,10 @@ function startGame(players) {
     font: "monospace",
   });
 
+  const SPEED = 120;
+  const JUMP_FORCE = 240;
+  setGravity(640);
+
   // Loading a multi-frame sprite
   loadSprite("dino", "../static/sprites/dino.png", {
     sliceX: 9,
@@ -22,19 +26,40 @@ function startGame(players) {
       jump: 8,
     },
   });
+  loadSprite("bullet", "../static/sprites/bullet2.png");
 
-  const SPEED = 120;
-  const JUMP_FORCE = 240;
+  // Function to spawn a bullet in a given direction
+  function spawnBullet(player, dir) {
+    const BULLET_SPEED = 300;
+    add([
+      sprite("bullet"), // Replace with your bullet sprite
+      pos(player.pos), // Spawn the bullet at the player's position
+      move(dir, BULLET_SPEED), // Move the bullet in the specified direction
+      area(),
+      "bullet",
+    ]);
+  }
 
-  setGravity(640);
+  // Define the direction vectors for 8-way shooting
+  const DIR_VECTORS = {
+    left: vec2(-1, 0),
+    right: vec2(1, 0),
+    up: vec2(0, -1),
+    down: vec2(0, 1),
+    left_up: vec2(-1, -1).unit(),
+    left_down: vec2(-1, 1).unit(),
+    right_up: vec2(1, -1).unit(),
+    right_down: vec2(1, 1).unit(),
+  };
 
   // Add our player1 character
   const player1 = add([sprite("dino"), pos(120, 80), anchor("center"), area(), body()]);
-
   player1.play("idle");
+  let player1LastDir = DIR_VECTORS.up;
+  let player2LastDir = DIR_VECTORS.up;
 
   // Add a platform
-  add([rect(width(), 24), area(), outline(1), pos(0, height() - 24), body({ isStatic: true })]);
+  add([rect(width(), 24), area(), outline(1), pos(0, height() - 10), body({ isStatic: true })]);
 
   // Switch to "idle" or "run" animation when player1 hits ground
   player1.onGround(() => {
@@ -76,13 +101,49 @@ function startGame(players) {
     });
   });
 
-  const getInfo1 = () => `Anim: ${player1.curAnim()} Frame: ${player1.frame}`.trim();
+  // Track the last direction Player 1 was facing
+  function updatePlayer1LastDir() {
+    if (isKeyDown(player1Controls.left) && isKeyDown(player1Controls.up)) {
+      player1LastDir = DIR_VECTORS.left_up;
+    } else if (isKeyDown(player1Controls.left) && isKeyDown(player1Controls.down)) {
+      player1LastDir = DIR_VECTORS.left_down;
+    } else if (isKeyDown(player1Controls.right) && isKeyDown(player1Controls.up)) {
+      player1LastDir = DIR_VECTORS.right_up;
+    } else if (isKeyDown(player1Controls.right) && isKeyDown(player1Controls.down)) {
+      player1LastDir = DIR_VECTORS.right_down;
+    } else if (isKeyDown(player1Controls.left)) {
+      player1LastDir = DIR_VECTORS.left;
+    } else if (isKeyDown(player1Controls.right)) {
+      player1LastDir = DIR_VECTORS.right;
+    } else if (isKeyDown(player1Controls.up)) {
+      player1LastDir = DIR_VECTORS.up;
+    } else if (isKeyDown(player1Controls.down)) {
+      player1LastDir = DIR_VECTORS.down;
+    }
+  }
 
-  // Add some text to show the current animation
-  const label = add([text(getInfo1(), { size: 12 }), color(0, 0, 0), pos(4)]);
+  function updatePlayer2LastDir() {
+    if (isKeyDown(player2Controls.left) && isKeyDown(player2Controls.up)) {
+      player2LastDir = DIR_VECTORS.left_up;
+    } else if (isKeyDown(player2Controls.left) && isKeyDown(player2Controls.down)) {
+      player2LastDir = DIR_VECTORS.left_down;
+    } else if (isKeyDown(player2Controls.right) && isKeyDown(player2Controls.up)) {
+      player2LastDir = DIR_VECTORS.right_up;
+    } else if (isKeyDown(player2Controls.right) && isKeyDown(player2Controls.down)) {
+      player2LastDir = DIR_VECTORS.right_down;
+    } else if (isKeyDown(player2Controls.left)) {
+      player2LastDir = DIR_VECTORS.left;
+    } else if (isKeyDown(player2Controls.right)) {
+      player2LastDir = DIR_VECTORS.right;
+    } else if (isKeyDown(player2Controls.up)) {
+      player2LastDir = DIR_VECTORS.up;
+    } else if (isKeyDown(player2Controls.down)) {
+      player2LastDir = DIR_VECTORS.down;
+    }
+  }
 
-  label.onUpdate(() => {
-    label.text = getInfo1();
+  onKeyPress(player1Controls.shoot, () => {
+    spawnBullet(player1, player1LastDir); // Shoot in the last direction the player was facing
   });
 
   // If 2 players, add the second player
@@ -128,7 +189,19 @@ function startGame(players) {
         }
       });
     });
+    // Track the last direction Player 2 was facing
+
+    onKeyPress(player2Controls.shoot, () => {
+      spawnBullet(player2, player2LastDir); // Shoot in the last direction the player was facing
+    });
   }
+
+  onUpdate(() => {
+    updatePlayer1LastDir();
+    if (players === 2) {
+      updatePlayer2LastDir();
+    }
+  });
 }
 
 // Show the modal on page load
