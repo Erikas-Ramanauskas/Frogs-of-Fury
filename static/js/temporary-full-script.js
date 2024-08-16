@@ -38,7 +38,7 @@ let sections = []; // Array to keep track of current sections
 // Function to generate a platform
 function spawnPlatform(y) {
     const length = rand(2, 5) * 64; // Random length between 128 and 320
-    add([
+    const platform = add([
         rect(length, PLATFORM_HEIGHT),
         pos(rand(WALL_WIDTH, width() - length - WALL_WIDTH), y),
         outline(4),
@@ -48,12 +48,13 @@ function spawnPlatform(y) {
         anchor("bot"),
         "platform",
     ]);
+    sections.push(platform); // Store the platform in the sections array
 }
 
 // Function to create side walls
 function spawnSideWalls(y) {
     // Left wall
-    add([
+    const leftWall = add([
         rect(WALL_WIDTH, PLATFORM_GAP + PLATFORM_HEIGHT),
         pos(-1, y),
         outline(4),
@@ -63,9 +64,10 @@ function spawnSideWalls(y) {
         anchor("bot"),
         "wall",
     ]);
+    sections.push(leftWall); // Store the left wall in the sections array
     
     // Right wall
-    add([
+    const rightWall = add([
         rect(WALL_WIDTH, PLATFORM_GAP + PLATFORM_HEIGHT),
         pos(width() - WALL_WIDTH + 1, y),
         outline(4),
@@ -75,6 +77,7 @@ function spawnSideWalls(y) {
         anchor("bot"),
         "wall",
     ]);
+    sections.push(rightWall); // Store the right wall in the sections array
 }
 
 // Function to create the initial floor with platforms and walls
@@ -84,7 +87,7 @@ function createInitialPlatformsAndWalls() {
     const platformWidth = width() / numPlatforms;  // Width of each platform
 
     for (let i = 0; i < numPlatforms; i++) {
-        add([
+        const platform = add([
             rect(platformWidth, PLATFORM_HEIGHT),
             pos(i * platformWidth, platformHeight),
             outline(4),
@@ -94,6 +97,7 @@ function createInitialPlatformsAndWalls() {
             anchor("bot"),
             "platform",
         ]);
+        sections.push(platform); // Store the platform in the sections array
     }
 
     // Add initial walls on both sides
