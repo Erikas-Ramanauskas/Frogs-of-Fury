@@ -2,6 +2,7 @@ import kaplay from "https://unpkg.com/kaplay@3001.0.0-alpha.20/dist/kaplay.mjs";
 // start kaplay
 
 import { player1Controls, player2Controls, loadPlayerControls } from "./controlKeys.js";
+import { aiControlPlayer2 } from './ai.js';
 
 // This function loads controls from localStorage and updates the global control variables.
 loadPlayerControls();
@@ -85,9 +86,11 @@ function startGame(players) {
     label.text = getInfo1();
   });
 
+  let player2;
+
   // If 2 players, add the second player
   if (players === 2) {
-    const player2 = add([sprite("dino"), pos(180, 80), anchor("center"), area(), body()]);
+    player2 = add([sprite("dino"), pos(180, 80), anchor("center"), area(), body()]);
     player2.play("idle");
 
     player2.onGround(() => {
@@ -129,6 +132,17 @@ function startGame(players) {
       });
     });
   }
+
+  // Custom game loop using requestAnimationFrame
+  function gameLoop() {
+    if (players === 2 && player2) {
+      aiControlPlayer2(player2); // Call AI function for player2
+    }
+    requestAnimationFrame(gameLoop); // Schedule the next frame
+  }
+
+  // Start the game loop
+  gameLoop();
 }
 
 // Show the modal on page load
