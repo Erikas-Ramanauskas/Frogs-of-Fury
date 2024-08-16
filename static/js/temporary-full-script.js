@@ -1,3 +1,6 @@
+// ---------------------------------------------------
+// assets.js - Asset Loading and Configuration
+// ---------------------------------------------------
 kaplay({
     background: [141, 183, 255],
 });
@@ -9,6 +12,10 @@ loadSprite("grass", "/sprites/grass.png");
 loadSound("blip", "/examples/sounds/blip.mp3");
 loadSound("hit", "/examples/sounds/hit.mp3");
 loadSound("portal", "/examples/sounds/portal.mp3");
+
+// ---------------------------------------------------
+// config.js - Game Configuration and Constants
+// ---------------------------------------------------
 
 setGravity(3200);
 
@@ -23,6 +30,10 @@ const MAX_SECTIONS = 10; // Number of sections to maintain
 
 let lastY = height(); // Track the last Y position where platforms were generated
 let sections = []; // Array to keep track of current sections
+
+// ---------------------------------------------------
+// platform.js - Platform and Wall Generation
+// ---------------------------------------------------
 
 // Function to generate a platform
 function spawnPlatform(y) {
@@ -88,6 +99,10 @@ function createInitialPlatformsAndWalls() {
     // Add initial walls on both sides
     spawnSideWalls(platformHeight);
 }
+
+// ---------------------------------------------------
+// player.js - Player Setup and Controls
+// ---------------------------------------------------
 
 scene("game", () => {
     // Create the initial row of platforms and walls
@@ -167,6 +182,10 @@ scene("game", () => {
     onGamepadButtonPress("south", jump);
     onClick(jump);
 });
+
+// ---------------------------------------------------
+// scenes.js - Game Scenes
+// ---------------------------------------------------
 
 scene("lose", ({ maxHeight }) => {
     add([
