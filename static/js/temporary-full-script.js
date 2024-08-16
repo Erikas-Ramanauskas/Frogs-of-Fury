@@ -122,32 +122,32 @@ scene("game", () => {
     const startY = player.pos.y;
 
     player.onUpdate(() => {
-        camPos(player.pos.x, player.pos.y - height() / 3);
+        // Camera only moves up when the player is near the top of the screen
+        if (player.pos.y < camPos().y - CAMERA_THRESHOLD) {
+            camPos(width() / 2, player.pos.y + CAMERA_THRESHOLD);
+        }
 
-        // Remove old sections
-        sections = sections.filter(section => {
-            if (section.pos.y < player.pos.y - PLATFORM_GAP * MAX_SECTIONS) {
-                section.destroy();
-                return false; // Remove from sections array
+        // Remove old sections below the camera
+        sections.forEach((section, index) => {
+            if (section.pos.y > camPos().y + DELETE_THRESHOLD) {
+                section.destroy(); // Destroy the section
+                sections.splice(index, 1); // Remove from sections array
             }
-            return true; // Keep in sections array
         });
 
-        // Generate new sections if needed
-        while (player.pos.y < lastY - PLATFORM_GAP) {
-            for (let i = 0; i < 5; i++) { // Generate 5 sections at a time
-                spawnPlatform(lastY - PLATFORM_GAP);
-                spawnSideWalls(lastY - PLATFORM_GAP);
-                lastY -= PLATFORM_GAP;
-            }
+        // Generate new sections as the camera moves up
+        while (lastY > camPos().y - height()) {
+            spawnPlatform(lastY - PLATFORM_GAP);
+            spawnSideWalls(lastY - PLATFORM_GAP);
+            lastY -= PLATFORM_GAP;
         }
 
         // Calculate the height climbed in meters
         const heightClimbed = (startY - player.pos.y) * UNIT_TO_METERS;
         heightLabel.text = `Height: ${heightClimbed.toFixed(1)} meters`;
 
-        // Check fall death
-        if (player.pos.y > height() + FALL_DEATH) {
+        // Check if player falls below the screen
+        if (player.pos.y > camPos().y + height() / 2) {
             go("lose", { maxHeight: heightClimbed.toFixed(1) });
         }
     });
@@ -159,6 +159,7 @@ scene("game", () => {
         fixed(),
     ]);
 
+    // Player controls
     function jump() {
         if (player.isGrounded()) {
             player.jump(JUMP_FORCE);
