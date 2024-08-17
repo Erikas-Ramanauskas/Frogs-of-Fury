@@ -21,19 +21,23 @@ loadSound("portal", "/examples/sounds/portal.mp3");
 
 setGravity(3200);
 
-const JUMP_FORCE = 200320; // Updated jump force
+const JUMP_FORCE = 1650; // Updated jump force
 const MOVE_SPEED = 480;
 const TILE_WIDTH = 64;
 const TILE_HEIGHT = 64;
 const WALL_HEIGHT_TILES = 3; // Height of wall sections in tiles
 const PLATFORM_HEIGHT_TILES = 1; // Platform height in tiles
 const PLATFORM_GAP_TILES = 3; // Vertical gap between platforms in tiles
-const PLATFORMS_PER_ROW = 3; // Number of platforms per row
-const UNIT_TO_METERS = 0.1; // Conversion factor: 1 game unit = 0.1 meters
+const PLATFORMS_PER_ROW = 14; // Number of platforms per row
+const WALLS_WIDTH = 2; // Width of walls in tiles
+const TOTAL_TILES = PLATFORMS_PER_ROW + WALLS_WIDTH * 2; // Total tiles width (platforms + walls)
+const UNIT_TO_METERS = 0.08; // Conversion factor: 1 game unit = 0.08 meters
 const CAMERA_THRESHOLD = height() / 3; // Height threshold to start moving camera
 const DELETE_THRESHOLD = 900; // Distance below the camera to delete objects
+const CAMERA_MOVE_SPEED = -10; // Speed for slow upward camera movement
 
 let lastY = 0; // Track the last Y position where platforms were generated in tile units
+let isFirstRow = true; // Flag to manage initial platform row
 let sections = []; // Array to keep track of current sections
 
 // ---------------------------------------------------
