@@ -152,23 +152,35 @@ scene("game", () => {
   // Record the player's starting Y position
   const startY = player.pos.y;
 
+  // Display height achieved at the top of the screen
+  const heightLabel = add([
+    text("Height: 0.0 meters"),
+    pos(24, 24),
+    fixed(),
+    layer("ui"),
+  ]);
+
   player.onUpdate(() => {
+    // Gradually move the camera upwards
+    const currentCamPos = camPos();
+    camPos(currentCamPos.x, currentCamPos.y + CAMERA_MOVE_SPEED * dt());
+
     // Camera only moves up when the player is near the top of the screen
-    if (player.pos.y < camPos().y - CAMERA_THRESHOLD) {
+    if (player.pos.y < currentCamPos.y - CAMERA_THRESHOLD) {
       camPos(width() / 2, player.pos.y + CAMERA_THRESHOLD);
     }
 
     // Remove old sections below the camera
     sections.forEach((section, index) => {
       if (section.pos.y > camPos().y + DELETE_THRESHOLD) {
-        section.destroy(); // Destroy the section
-        sections.splice(index, 1); // Remove from sections array
+        section.destroy();
+        sections.splice(index, 1);
       }
     });
 
     // Generate new sections as the camera moves up
     while (lastY > camPos().y - height()) {
-      spawnPlatforms(lastY - PLATFORM_GAP_TILES * TILE_HEIGHT);
+      spawnPlatformRowWithGaps(lastY - PLATFORM_GAP_TILES * TILE_HEIGHT);
       spawnSideWalls(lastY - PLATFORM_GAP_TILES * TILE_HEIGHT);
       lastY -= PLATFORM_GAP_TILES * TILE_HEIGHT;
     }
@@ -182,9 +194,6 @@ scene("game", () => {
       go("lose", { maxHeight: heightClimbed.toFixed(1) });
     }
   });
-
-  // Display height achieved
-  const heightLabel = add([text("Height: 0.0 meters"), pos(24, 24), fixed()]);
 
   // Player controls
   function jump() {
@@ -209,7 +218,7 @@ scene("game", () => {
   // Gamepad and mobile controls
   onGamepadButtonPress("south", jump);
   onClick(jump);
-});
+});;
 
 // ---------------------------------------------------
 // scenes.js - Game Scenes
