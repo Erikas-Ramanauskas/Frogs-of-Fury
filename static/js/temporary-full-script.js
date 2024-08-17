@@ -1,6 +1,7 @@
 // ---------------------------------------------------
 // assets.js - Asset Loading and Configuration
 // ---------------------------------------------------
+
 kaplay({
   background: [141, 183, 255],
 });
@@ -136,6 +137,7 @@ scene("game", () => {
   // Reset sections array and lastY position on restart
   sections = [];
   lastY = Math.floor(height() / TILE_HEIGHT) * TILE_HEIGHT;
+  isFirstRow = true; // Reset flag for platform generation
 
   // Create the initial row of platforms and walls
   createInitialPlatformsAndWalls();
@@ -218,7 +220,7 @@ scene("game", () => {
   // Gamepad and mobile controls
   onGamepadButtonPress("south", jump);
   onClick(jump);
-});;
+});
 
 // ---------------------------------------------------
 // scenes.js - Game Scenes
