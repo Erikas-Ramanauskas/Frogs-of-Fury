@@ -22,9 +22,12 @@ setGravity(3200);
 const JUMP_FORCE = 2320;
 const MOVE_SPEED = 480;
 const FALL_DEATH = 2500;
-const PLATFORM_HEIGHT = 32;
-const PLATFORM_GAP = 200; // Vertical gap between platforms
-const WALL_WIDTH = 64; // Width of the side walls
+const TILE_WIDTH = 64;
+const TILE_HEIGHT = 64;
+const WALL_HEIGHT_TILES = 3; // Height of wall sections in tiles
+const PLATFORM_HEIGHT_TILES = 1; // Platform height in tiles
+const PLATFORM_GAP_TILES = 3; // Vertical gap between platforms in tiles
+const PLATFORMS_PER_ROW = 3; // Number of platforms per row
 const UNIT_TO_METERS = 0.1; // Conversion factor: 1 game unit = 0.1 meters
 const CAMERA_SPEED = 120; // Camera upward speed
 const CAMERA_THRESHOLD = height() / 3; // Height threshold to start moving camera
