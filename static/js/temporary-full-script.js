@@ -41,48 +41,50 @@ let sections = []; // Array to keep track of current sections
 // ---------------------------------------------------
 
 // Function to generate a platform
-function spawnPlatform(y) {
-    const length = rand(2, 5) * 64; // Random length between 128 and 320
-    const platform = add([
-        rect(length, PLATFORM_HEIGHT),
-        pos(rand(WALL_WIDTH, width() - length - WALL_WIDTH), y),
-        outline(4),
-        color(34, 139, 34),
-        area(),
+function spawnPlatforms(y) {
+  const platforms = [];
+  for (let i = 0; i < PLATFORMS_PER_ROW; i++) {
+    const length = rand(2, 5); // Random length between 2 and 5 tiles
+    const x = Math.floor(rand(0, width() / TILE_WIDTH - length)) * TILE_WIDTH;
+
+    if (platforms.every(p => Math.abs(p.pos.x - x) > length * TILE_WIDTH)) {
+      const platform = add([
+        sprite("grass"),
+        pos(x, y),
+        area({ width: length * TILE_WIDTH, height: TILE_HEIGHT }),
         body({ isStatic: true }),
         anchor("bot"),
         "platform",
-    ]);
-    sections.push(platform); // Store the platform in the sections array
+      ]);
+      sections.push(platform);
+      platforms.push(platform);
+    }
+  }
 }
 
-// Function to create side walls
+// Spawn side walls
 function spawnSideWalls(y) {
-    // Left wall
+  for (let i = 0; i < WALL_HEIGHT_TILES; i++) {
     const leftWall = add([
-        rect(WALL_WIDTH, PLATFORM_GAP + PLATFORM_HEIGHT),
-        pos(-1, y),
-        outline(4),
-        color(34, 139, 34),
-        area(),
-        body({ isStatic: true }),
-        anchor("bot"),
-        "wall",
+      sprite("steel"),
+      pos(0, y - i * TILE_HEIGHT),
+      area({ width: TILE_WIDTH, height: TILE_HEIGHT }),
+      body({ isStatic: true }),
+      anchor("bot"),
+      "wall",
     ]);
-    sections.push(leftWall); // Store the left wall in the sections array
-    
-    // Right wall
+    sections.push(leftWall);
+
     const rightWall = add([
-        rect(WALL_WIDTH, PLATFORM_GAP + PLATFORM_HEIGHT),
-        pos(width() - WALL_WIDTH + 1, y),
-        outline(4),
-        color(34, 139, 34),
-        area(),
-        body({ isStatic: true }),
-        anchor("bot"),
-        "wall",
+      sprite("steel"),
+      pos(width() - TILE_WIDTH, y - i * TILE_HEIGHT),
+      area({ width: TILE_WIDTH, height: TILE_HEIGHT }),
+      body({ isStatic: true }),
+      anchor("bot"),
+      "wall",
     ]);
-    sections.push(rightWall); // Store the right wall in the sections array
+    sections.push(rightWall);
+  }
 }
 
 // Function to create the initial floor with platforms and walls
