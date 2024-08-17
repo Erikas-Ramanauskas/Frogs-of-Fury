@@ -45,76 +45,84 @@ let sections = []; // Array to keep track of current sections
 // ---------------------------------------------------
 
 // Function to generate multiple platforms in a row
-function spawnPlatforms(y) {
-  const platforms = [];
-  for (let i = 0; i < PLATFORMS_PER_ROW; i++) {
-    const length = rand(2, 5); // Random length between 2 and 5 tiles
-    const x = Math.floor(rand(0, width() / TILE_WIDTH - length)) * TILE_WIDTH;
-    
-    // Ensure platforms don't overlap horizontally
-    if (platforms.every(p => Math.abs(p.pos.x - x) > length * TILE_WIDTH)) {
+function spawnPlatformRowWithGaps(y) {
+  const startX = WALLS_WIDTH;
+  const endX = TOTAL_TILES - WALLS_WIDTH;
+
+  if (isFirstRow) {
+    isFirstRow = false;
+    for (let i = startX; i < endX; i++) {
       const platform = add([
-        sprite("grass"), // Use grass sprite for platform
-        pos(x, y), // Position aligned to the tile grid
-        area({ width: length * TILE_WIDTH, height: TILE_HEIGHT }), // Correctly define the collision area based on the platform's size
-        body({ isStatic: true }), // Static body to ensure proper collision
+        sprite("grass"),
+        pos(i * TILE_WIDTH, y),
+        area({ width: TILE_WIDTH, height: TILE_HEIGHT }),
+        body({ isStatic: true }),
         anchor("bot"),
         "platform",
       ]);
-      sections.push(platform); // Store the platform in the sections array
-      platforms.push(platform);
+      sections.push(platform); // Add to sections array
+    }
+  } else {
+    const numGaps = Math.floor((endX - startX) / 3);
+    const gapPositions = [];
+    
+    while (gapPositions.length < numGaps) {
+      const pos = Math.floor(rand(startX, endX - 1) / 2) * 2;
+      if (!gapPositions.includes(pos) && !gapPositions.includes(pos + 1)) {
+        gapPositions.push(pos);
+      }
+    }
+
+    for (let i = startX; i < endX; i++) {
+      if (!gapPositions.includes(i) && !gapPositions.includes(i + 1)) {
+        const platform = add([
+          sprite("grass"),
+          pos(i * TILE_WIDTH, y),
+          area({ width: TILE_WIDTH, height: TILE_HEIGHT }),
+          body({ isStatic: true }),
+          anchor("bot"),
+          "platform",
+        ]);
+        sections.push(platform); // Add to sections array
+      }
     }
   }
 }
 
 // Function to create continuous side walls without gaps
 function spawnSideWalls(y) {
-  // Left wall
+  const wallWidth = TILE_WIDTH * WALLS_WIDTH;
+  const wallHeight = TILE_HEIGHT * WALL_HEIGHT_TILES;
+
   for (let i = 0; i < WALL_HEIGHT_TILES; i++) {
     const leftWall = add([
-      sprite("steel"), // Use steel sprite for wall
-      pos(0, y - i * TILE_HEIGHT), // Position aligned to the tile grid, stacking vertically
-      area({ width: TILE_WIDTH, height: TILE_HEIGHT }), // Correctly define the collision area based on the wall's size
-      body({ isStatic: true }), // Static body to ensure proper collision
+      sprite("steel"),
+      pos(TILE_WIDTH, y - i * TILE_HEIGHT),
+      area({ width: wallWidth, height: TILE_HEIGHT }),
+      body({ isStatic: true }),
       anchor("bot"),
       "wall",
     ]);
-    sections.push(leftWall); // Store the left wall in the sections array
-  }
+    sections.push(leftWall); // Add to sections array
 
-  // Right wall
-  for (let i = 0; i < WALL_HEIGHT_TILES; i++) {
     const rightWall = add([
-      sprite("steel"), // Use steel sprite for wall
-      pos(width() - TILE_WIDTH, y - i * TILE_HEIGHT), // Position aligned to the tile grid, stacking vertically
-      area({ width: TILE_WIDTH, height: TILE_HEIGHT }), // Correctly define the collision area based on the wall's size
-      body({ isStatic: true }), // Static body to ensure proper collision
+      sprite("steel"),
+      pos((TOTAL_TILES - WALLS_WIDTH) * TILE_WIDTH, y - i * TILE_HEIGHT),
+      area({ width: wallWidth, height: TILE_HEIGHT }),
+      body({ isStatic: true }),
       anchor("bot"),
       "wall",
     ]);
-    sections.push(rightWall); // Store the right wall in the sections array
+    sections.push(rightWall); // Add to sections array
   }
 }
 
 // Function to create the initial floor with platforms and walls
 function createInitialPlatformsAndWalls() {
-  const platformHeight =
-    Math.floor(height() / TILE_HEIGHT) * TILE_HEIGHT - TILE_HEIGHT; // Height of the initial platform row in tile units
-  const numPlatforms = Math.floor(width() / TILE_WIDTH); // Number of platforms to fit the screen width
+  const platformHeight = Math.floor(height() / TILE_HEIGHT) * TILE_HEIGHT;
 
-  for (let i = 0; i < numPlatforms; i++) {
-    const platform = add([
-      sprite("grass"), // Use grass sprite for platform
-      pos(i * TILE_WIDTH, platformHeight), // Position aligned to the tile grid
-      area({ width: TILE_WIDTH, height: TILE_HEIGHT }), // Correctly define the collision area based on the platform's size
-      body({ isStatic: true }), // Static body to ensure proper collision
-      anchor("bot"),
-      "platform",
-    ]);
-    sections.push(platform); // Store the platform in the sections array
-  }
+  spawnPlatformRowWithGaps(platformHeight);
 
-  // Add initial walls on both sides, filling the entire height
   for (let i = 0; i < WALL_HEIGHT_TILES; i++) {
     spawnSideWalls(platformHeight - i * TILE_HEIGHT);
   }
