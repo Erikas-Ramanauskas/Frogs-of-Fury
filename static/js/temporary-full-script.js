@@ -116,83 +116,82 @@ function createInitialPlatformsAndWalls() {
 // ---------------------------------------------------
 
 scene("game", () => {
-    // Create the initial row of platforms and walls
-    createInitialPlatformsAndWalls();
+  // Reset sections array and lastY position on restart
+  sections = [];
+  lastY = Math.floor(height() / TILE_HEIGHT) * TILE_HEIGHT;
 
-    // Initialize lastY and player
-    lastY = height();
-    const player = add([
-        sprite("bean"),
-        pos(width() / 2, height() - PLATFORM_HEIGHT - 1),
-        area(),
-        body(),
-        anchor("bot"),
-    ]);
+  // Create the initial row of platforms and walls
+  createInitialPlatformsAndWalls();
 
-    // Record the player's starting Y position
-    const startY = player.pos.y;
+  // Align the player spawn to the grid, placing them fully above the initial platform row
+  const player = add([
+    sprite("bean"),
+    pos(width() / 2 - TILE_WIDTH / 2, lastY - TILE_HEIGHT * 2), // Centered above the initial platform row
+    area({ width: TILE_WIDTH, height: TILE_HEIGHT * 2 }), // Player area defined by 1x2 tiles
+    body(),
+    anchor("bot"),
+  ]);
 
-    player.onUpdate(() => {
-        // Camera only moves up when the player is near the top of the screen
-        if (player.pos.y < camPos().y - CAMERA_THRESHOLD) {
-            camPos(width() / 2, player.pos.y + CAMERA_THRESHOLD);
-        }
+  // Record the player's starting Y position
+  const startY = player.pos.y;
 
-        // Remove old sections below the camera
-        sections.forEach((section, index) => {
-            if (section.pos.y > camPos().y + DELETE_THRESHOLD) {
-                section.destroy(); // Destroy the section
-                sections.splice(index, 1); // Remove from sections array
-            }
-        });
-
-        // Generate new sections as the camera moves up
-        while (lastY > camPos().y - height()) {
-            spawnPlatform(lastY - PLATFORM_GAP);
-            spawnSideWalls(lastY - PLATFORM_GAP);
-            lastY -= PLATFORM_GAP;
-        }
-
-        // Calculate the height climbed in meters
-        const heightClimbed = (startY - player.pos.y) * UNIT_TO_METERS;
-        heightLabel.text = `Height: ${heightClimbed.toFixed(1)} meters`;
-
-        // Check if player falls below the screen
-        if (player.pos.y > camPos().y + height() / 2) {
-            go("lose", { maxHeight: heightClimbed.toFixed(1) });
-        }
-    });
-
-    // Display height achieved
-    const heightLabel = add([
-        text(`Height: 0.0 meters`),
-        pos(24, 24),
-        fixed(),
-    ]);
-
-    // Player controls
-    function jump() {
-        if (player.isGrounded()) {
-            player.jump(JUMP_FORCE);
-        }
+  player.onUpdate(() => {
+    // Camera only moves up when the player is near the top of the screen
+    if (player.pos.y < camPos().y - CAMERA_THRESHOLD) {
+      camPos(width() / 2, player.pos.y + CAMERA_THRESHOLD);
     }
 
-    onKeyPress("space", jump);
-    onKeyDown("left", () => {
-        player.move(-MOVE_SPEED, 0);
-    });
-    onKeyDown("right", () => {
-        player.move(MOVE_SPEED, 0);
-    });
-
-    // Prevent the player from moving through walls
-    player.onCollide("wall", () => {
-        player.stop();
+    // Remove old sections below the camera
+    sections.forEach((section, index) => {
+      if (section.pos.y > camPos().y + DELETE_THRESHOLD) {
+        section.destroy(); // Destroy the section
+        sections.splice(index, 1); // Remove from sections array
+      }
     });
 
-    // Gamepad and mobile controls
-    onGamepadButtonPress("south", jump);
-    onClick(jump);
+    // Generate new sections as the camera moves up
+    while (lastY > camPos().y - height()) {
+      spawnPlatforms(lastY - PLATFORM_GAP_TILES * TILE_HEIGHT);
+      spawnSideWalls(lastY - PLATFORM_GAP_TILES * TILE_HEIGHT);
+      lastY -= PLATFORM_GAP_TILES * TILE_HEIGHT;
+    }
+
+    // Calculate the height climbed in meters
+    const heightClimbed = (startY - player.pos.y) * UNIT_TO_METERS;
+    heightLabel.text = `Height: ${heightClimbed.toFixed(1)} meters`;
+
+    // Check if player falls below the screen
+    if (player.pos.y > camPos().y + height() / 2) {
+      go("lose", { maxHeight: heightClimbed.toFixed(1) });
+    }
+  });
+
+  // Display height achieved
+  const heightLabel = add([text("Height: 0.0 meters"), pos(24, 24), fixed()]);
+
+  // Player controls
+  function jump() {
+    if (player.isGrounded()) {
+      player.jump(JUMP_FORCE);
+    }
+  }
+
+  onKeyPress("space", jump);
+  onKeyDown("left", () => {
+    player.move(-MOVE_SPEED, 0);
+  });
+  onKeyDown("right", () => {
+    player.move(MOVE_SPEED, 0);
+  });
+
+  // Prevent the player from moving through walls
+  player.onCollide("wall", () => {
+    player.stop();
+  });
+
+  // Gamepad and mobile controls
+  onGamepadButtonPress("south", jump);
+  onClick(jump);
 });
 
 // ---------------------------------------------------
