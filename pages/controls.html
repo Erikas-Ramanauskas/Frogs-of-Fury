@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Controls</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <!-- Custom CSS (optional) -->
     <link rel="stylesheet" href="../static/css/controls.css" />
     <!-- Font Awesome CSS -->
@@ -36,7 +39,9 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../index.html">Home</a>
+                <a class="nav-link" aria-current="page" href="../index.html"
+                  >Home</a
+                >
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="game.html">Game</a>
@@ -52,14 +57,22 @@
         </div>
       </nav>
     </header>
-    <h1>Customize Controls for Player 1 & Player 2</h1>
+    <div class="header_controls">
+      <h1>Customize Controls for Player 1 & Player 2</h1>
+    </div>
     <div class="container">
       <div class="row d-flex justify-content-around mt-5">
         <div class="player-section col-6" id="player1-section">
           <h2>Player 1 Controls</h2>
-          <div class="control-item" data-player="1" data-action="up">Up: <span id="player1-up-key">W</span></div>
-          <div class="control-item" data-player="1" data-action="down">Down: <span id="player1-down-key">S</span></div>
-          <div class="control-item" data-player="1" data-action="left">Left: <span id="player1-left-key">A</span></div>
+          <div class="control-item" data-player="1" data-action="up">
+            Up: <span id="player1-up-key">W</span>
+          </div>
+          <div class="control-item" data-player="1" data-action="down">
+            Down: <span id="player1-down-key">S</span>
+          </div>
+          <div class="control-item" data-player="1" data-action="left">
+            Left: <span id="player1-left-key">A</span>
+          </div>
           <div class="control-item" data-player="1" data-action="right">
             Right: <span id="player1-right-key">D</span>
           </div>
@@ -72,7 +85,9 @@
         </div>
         <div class="player-section col-6" id="player2-section">
           <h2>Player 2 Controls</h2>
-          <div class="control-item" data-player="2" data-action="up">Up: <span id="player2-up-key">ArrowUp</span></div>
+          <div class="control-item" data-player="2" data-action="up">
+            Up: <span id="player2-up-key">ArrowUp</span>
+          </div>
           <div class="control-item" data-player="2" data-action="down">
             Down: <span id="player2-down-key">ArrowDown</span>
           </div>
@@ -91,9 +106,37 @@
         </div>
       </div>
     </div>
-
+    <div class="header_controls">
+      <h2 id="header_rules">Game Rules</h2>
+      <ol>
+        <li>
+          <b>Objective:</b> Ascend as high as possible by jumping from platform to
+          platform. The higher you go, the tougher the enemies and the
+          challenges.
+        </li>
+        <li>
+          <b>Enemies:</b> Various enemies will try to stop your progress. Use different
+          weapons to defeat them and clear your path upwards.
+        </li>
+        <li>
+          <b>Falling:</b> If you miss a jump and fall off a platform, you can either
+          land on a lower platform or fall into the abyss, leading to death.
+        </li>
+        <li>
+          <b>Rising Abyss:</b> The abyss slowly rises from below, forcing you to keep
+          moving upwards. Standing still for too long will result in being
+          swallowed by the abyss.
+        </li>
+      </ol>
+      <p>
+        Good luck! Keep climbing, stay sharp, and survive as long as you can!
+      </p>
+    </div>
     <div id="modal">
-      <p>Press a key to set for <span id="current-action"></span> (Player <span id="current-player"></span>)</p>
+      <p>
+        Press a key to set for <span id="current-action"></span> (Player
+        <span id="current-player"></span>)
+      </p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>

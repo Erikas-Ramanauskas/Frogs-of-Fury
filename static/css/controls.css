@@ -1,10 +1,21 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  /*background-color: #f0f0f0;*/
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  /* Add the background */
+  background-color: #000000;
+  background-image: 
+    radial-gradient(circle at 50% 0%, #FF00FF, transparent 60%),
+    radial-gradient(circle at 50% 100%, #00FFFF, transparent 60%),
+    radial-gradient(circle at 50% 50%, #00FF00, transparent 60%), 
+    linear-gradient(to right, rgba(0, 255, 0, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 0, 0.2) 1px, transparent 1px); 
+  background-size: 50px 50px;
+  background-repeat: repeat;
+  background-position: center;
 }
 
 .player-section {
@@ -40,4 +51,30 @@ body {
 
 #modal.show {
   display: block;
+}
+
+/* Main styling of the body */
+
+#player1-section, #player2-section {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid #00FF00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.header_controls {
+  margin-top: 50px;
+  padding: 20px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid #00FF00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+li {
+  text-align: start;
+}
+
+#header_rules {
+  margin-bottom: 20px;
 }
