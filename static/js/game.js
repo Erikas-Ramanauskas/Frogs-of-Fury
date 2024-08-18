@@ -51,7 +51,7 @@ const LOOT_TYPES = [
   { type: "rocket", chance: 0.33 },
 ];
 
-let maxEnemies = 12; // Maximum number of enemies to spawn
+let maxEnemies = 32; // Maximum number of enemies to spawn
 let spawnedEnemies = 0; // Number of enemies spawned
 let lastSpawnedY = 0;
 let lastY = 0; // Track the last Y position where platforms were generated in tile units
@@ -325,7 +325,7 @@ function chooseLootType() {
 
 // Handle weapon pickups
 function spawnWeaponPickup(weaponType, position) {
-  add([
+  const pickup = add([
     sprite("pickup_" + weaponType),
     pos(position),
     area(),
@@ -333,6 +333,13 @@ function spawnWeaponPickup(weaponType, position) {
     scale(PICKUP_SACLE),
     { weaponType: weaponType },
   ]);
+
+  // Set a timer to destroy the pickup if it is not collected within 20 seconds
+  wait(20, () => {
+    if (pickup) {
+      destroy(pickup);
+    }
+  });
 }
 
 function createExplosion(position, radius, damage) {
