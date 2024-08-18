@@ -24,16 +24,17 @@ setGravity(640);
 const TILE_WIDTH = 64;
 const TILE_HEIGHT = 64;
 const WALL_HEIGHT_TILES = 3; // Height of wall sections in tiles
-const PLATFORM_HEIGHT_TILES = 1; // Platform height in tiles
+const PLATFORM_HEIGHT_TILES = 3; // Platform height in tiles
 const PLATFORM_GAP_TILES = 3; // Vertical gap between platforms in tiles
 const PLATFORMS_PER_ROW = 14; // Number of platforms per row
-const WALLS_WIDTH = 2; // Width of walls in tiles
+const WALLS_WIDTH = 1; // Width of walls in tiles
 const TOTAL_TILES = PLATFORMS_PER_ROW + WALLS_WIDTH * 2; // Total tiles width (platforms + walls)
 const UNIT_TO_METERS = 0.08; // Conversion factor: 1 game unit = 0.08 meters
 const CAMERA_THRESHOLD = height() / 3; // Height threshold to start moving camera
 const DELETE_THRESHOLD = 900; // Distance below the camera to delete objects
 const CAMERA_MOVE_SPEED = 0; // Speed for slow upward camera movement
-const LAVA_MOVE_SPEED = 500; // Speed at which the lava moves up
+const LAVA_MOVE_SPEED = 0; // Speed at which the lava moves up
+const PICKUP_SACLE = 1.5;
 
 let lastY = 0; // Track the last Y position where platforms were generated in tile units
 let isFirstRow = true; // Flag to manage initial platform row
@@ -141,6 +142,7 @@ let player1LastDir = DIR_VECTORS.right;
 let player2LastDir = DIR_VECTORS.left;
 
 let player1;
+let player2;
 
 // Track the last direction Player 1 was facing
 function updatePlayer1LastDir() {
@@ -177,209 +179,6 @@ function updatePlayer2LastDir() {
   } else if (isKeyDown(player2Controls.up)) {
     player2LastDir = DIR_VECTORS.up;
   }
-}
-
-function addPlayer1() {
-  // Add our player1 character
-  player1 = add([
-    sprite("frog1"),
-    pos(180, 80),
-    anchor("center"),
-    area({ shape: new Polygon([vec2(-15, -10), vec2(20, -10), vec2(20, 33), vec2(-15, 33)]) }),
-    body(),
-    scale(1),
-    "player1",
-  ]);
-  player1.play("idle");
-
-  // Switch to "idle" or "run" animation when player1 hits ground
-  player1.onGround(() => {
-    console.log(player1);
-    if (!isKeyDown(player1Controls.left) && !isKeyDown(player1Controls.right)) {
-      player1.play("idle");
-    } else {
-      player1.play("run");
-    }
-  });
-
-  onKeyPress(player1Controls.jump, () => {
-    if (player1.isGrounded()) {
-      player1.jump(JUMP_FORCE);
-      player1.play("jump");
-    }
-  });
-
-  onKeyDown(player1Controls.right, () => {
-    player1.move(SPEED, 0);
-    player1.flipX = false;
-    if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
-      player1.play("run");
-    }
-  });
-
-  onKeyDown(player1Controls.left, () => {
-    player1.move(-SPEED, 0);
-    player1.flipX = true;
-    if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
-      player1.play("run");
-    }
-  });
-
-  [player1Controls.left, player1Controls.right].forEach((key) => {
-    onKeyRelease(key, () => {
-      if (
-        player1.isGrounded() &&
-        !isKeyDown(player1Controls.left) &&
-        !isKeyDown(player1Controls.right) &&
-        !isKeyDown(player1Controls.shoots)
-      ) {
-        player1.play("idle");
-      }
-    });
-  });
-  onKeyPress(player1Controls.shoot, () => {
-    if (canFire(lastFireTimePlayer1, player1Weapon.fireRate)) {
-      spawnBullet(player1, player1LastDir.vect);
-      isPlayer1Shooting = true;
-
-      // Play the appropriate shooting animation based on the direction
-      if (isKeyDown(player1Controls.left) || isKeyDown(player1Controls.right)) {
-        switch (player1LastDir.direction) {
-          case "left_up":
-          case "right_up":
-            player1.play("shoot45upRun");
-            break;
-          case "left_down":
-          case "right_down":
-            player1.play("shoot45downRun");
-            break;
-          default:
-            player1.play("run"); // Continue running animation if not in a 45-degree angle
-        }
-      } else {
-        switch (player1LastDir.direction) {
-          case "up":
-            player1.play("shootUp");
-            break;
-          case "left_up":
-          case "right_up":
-            player1.play("shoot45upIdle");
-            break;
-          case "left_down":
-          case "right_down":
-            player1.play("shoot45downIdle");
-            break;
-          default:
-            player1.play("shoot");
-        }
-      }
-
-      lastFireTimePlayer1 = time();
-
-      // Reset the shooting flag after a short delay (based on animation length or a fixed time)
-      wait(1, () => {
-        isPlayer1Shooting = false;
-      });
-    }
-  });
-}
-
-let player2;
-// If 2 players, add the second player
-function addPlayer2() {
-  player2 = add([sprite("frog2"), pos(180, 80), anchor("center"), area(), body(), scale(1), "player2"]);
-  player2.play("idle");
-
-  player2.onGround(() => {
-    if (!isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right) && !isKeyDown(player2Controls.shoot)) {
-      player2.play("idle");
-    } else {
-      player2.play("run");
-    }
-  });
-
-  onKeyPress(player2Controls.jump, () => {
-    if (player2.isGrounded()) {
-      player2.jump(JUMP_FORCE);
-      player2.play("jump");
-    }
-  });
-
-  onKeyDown(player2Controls.right, () => {
-    player2.move(SPEED, 0);
-    player2.flipX = false;
-    if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
-      player2.play("run");
-    }
-  });
-
-  onKeyDown(player2Controls.left, () => {
-    player2.move(-SPEED, 0);
-    player2.flipX = true;
-    if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
-      player2.play("run");
-    }
-  });
-
-  [player2Controls.left, player2Controls.right].forEach((key) => {
-    onKeyRelease(key, () => {
-      if (
-        player2.isGrounded() &&
-        !isKeyDown(player2Controls.left) &&
-        !isKeyDown(player2Controls.right) &&
-        !isKeyDown(player2Controls.shoot)
-      ) {
-        player2.play("idle");
-      }
-    });
-  });
-
-  // Track the last direction Player 2 was facing
-  onKeyPress(player2Controls.shoot, () => {
-    if (canFire(lastFireTimePlayer2, player2Weapon.fireRate)) {
-      spawnBullet(player2, player2LastDir.vect);
-      isPlayer2Shooting = true;
-
-      // Play the appropriate shooting animation based on the direction
-      if (isKeyDown(player2Controls.left) || isKeyDown(player2Controls.right)) {
-        switch (player2LastDir.direction) {
-          case "left_up":
-          case "right_up":
-            player2.play("shoot45upRun");
-            break;
-          case "left_down":
-          case "right_down":
-            player2.play("shoot45downRun");
-            break;
-          default:
-            player2.play("run"); // Continue running animation if not in a 45-degree angle
-        }
-      } else {
-        switch (player2LastDir.direction) {
-          case "up":
-            player2.play("shootUp");
-            break;
-          case "left_up":
-          case "right_up":
-            player2.play("shoot45upIdle");
-            break;
-          case "left_down":
-          case "right_down":
-            player2.play("shoot45downIdle");
-            break;
-          default:
-            player2.play("shoot");
-        }
-      }
-
-      lastFireTimePlayer2 = time();
-
-      // Reset the shooting flag after a short delay (based on animation length or a fixed time)
-      wait(1, () => {
-        isPlayer2Shooting = false;
-      });
-    }
-  });
 }
 
 /**
@@ -422,37 +221,17 @@ function startTrackingDir(players) {
   });
 }
 
-// Add a wall or obstacle object
-function addObstacle(position, size) {
-  add([
-    rect(size.x, size.y), // Rectangle shape for the obstacle
-    pos(position), // Position of the obstacle
-    area(), // Add collision area
-    body({ isStatic: true }), // Make the object solid (prevents players from moving through it)
-    color(100, 100, 100), // Give it a color (gray, in this case)
-    "obstacle", // Tag it as an "obstacle"
-  ]);
-}
-
-// Add a platform
-add([rect(width(), 24), area(), outline(1), pos(0, height() - 10), body({ isStatic: true })]);
-
 // Handle weapon pickups
 function spawnWeaponPickup(weaponType, position) {
-  add([sprite("pickup_" + weaponType), pos(position), area(), "weaponPickup", { weaponType: weaponType }]);
+  add([
+    sprite("pickup_" + weaponType),
+    pos(position),
+    area(),
+    "weaponPickup",
+    scale(PICKUP_SACLE),
+    { weaponType: weaponType },
+  ]);
 }
-
-// Handle weapon pickups for player 1
-onCollide("weaponPickup", "player1", (pickup) => {
-  switchWeapon(1, pickup.weaponType); // Switch to the new weapon for player 1
-  destroy(pickup); // Remove the pickup after it's taken
-});
-
-// Handle weapon pickups for player 2
-onCollide("weaponPickup", "player2", (pickup) => {
-  switchWeapon(2, pickup.weaponType); // Switch to the new weapon for player 2
-  destroy(pickup); // Remove the pickup after it's taken
-});
 
 function createExplosion(position, radius, damage) {
   // Visual explosion effect
@@ -474,158 +253,11 @@ function createExplosion(position, radius, damage) {
   });
 }
 
-function spawnBullet(player, dir) {
-  const weapon = player === player1 ? player1Weapon : player2Weapon;
-
-  // Function to create and spawn a bullet
-  const createBullet = (dir) => {
-    // Determine the angle of rotation based on the direction vector
-    const angle = Math.atan2(dir.y, dir.x) * (180 / Math.PI);
-
-    const bullet = add([
-      sprite(weapon.bulletSprite), // Use the bullet sprite of the current weapon
-      pos(player.pos), // Spawn the bullet at the player's position
-      rotate(angle), // Rotate the bullet to match the direction
-      area(weapon.collisionArea), // Add collision area
-      {
-        damage: weapon.damage,
-        bounces: 0, // Track number of bounces
-        speed: weapon.speed, // Keep track of bullet speed
-        dir: dir.clone(), // Clone the direction vector to maintain its state
-      },
-      "bullet",
-    ]);
-
-    // Set the initial movement
-    bullet.move(bullet.dir);
-  };
-
-  // For the "split" weapon, fire three bullets at different angles
-  if (weapon.bulletSprite === "bullet_split") {
-    // Original direction
-    createBullet(dir);
-
-    // Calculate the directions for the side bullets
-    const angleOffset = 22.5 * (Math.PI / 180); // 22.5 degrees in radians
-
-    // Calculate left and right split angles
-    const dirLeft = vec2(
-      dir.x * Math.cos(angleOffset) - dir.y * Math.sin(angleOffset),
-      dir.x * Math.sin(angleOffset) + dir.y * Math.cos(angleOffset)
-    );
-
-    const dirRight = vec2(
-      dir.x * Math.cos(-angleOffset) - dir.y * Math.sin(-angleOffset),
-      dir.x * Math.sin(-angleOffset) + dir.y * Math.cos(-angleOffset)
-    );
-
-    // Fire the side bullets
-    createBullet(dirLeft);
-    createBullet(dirRight);
-  } else {
-    // For other weapons, just fire a single bullet
-    createBullet(dir);
-  }
-}
-
-// Handle bullet-obstacle collisions, specifically for lasers and rockets
-onCollide("bullet", "obstacle", (bullet, obstacle) => {
-  const obstacleBR = obstacle.pos.add([obstacle.width, obstacle.height]);
-  const obstacleTL = obstacle.pos;
-  let shootingDirection;
-
-  if (obstacleTL.x > bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
-    shootingDirection = "left";
-  } else if (obstacleTL.x < bullet.pos.x && obstacleTL.y > bullet.pos.y && obstacleBR.x > bullet.pos.x) {
-    shootingDirection = "top";
-  } else if (obstacleBR.x < bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
-    shootingDirection = "right";
-  } else if (obstacleTL.x < bullet.pos.x && obstacleBR.y < bullet.pos.y && obstacleBR.x > bullet.pos.x) {
-    shootingDirection = "bottom";
-  } else {
-    shootingDirection = null;
-  }
-
-  switch (shootingDirection) {
-    case "left":
-      bullet.dir.x = -bullet.dir.x;
-      break;
-    case "top":
-      bullet.dir.y = -bullet.dir.y;
-      break;
-    case "right":
-      bullet.dir.x = -bullet.dir.x;
-      break;
-    case "bottom":
-      bullet.dir.y = -bullet.dir.y;
-      break;
-    default:
-      bullet.dir = bullet.dir;
-  }
-
-  // Move the bullet in the new direction after bouncing
-  bullet.move(bullet.dir.scale(bullet.speed));
-
-  // If it's a laser, increment the bounce counter and check if it should be destroyed
-  if (bullet.sprite === "bullet_laser") {
-    bullet.bounces += 1;
-    if (bullet.bounces >= 3) {
-      destroy(bullet);
-    }
-  } else if (bullet.sprite === "bullet_rocket") {
-    createExplosion(bullet.pos, 50, bullet.damage);
-    destroy(bullet);
-  } else {
-    destroy(bullet);
-  }
-});
-
-// ensure that all bullet moves
-onUpdate("bullet", (bullet) => {
-  bullet.pos.x += bullet.dir.x * bullet.speed * dt();
-  bullet.pos.y += bullet.dir.y * bullet.speed * dt();
-
-  // Rotate the bullet sprite to face the direction it's moving
-  const angle = Math.atan2(bullet.dir.y, bullet.dir.x) * (180 / Math.PI);
-  bullet.angle = angle;
-});
-
 // Reset player weapons when game restarts
 function resetWeapons() {
   player1Weapon = WEAPONS.standard;
   player2Weapon = WEAPONS.standard;
 }
-
-spawnWeaponPickup("laser", vec2(50, 150));
-spawnWeaponPickup("split", vec2(200, 150));
-spawnWeaponPickup("rocket", vec2(300, 150));
-
-// Example of adding some obstacles
-addObstacle(vec2(20, 50), vec2(30, 200));
-addObstacle(vec2(350, 50), vec2(30, 200));
-
-addObstacle(vec2(10, 20), vec2(350, 50));
-
-// Show the modal on page load
-window.addEventListener("DOMContentLoaded", () => {
-  const playerSelectModal = new bootstrap.Modal(document.getElementById("playerSelectModal"));
-  playerSelectModal.show();
-
-  document.getElementById("onePlayerBtn").addEventListener("click", () => {
-    playerSelectModal.hide();
-    startTrackingDir(1);
-    playersCountFinction(1);
-    addPlayer1();
-  });
-
-  document.getElementById("twoPlayersBtn").addEventListener("click", () => {
-    playerSelectModal.hide();
-    startTrackingDir(2);
-    playersCountFinction(2);
-    addPlayer1();
-    addPlayer2();
-  });
-});
 
 // Code for generating levels
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -677,14 +309,11 @@ function spawnPlatformRowWithGaps(y) {
 
 // Function to create continuous side walls without gaps
 function spawnSideWalls(y) {
-  const wallWidth = TILE_WIDTH * WALLS_WIDTH;
-  const wallHeight = TILE_HEIGHT * WALL_HEIGHT_TILES;
-
   for (let i = 0; i < WALL_HEIGHT_TILES; i++) {
     const leftWall = add([
       sprite("wall"),
       pos(TILE_WIDTH, y - i * TILE_HEIGHT),
-      area({ width: wallWidth, height: TILE_HEIGHT }),
+      area({ width: WALLS_WIDTH, height: TILE_HEIGHT }),
       body({ isStatic: true }),
       anchor("bot"),
       "wall",
@@ -694,7 +323,7 @@ function spawnSideWalls(y) {
     const rightWall = add([
       sprite("wall"),
       pos((TOTAL_TILES - WALLS_WIDTH) * TILE_WIDTH, y - i * TILE_HEIGHT),
-      area({ width: wallWidth, height: TILE_HEIGHT }),
+      area({ width: WALLS_WIDTH, height: TILE_HEIGHT }),
       body({ isStatic: true }),
       anchor("bot"),
       "wall",
@@ -817,6 +446,386 @@ scene("game", () => {
       // checkGameOver(); // Check if game is over
     }
   });
+
+  function addPlayer1() {
+    // Add our player1 character
+    player1 = add([
+      sprite("frog1"),
+      pos(180, 80),
+      anchor("center"),
+      area({ shape: new Polygon([vec2(-15, -10), vec2(20, -10), vec2(20, 33), vec2(-15, 33)]) }),
+      body(),
+      scale(1),
+      "player1",
+    ]);
+    player1.play("idle");
+
+    // Switch to "idle" or "run" animation when player1 hits ground
+    player1.onGround(() => {
+      if (!isKeyDown(player1Controls.left) && !isKeyDown(player1Controls.right)) {
+        player1.play("idle");
+      } else {
+        player1.play("run");
+      }
+    });
+
+    onKeyPress(player1Controls.jump, () => {
+      if (player1.isGrounded()) {
+        player1.jump(JUMP_FORCE);
+        player1.play("jump");
+      }
+    });
+
+    onKeyDown(player1Controls.right, () => {
+      player1.move(SPEED, 0);
+      player1.flipX = false;
+      if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
+        player1.play("run");
+      }
+    });
+
+    onKeyDown(player1Controls.left, () => {
+      player1.move(-SPEED, 0);
+      player1.flipX = true;
+      if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
+        player1.play("run");
+      }
+    });
+
+    [player1Controls.left, player1Controls.right].forEach((key) => {
+      onKeyRelease(key, () => {
+        if (
+          player1.isGrounded() &&
+          !isKeyDown(player1Controls.left) &&
+          !isKeyDown(player1Controls.right) &&
+          !isKeyDown(player1Controls.shoots)
+        ) {
+          player1.play("idle");
+        }
+      });
+    });
+    onKeyPress(player1Controls.shoot, () => {
+      if (canFire(lastFireTimePlayer1, player1Weapon.fireRate)) {
+        spawnBullet(player1, player1LastDir.vect);
+        isPlayer1Shooting = true;
+
+        // Play the appropriate shooting animation based on the direction
+        if (isKeyDown(player1Controls.left) || isKeyDown(player1Controls.right)) {
+          switch (player1LastDir.direction) {
+            case "left_up":
+            case "right_up":
+              player1.play("shoot45upRun");
+              break;
+            case "left_down":
+            case "right_down":
+              player1.play("shoot45downRun");
+              break;
+            default:
+              player1.play("run"); // Continue running animation if not in a 45-degree angle
+          }
+        } else {
+          switch (player1LastDir.direction) {
+            case "up":
+              player1.play("shootUp");
+              break;
+            case "left_up":
+            case "right_up":
+              player1.play("shoot45upIdle");
+              break;
+            case "left_down":
+            case "right_down":
+              player1.play("shoot45downIdle");
+              break;
+            default:
+              player1.play("shoot");
+          }
+        }
+
+        lastFireTimePlayer1 = time();
+
+        // Reset the shooting flag after a short delay (based on animation length or a fixed time)
+        wait(1, () => {
+          isPlayer1Shooting = false;
+        });
+      }
+    });
+  }
+
+  // If 2 players, add the second player
+  function addPlayer2() {
+    player2 = add([
+      sprite("frog2"),
+      pos(180, 80),
+      anchor("center"),
+      area({ shape: new Polygon([vec2(-15, -10), vec2(20, -10), vec2(20, 33), vec2(-15, 33)]) }),
+      body(),
+      scale(1),
+      "player2",
+    ]);
+    player2.play("idle");
+
+    player2.onGround(() => {
+      if (!isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right) && !isKeyDown(player2Controls.shoot)) {
+        player2.play("idle");
+      } else {
+        player2.play("run");
+      }
+    });
+
+    onKeyPress(player2Controls.jump, () => {
+      if (player2.isGrounded()) {
+        player2.jump(JUMP_FORCE);
+        player2.play("jump");
+      }
+    });
+
+    onKeyDown(player2Controls.right, () => {
+      player2.move(SPEED, 0);
+      player2.flipX = false;
+      if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
+        player2.play("run");
+      }
+    });
+
+    onKeyDown(player2Controls.left, () => {
+      player2.move(-SPEED, 0);
+      player2.flipX = true;
+      if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
+        player2.play("run");
+      }
+    });
+
+    [player2Controls.left, player2Controls.right].forEach((key) => {
+      onKeyRelease(key, () => {
+        if (
+          player2.isGrounded() &&
+          !isKeyDown(player2Controls.left) &&
+          !isKeyDown(player2Controls.right) &&
+          !isKeyDown(player2Controls.shoot)
+        ) {
+          player2.play("idle");
+        }
+      });
+    });
+
+    // Track the last direction Player 2 was facing
+    onKeyPress(player2Controls.shoot, () => {
+      if (canFire(lastFireTimePlayer2, player2Weapon.fireRate)) {
+        spawnBullet(player2, player2LastDir.vect);
+        isPlayer2Shooting = true;
+
+        // Play the appropriate shooting animation based on the direction
+        if (isKeyDown(player2Controls.left) || isKeyDown(player2Controls.right)) {
+          switch (player2LastDir.direction) {
+            case "left_up":
+            case "right_up":
+              player2.play("shoot45upRun");
+              break;
+            case "left_down":
+            case "right_down":
+              player2.play("shoot45downRun");
+              break;
+            default:
+              player2.play("run"); // Continue running animation if not in a 45-degree angle
+          }
+        } else {
+          switch (player2LastDir.direction) {
+            case "up":
+              player2.play("shootUp");
+              break;
+            case "left_up":
+            case "right_up":
+              player2.play("shoot45upIdle");
+              break;
+            case "left_down":
+            case "right_down":
+              player2.play("shoot45downIdle");
+              break;
+            default:
+              player2.play("shoot");
+          }
+        }
+
+        lastFireTimePlayer2 = time();
+
+        // Reset the shooting flag after a short delay (based on animation length or a fixed time)
+        wait(1, () => {
+          isPlayer2Shooting = false;
+        });
+      }
+    });
+  }
+
+  function spawnBullet(player, dir) {
+    const weapon = player === player1 ? player1Weapon : player2Weapon;
+
+    // Function to create and spawn a bullet
+    const createBullet = (dir) => {
+      // Determine the angle of rotation based on the direction vector
+      const angle = Math.atan2(dir.y, dir.x) * (180 / Math.PI);
+
+      const bullet = add([
+        sprite(weapon.bulletSprite),
+        pos(player.pos),
+        rotate(angle),
+        area(weapon.collisionArea),
+        {
+          damage: weapon.damage,
+          bounces: 0,
+          speed: weapon.speed,
+          dir: dir.clone(),
+        },
+        "bullet", // Ensure the "bullet" tag is added here
+      ]);
+
+      // Set the initial movement
+      bullet.move(bullet.dir);
+    };
+
+    // For the "split" weapon, fire three bullets at different angles
+    if (weapon.bulletSprite === "bullet_split") {
+      // Original direction
+      createBullet(dir);
+
+      // Calculate the directions for the side bullets
+      const angleOffset = 22.5 * (Math.PI / 180); // 22.5 degrees in radians
+
+      // Calculate left and right split angles
+      const dirLeft = vec2(
+        dir.x * Math.cos(angleOffset) - dir.y * Math.sin(angleOffset),
+        dir.x * Math.sin(angleOffset) + dir.y * Math.cos(angleOffset)
+      );
+
+      const dirRight = vec2(
+        dir.x * Math.cos(-angleOffset) - dir.y * Math.sin(-angleOffset),
+        dir.x * Math.sin(-angleOffset) + dir.y * Math.cos(-angleOffset)
+      );
+
+      // Fire the side bullets
+      createBullet(dirLeft);
+      createBullet(dirRight);
+    } else {
+      // For other weapons, just fire a single bullet
+      createBullet(dir);
+    }
+  }
+
+  // Handle weapon pickups for player 1
+  onCollide("weaponPickup", "player1", (pickup) => {
+    switchWeapon(1, pickup.weaponType); // Switch to the new weapon for player 1
+    destroy(pickup); // Remove the pickup after it's taken
+  });
+
+  // Handle weapon pickups for player 2
+  onCollide("weaponPickup", "player2", (pickup) => {
+    switchWeapon(2, pickup.weaponType); // Switch to the new weapon for player 2
+    destroy(pickup); // Remove the pickup after it's taken
+  });
+
+  // ensure that all bullet moves
+  onUpdate("bullet", (bullet) => {
+    bullet.pos.x += bullet.dir.x * bullet.speed * dt();
+    bullet.pos.y += bullet.dir.y * bullet.speed * dt();
+
+    // Rotate the bullet sprite to face the direction it's moving
+    const angle = Math.atan2(bullet.dir.y, bullet.dir.x) * (180 / Math.PI);
+    bullet.angle = angle;
+  });
+
+  function bounceOfTheWalls(bullet, obstacle) {
+    if (bullet.bouncedRecently) return; // Skip if it has bounced recently
+
+    // Mark as bounced to avoid immediate subsequent collisions
+    bullet.bouncedRecently = true;
+    wait(0.1, () => {
+      bullet.bouncedRecently = false;
+    }); // Reset the flag after a short delay
+
+    const obstacleTL = obstacle.pos.add([-(TILE_WIDTH / 2), -TILE_HEIGHT]);
+    const obstacleBR = obstacle.pos.add([TILE_WIDTH / 2, 0]);
+    let shootingDirection;
+
+    if (obstacleTL.x > bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
+      shootingDirection = "left";
+    } else if (obstacleTL.x < bullet.pos.x && obstacleTL.y > bullet.pos.y && obstacleBR.x > bullet.pos.x) {
+      shootingDirection = "top";
+    } else if (obstacleBR.x < bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
+      shootingDirection = "right";
+    } else if (obstacleTL.x < bullet.pos.x && obstacleBR.y < bullet.pos.y && obstacleBR.x > bullet.pos.x) {
+      shootingDirection = "bottom";
+    } else {
+      shootingDirection = null;
+    }
+
+    switch (shootingDirection) {
+      case "left":
+        bullet.dir.x = -bullet.dir.x;
+        break;
+      case "top":
+        bullet.dir.y = -bullet.dir.y;
+        break;
+      case "right":
+        bullet.dir.x = -bullet.dir.x;
+        break;
+      case "bottom":
+        bullet.dir.y = -bullet.dir.y;
+        break;
+      default:
+        bullet.dir = bullet.dir;
+    }
+
+    console.log(bullet.dir);
+
+    // Move the bullet in the new direction after bouncing
+    bullet.move(bullet.dir.scale(bullet.speed));
+
+    // If it's a laser, increment the bounce counter and check if it should be destroyed
+    if (bullet.sprite === "bullet_laser") {
+      console.log(bullet.bounces);
+      bullet.bounces += 1;
+      if (bullet.bounces >= 3) {
+        destroy(bullet);
+      }
+    } else if (bullet.sprite === "bullet_rocket") {
+      createExplosion(bullet.pos, 50, bullet.damage);
+      destroy(bullet);
+    } else {
+      destroy(bullet);
+    }
+  }
+
+  // Handle bullet-obstacle collisions, specifically for lasers and rockets
+  onCollide("bullet", "wall", (bullet, obstacle) => {
+    bounceOfTheWalls(bullet, obstacle);
+  });
+
+  onCollide("bullet", "platform", (bullet, obstacle) => {
+    bounceOfTheWalls(bullet, obstacle);
+  });
+
+  spawnWeaponPickup("laser", vec2(200, 150));
+
+  // Show the modal on page load
+  function openModal() {
+    const playerSelectModal = new bootstrap.Modal(document.getElementById("playerSelectModal"));
+    playerSelectModal.show();
+
+    document.getElementById("onePlayerBtn").addEventListener("click", () => {
+      playerSelectModal.hide();
+      startTrackingDir(1);
+      playersCountFinction(1);
+      addPlayer1();
+    });
+
+    document.getElementById("twoPlayersBtn").addEventListener("click", () => {
+      playerSelectModal.hide();
+      startTrackingDir(2);
+      playersCountFinction(2);
+      addPlayer1();
+      addPlayer2();
+    });
+  }
+  openModal();
 });
 
 // Start the game
