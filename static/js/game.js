@@ -439,67 +439,67 @@ scene("game", () => {
     const lavaTileHeight = originalTileSize * scaleFactor; // New height (640)
 
     // Calculate the number of tiles needed to cover the screen width and height
-    const numTilesAcross = Math.ceil(width() / lavaTileWidth); 
-    const numTilesDown = Math.ceil(height() / lavaTileHeight); 
+    const numTilesAcross = Math.ceil(width() / lavaTileWidth);
+    const numTilesDown = Math.ceil(height() / lavaTileHeight);
 
     for (let j = 0; j < numTilesDown; j++) {
-        // Loop to create tiles down the height
-        for (let i = 0; i < numTilesAcross; i++) {
-            add([
-                sprite("lava"),
-                pos(i * lavaTileWidth, y - j * lavaTileHeight), // Position each tile
-                area({ width: lavaTileWidth, height: lavaTileHeight }), // Set each tile's size
-                scale(scaleFactor), // Scale the sprite
-                "lava",
-            ]);
-        }
+      // Loop to create tiles down the height
+      for (let i = 0; i < numTilesAcross; i++) {
+        add([
+          sprite("lava"),
+          pos(i * lavaTileWidth, y - j * lavaTileHeight), // Position each tile
+          area({ width: lavaTileWidth, height: lavaTileHeight }), // Set each tile's size
+          scale(scaleFactor), // Scale the sprite
+          "lava",
+        ]);
+      }
     }
   }
 
   // Create the initial lava using larger blocks
   createLava(lastY + TILE_HEIGHT * 5); // Push the lava much lower below the starting point
 
- onUpdate(() => {
+  onUpdate(() => {
     // Ensure player1 is defined before trying to access it
     if (!player1) return;
 
     // Move lava up gradually
     const lavaTiles = get("lava");
     lavaTiles.forEach((lava) => {
-        lava.move(0, -LAVA_MOVE_SPEED * dt());
+      lava.move(0, -LAVA_MOVE_SPEED * dt());
     });
 
     // Destroy the player if they touch the lava
     const players = [];
     if (playersCount === 1) {
-        players.push(player1);
+      players.push(player1);
     }
     if (playersCount === 2) {
-        players.push(player2);
+      players.push(player2);
     }
 
     players.forEach((player) => {
-        lavaTiles.forEach((lava) => {
-            if (player.isColliding(lava)) {
-                destroy(player);
-                const index = players.indexOf(player);
-                if (index > -1) {
-                    players.splice(index, 1);
-                }
-                checkGameOver();
-                return;
-            }
-        });
+      lavaTiles.forEach((lava) => {
+        if (player.isColliding(lava)) {
+          destroy(player);
+          const index = players.indexOf(player);
+          if (index > -1) {
+            players.splice(index, 1);
+          }
+          checkGameOver();
+          return;
+        }
+      });
     });
 
     // Destroy enemies if they touch the lava
     const enemies = get("enemy");
     enemies.forEach((enemy) => {
-        lavaTiles.forEach((lava) => {
-            if (enemy.isColliding(lava)) {
-                destroy(enemy);
-            }
-        });
+      lavaTiles.forEach((lava) => {
+        if (enemy.isColliding(lava)) {
+          destroy(enemy);
+        }
+      });
     });
 
     // Gradually move the camera upwards
@@ -830,7 +830,6 @@ scene("game", () => {
   ];
 
   // Call this function after creating the player
-
   function spawnEnemy(position) {
     const randomEnemy = choose(listOfSpriteNames);
     console.log(randomEnemy);
@@ -845,27 +844,25 @@ scene("game", () => {
       {
         fly: randomEnemy.fly,
         speed: randomEnemy.speed,
+        direction: choose(ENEMY_DIRECTIONS), // Initialize with a random direction
       },
       randomEnemy.name,
       "enemy",
     ]);
 
-    // Set a random direction initially
-    let currentDirection = choose(ENEMY_DIRECTIONS);
-
-    // Define how often the direction should change (e.g., every 2-3 seconds)
-    loop(rand(2, 3), () => {
-      currentDirection = choose(ENEMY_DIRECTIONS); // Pick a new random direction
-    });
-
-    // Define the enemy's movement
+    // Update enemy movement
     enemy.onUpdate(() => {
-      if (enemy.fly) {
-        enemy.vel.y = 0; // Set vertical velocity to zero to counteract gravity
-        enemy.move(0, -enemy.speed); // Move upwards
+      // Move the enemy in the current direction
+      enemy.move(
+        enemy.direction.x * enemy.speed,
+        enemy.direction.y * enemy.speed
+      );
+
+      // Change direction randomly at intervals
+      if (Math.random() < 0.01) {
+        // Adjust this probability to control direction change frequency
+        enemy.direction = choose(ENEMY_DIRECTIONS);
       }
-      // Move in the current direction scaled by speed and dt()
-      enemy.move(currentDirection.scale(enemy.speed * dt()));
     });
 
     // Play the move animation
