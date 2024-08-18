@@ -713,7 +713,6 @@ scene("game", () => {
 
   function spawnEnemy(position) {
     const randomEnemy = choose(listOfSpriteNames);
-    console.log(randomEnemy);
     const enemy = add([
       sprite(randomEnemy.name),
       pos(position),
