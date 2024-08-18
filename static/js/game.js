@@ -2,7 +2,6 @@ import kaplay from "https://unpkg.com/kaplay@3001.0.0-alpha.20/dist/kaplay.mjs";
 // start kaplay
 
 import { player1Controls, player2Controls, loadPlayerControls } from "./controlKeys.js";
-import { sprites } from "./assets.js";
 import { WEAPONS } from "./weapons.js";
 
 // This function loads controls from localStorage and updates the global control variables.
@@ -21,24 +20,29 @@ kaplay({
 const SPEED = 240;
 const JUMP_FORCE = 600;
 setGravity(640);
-const TILE_WIDTH = 64;
-const TILE_HEIGHT = 64;
+const TILE_WIDTH = 32;
+const TILE_HEIGHT = 32;
 const WALL_HEIGHT_TILES = 3; // Height of wall sections in tiles
 const PLATFORM_HEIGHT_TILES = 3; // Platform height in tiles
 const PLATFORM_GAP_TILES = 3; // Vertical gap between platforms in tiles
-const PLATFORMS_PER_ROW = 14; // Number of platforms per row
+const PLATFORMS_PER_ROW = 30; // Number of platforms per row
 const WALLS_WIDTH = 1; // Width of walls in tiles
 const TOTAL_TILES = PLATFORMS_PER_ROW + WALLS_WIDTH * 2; // Total tiles width (platforms + walls)
 const UNIT_TO_METERS = 0.08; // Conversion factor: 1 game unit = 0.08 meters
-const CAMERA_THRESHOLD = height() / 3; // Height threshold to start moving camera
+const CAMERA_THRESHOLD = height() / 5; // Height threshold to start moving camera
 const DELETE_THRESHOLD = 900; // Distance below the camera to delete objects
 const CAMERA_MOVE_SPEED = 0; // Speed for slow upward camera movement
 const LAVA_MOVE_SPEED = 0; // Speed at which the lava moves up
 const PICKUP_SACLE = 1.5;
 
+const SPAWN_WIDTH_P1 = 180;
+const SPAWN_WIDTH_P2 = 360;
+const SPAWN_HEIGHT = 400;
+
 let lastY = 0; // Track the last Y position where platforms were generated in tile units
 let isFirstRow = true; // Flag to manage initial platform row
 let sections = []; // Array to keep track of current sections
+let highestCamPosY = camPos().y;
 
 // Initialize startY with the initial Y position of player1 after it's added
 let startY = 30;
@@ -83,6 +87,15 @@ loadSprite("frog2", "../static/sprites/player_2_sprite.png", {
   },
 });
 
+loadSprite("snake", "../static/sprites/snake_sprite.png", {
+  sliceX: 3,
+  sliceY: 1,
+  anims: {
+    idle: 2,
+    move: { from: 0, to: 1, speed: 8, loop: true },
+  },
+});
+
 // Loading gun sprites
 loadSprite("bullet", "../static/sprites/bullet.png");
 loadSprite("bullet_split", "../static/sprites/bullet_split.png");
@@ -94,10 +107,10 @@ loadSprite("pickup_split", "../static/sprites/pickup_split.png");
 loadSprite("pickup_rocket", "../static/sprites/pickup_rocket.png");
 
 // Load level sprites
-loadSprite("lava", sprites.lava); // moved all sprites assets to assets.js
-loadSprite("wall", sprites.wall);
-loadSprite("platform", sprites.platform);
-loadSprite("dirt", sprites.dirt);
+loadSprite("lava", "../static/Images/tiles/lava-tile-64x64.png");
+loadSprite("wall", "../static/Images/tiles/wall-tile-32x32-2.png");
+loadSprite("platform", "../static/Images/tiles/platform-tile-32x16.png");
+loadSprite("dirt", "../static/Images/tiles/dirt-tile-32x32-2.png");
 
 // Load sounds
 loadSound("blip", "/examples/sounds/blip.mp3");
@@ -416,9 +429,13 @@ scene("game", () => {
     const currentCamPos = camPos();
     camPos(currentCamPos.x, currentCamPos.y + CAMERA_MOVE_SPEED * dt());
 
+    const lowestPlayerPosition = playersCount === 2 ? Math.max(player1.pos.y, player2.pos.y) : player1.pos.y;
+
     // Camera only moves up when the player is near the top of the screen
-    if (player1 && player1.pos.y < currentCamPos.y - CAMERA_THRESHOLD) {
-      camPos(width() / 2, player1.pos.y + CAMERA_THRESHOLD);
+    if (lowestPlayerPosition < highestCamPosY) {
+      camPos(width() / 2, lowestPlayerPosition + CAMERA_THRESHOLD);
+
+      highestCamPosY = lowestPlayerPosition + CAMERA_THRESHOLD;
     }
 
     // Remove old sections below the camera
@@ -443,19 +460,26 @@ scene("game", () => {
     // Check if player falls below the screen
     if (player1.pos.y > camPos().y + height() / 2) {
       destroy(player1);
-      // checkGameOver(); // Check if game is over
+      checkGameOver(); // Check if game is over
     }
   });
+
+  function checkGameOver() {
+    if ((!player1 || player1.health() <= 0) && (!player2 || player2.health() <= 0)) {
+      go("lose", { maxHeight: (startY - highestCamPosY) * UNIT_TO_METERS });
+    }
+  }
 
   function addPlayer1() {
     // Add our player1 character
     player1 = add([
       sprite("frog1"),
-      pos(180, 80),
+      pos(SPAWN_WIDTH_P1, SPAWN_HEIGHT),
       anchor("center"),
-      area({ shape: new Polygon([vec2(-15, -10), vec2(20, -10), vec2(20, 33), vec2(-15, 33)]) }),
+      area({ shape: new Polygon([vec2(-13, -10), vec2(17, -10), vec2(17, 33), vec2(-13, 33)]) }),
       body(),
       scale(1),
+      health(100),
       "player1",
     ]);
     player1.play("idle");
@@ -549,17 +573,19 @@ scene("game", () => {
         });
       }
     });
+    displayPlayerHealth(player1);
   }
 
   // If 2 players, add the second player
   function addPlayer2() {
     player2 = add([
       sprite("frog2"),
-      pos(180, 80),
+      pos(SPAWN_WIDTH_P2, SPAWN_HEIGHT),
       anchor("center"),
-      area({ shape: new Polygon([vec2(-15, -10), vec2(20, -10), vec2(20, 33), vec2(-15, 33)]) }),
+      area({ shape: new Polygon([vec2(-13, -10), vec2(17, -10), vec2(17, 33), vec2(-13, 33)]) }),
       body(),
       scale(1),
+      health(100),
       "player2",
     ]);
     player2.play("idle");
@@ -654,6 +680,52 @@ scene("game", () => {
         });
       }
     });
+    displayPlayerHealth(player2);
+  }
+
+  function hurtPlayer(player, damage) {
+    if (player.exists()) {
+      player.health -= damage; // Directly reduce the player's health by the damage amount
+
+      // Optional: Add visual feedback or sound effects on hurt
+      shake(2); // Screen shake effect
+      play("hit"); // Play a hit sound
+
+      // Check if player's health is zero or less
+      if (player.health <= 0) {
+        player.trigger("death");
+      }
+    }
+  }
+
+  // Call this function after creating the player
+
+  function spawnEnemy(position) {
+    const enemy = add([
+      sprite("snake"),
+      pos(position),
+      anchor("center"),
+      area(),
+      body(),
+      health(100),
+      "snake",
+      "enemy",
+    ]);
+
+    // Define the enemy's movement
+    enemy.onUpdate(() => {
+      // Example AI movement: move left and right
+      if (enemy.pos.x > position.x + 50) {
+        enemy.move(-SPEED / 2, 0);
+      } else if (enemy.pos.x < position.x - 50) {
+        enemy.move(SPEED / 2, 0);
+      }
+    });
+
+    // Play the move animation
+    enemy.play("move");
+
+    return enemy;
   }
 
   function spawnBullet(player, dir) {
@@ -669,6 +741,7 @@ scene("game", () => {
         pos(player.pos),
         rotate(angle),
         area(weapon.collisionArea),
+        offscreen({ destroy: true }),
         {
           damage: weapon.damage,
           bounces: 0,
@@ -732,6 +805,27 @@ scene("game", () => {
     bullet.angle = angle;
   });
 
+  onCollide("enemy", "player1", (enemy, player) => {
+    hurtPlayer(player, 20); // Reduce player's health by 20
+    knockback(player, enemy.pos); // Optional: Apply a knockback effect
+  });
+
+  function knockback(player, sourcePosition, strength = 400) {
+    // Calculate the direction of the knockback
+    const knockbackDirection = player.pos.sub(sourcePosition).unit();
+
+    // Apply the knockback force to the player
+    player.move(knockbackDirection.scale(strength));
+  }
+
+  onCollide("bullet", "enemy", (bullet, enemy) => {
+    enemy.hurt(bullet.damage); // Reduce the enemy's health
+    if (bullet.sprite !== "bullet_laser") {
+      destroy(bullet); // Destroy the bullet
+    }
+    if (enemy.hp() <= 0) destroy(enemy); // Destroy the enemy if it's dead
+  });
+
   function bounceOfTheWalls(bullet, obstacle) {
     if (bullet.bouncedRecently) return; // Skip if it has bounced recently
 
@@ -774,14 +868,11 @@ scene("game", () => {
         bullet.dir = bullet.dir;
     }
 
-    console.log(bullet.dir);
-
     // Move the bullet in the new direction after bouncing
     bullet.move(bullet.dir.scale(bullet.speed));
 
     // If it's a laser, increment the bounce counter and check if it should be destroyed
     if (bullet.sprite === "bullet_laser") {
-      console.log(bullet.bounces);
       bullet.bounces += 1;
       if (bullet.bounces >= 3) {
         destroy(bullet);
@@ -804,6 +895,25 @@ scene("game", () => {
   });
 
   spawnWeaponPickup("laser", vec2(200, 150));
+
+  // Example: Spawn enemies at regular intervals
+  loop(5, () => {
+    spawnEnemy(vec2(rand(100, 500), rand(100, 300)));
+  });
+
+  function displayPlayerHealth(player) {
+    const healthLabel = add([
+      text(`Health: ${player.hp()}`),
+      pos(24, player === player1 ? 24 : 48), // Position for each player
+      fixed(), // Fixed to camera
+      layer("ui"), // Display on the UI layer
+      {
+        update() {
+          this.text = `Health: ${player.health}`;
+        },
+      },
+    ]);
+  }
 
   // Show the modal on page load
   function openModal() {
@@ -830,3 +940,13 @@ scene("game", () => {
 
 // Start the game
 go("game");
+
+scene("lose", ({ maxHeight }) => {
+  add([
+    text(`You Lose! Height Achieved: ${maxHeight.toFixed(1)} meters`),
+    pos(width() / 2, height() / 2),
+    anchor("center"),
+  ]);
+
+  onKeyPress(() => go("game"));
+});
