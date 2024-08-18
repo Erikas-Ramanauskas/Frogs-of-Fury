@@ -45,6 +45,11 @@ const SPAWN_WIDTH_P2 = 360;
 const SPAWN_HEIGHT = 400;
 const spawnInterval = 0.5; // Time interval between enemy spawns
 const spawnOffsetY = 500; // Distance above the players to spawn enemies
+const LOOT_TYPES = [
+  { type: "split", chance: 0.33 },
+  { type: "laser", chance: 0.34 },
+  { type: "rocket", chance: 0.33 },
+];
 
 let maxEnemies = 12; // Maximum number of enemies to spawn
 let spawnedEnemies = 0; // Number of enemies spawned
@@ -289,6 +294,33 @@ function startTrackingDir(players) {
       }
     }
   });
+}
+
+// Function to handle weapon pickups with a random chance
+function maybeSpawnWeaponPickup(position) {
+  if (Math.random() < 0.3) {
+    // 30% chance to drop something
+    const lootType = chooseLootType();
+    if (lootType) {
+      spawnWeaponPickup(lootType, position);
+    }
+  }
+}
+
+// Function to choose a loot type based on their chances
+function chooseLootType() {
+  const totalChance = LOOT_TYPES.reduce((sum, loot) => sum + loot.chance, 0);
+  const randomChance = Math.random() * totalChance;
+
+  let cumulativeChance = 0;
+  for (const loot of LOOT_TYPES) {
+    cumulativeChance += loot.chance;
+    if (randomChance < cumulativeChance) {
+      return loot.type; // Return the selected loot type
+    }
+  }
+
+  return;
 }
 
 // Handle weapon pickups
@@ -966,7 +998,10 @@ scene("game", () => {
     if (bullet.sprite !== "bullet_laser") {
       destroy(bullet); // Destroy the bullet
     }
-    if (enemy.hp() <= 0) destroy(enemy); // Destroy the enemy if it's dead
+    if (enemy.hp() <= 0) {
+      destroy(enemy); // Destroy the enemy if it's dead
+      maybeSpawnWeaponPickup(enemy.pos); // Handle weapon pickup with a chance
+    }
   });
 
   function bounceOfTheWalls(bullet, obstacle) {
