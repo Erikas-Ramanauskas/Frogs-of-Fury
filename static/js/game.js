@@ -20,14 +20,40 @@ const JUMP_FORCE = 240;
 setGravity(640);
 
 // Loading a multi-frame sprite
-loadSprite("dino", "../static/sprites/dino.png", {
-  sliceX: 9,
+loadSprite("frog1", "../static/sprites/player_1_sprite.png", {
+  sliceX: 7,
+  sliceY: 4,
+
   anims: {
-    idle: { from: 0, to: 3, speed: 5, loop: true },
-    run: { from: 4, to: 7, speed: 10, loop: true },
-    jump: 8,
+    idle: 5,
+    run: { from: 19, to: 22, speed: 10, loop: true },
+    jump: { from: 7, to: 10, speed: 20, loop: true },
+    shoot: { from: 5, to: 4, speed: 10, loop: false }, // Example shoot animation
+    shoot45upRun: { from: 15, to: 18, speed: 10, loop: true },
+    shoot45upIdle: { from: 15, to: 18, speed: 10, loop: true },
+    shootUp: { from: 0, to: 1, speed: 10, loop: true },
+    shoot45downRun: { from: 11, to: 14, speed: 10, loop: true },
+    shoot45downIdle: { from: 2, to: 3, speed: 10, loop: true },
   },
 });
+
+loadSprite("frog2", "../static/sprites/player_2_sprite.png", {
+  sliceX: 7,
+  sliceY: 4,
+
+  anims: {
+    idle: 5,
+    run: { from: 19, to: 22, speed: 10, loop: true },
+    jump: { from: 7, to: 10, speed: 20, loop: true },
+    shoot: { from: 5, to: 4, speed: 10, loop: false }, // Example shoot animation
+    shoot45upRun: { from: 15, to: 18, speed: 10, loop: true },
+    shoot45upIdle: { from: 15, to: 18, speed: 10, loop: true },
+    shootUp: { from: 0, to: 1, speed: 10, loop: true },
+    shoot45downRun: { from: 11, to: 14, speed: 10, loop: true },
+    shoot45downIdle: { from: 2, to: 3, speed: 10, loop: true },
+  },
+});
+
 loadSprite("bullet", "../static/sprites/bullet.png");
 loadSprite("bullet_split", "../static/sprites/bullet_split.png");
 loadSprite("bullet_laser", "../static/sprites/bullet_laser.png");
@@ -63,6 +89,7 @@ const WEAPONS = {
     damage: 4,
     fireRate: 100,
     collisionArea: [23, 9],
+    explosionArea: 50,
   },
 };
 
@@ -71,6 +98,8 @@ let player1Weapon = WEAPONS.standard;
 let player2Weapon = WEAPONS.standard;
 let lastFireTimePlayer1 = 0;
 let lastFireTimePlayer2 = 0;
+let isPlayer1Shooting = false;
+let isPlayer2Shooting = false;
 
 // Function to switch the player's active weapon
 function switchWeapon(player, newWeapon) {
@@ -88,20 +117,21 @@ function canFire(lastFireTime, fireRate) {
 
 // Define the direction vectors for 8-way shooting
 const DIR_VECTORS = {
-  left: vec2(-1, 0),
-  right: vec2(1, 0),
-  up: vec2(0, -1),
-  down: vec2(0, 1),
-  left_up: vec2(-1, -1).unit(),
-  left_down: vec2(-1, 1).unit(),
-  right_up: vec2(1, -1).unit(),
-  right_down: vec2(1, 1).unit(),
+  left: { vect: vec2(-1, 0), direction: "left" },
+  right: { vect: vec2(1, 0), direction: "right" },
+  up: { vect: vec2(0, -1), direction: "up" },
+  down: { vect: vec2(0, 1), direction: "down" },
+  left_up: { vect: vec2(-1, -1).unit(), direction: "left_up" },
+  left_down: { vect: vec2(-1, 1).unit(), direction: "left_down" },
+  right_up: { vect: vec2(1, -1).unit(), direction: "right_up" },
+  right_down: { vect: vec2(1, 1).unit(), direction: "right_down" },
 };
+
 let player1LastDir = DIR_VECTORS.right;
 let player2LastDir = DIR_VECTORS.left;
 
 // Add our player1 character
-const player1 = add([sprite("dino"), pos(120, 80), anchor("center"), area(), body(), "player1"]);
+const player1 = add([sprite("frog1"), pos(120, 80), anchor("center"), area(), body(), scale(0.5), "player1"]);
 player1.play("idle");
 
 // Add a platform
@@ -123,25 +153,30 @@ onKeyPress(player1Controls.jump, () => {
   }
 });
 
-onKeyDown(player1Controls.left, () => {
-  player1.move(-SPEED, 0);
-  player1.flipX = true;
-  if (player1.isGrounded() && player1.curAnim() !== "run") {
+onKeyDown(player1Controls.right, () => {
+  player1.move(SPEED, 0);
+  player1.flipX = false;
+  if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
     player1.play("run");
   }
 });
 
-onKeyDown(player1Controls.right, () => {
-  player1.move(SPEED, 0);
-  player1.flipX = false;
-  if (player1.isGrounded() && player1.curAnim() !== "run") {
+onKeyDown(player1Controls.left, () => {
+  player1.move(-SPEED, 0);
+  player1.flipX = true;
+  if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
     player1.play("run");
   }
 });
 
 [player1Controls.left, player1Controls.right].forEach((key) => {
   onKeyRelease(key, () => {
-    if (player1.isGrounded() && !isKeyDown(player1Controls.left) && !isKeyDown(player1Controls.right)) {
+    if (
+      player1.isGrounded() &&
+      !isKeyDown(player1Controls.left) &&
+      !isKeyDown(player1Controls.right) &&
+      !isKeyDown(player1Controls.shoots)
+    ) {
       player1.play("idle");
     }
   });
@@ -163,8 +198,6 @@ function updatePlayer1LastDir() {
     player1LastDir = DIR_VECTORS.right;
   } else if (isKeyDown(player1Controls.up)) {
     player1LastDir = DIR_VECTORS.up;
-  } else if (isKeyDown(player1Controls.down)) {
-    player1LastDir = DIR_VECTORS.down;
   }
 }
 
@@ -183,26 +216,63 @@ function updatePlayer2LastDir() {
     player2LastDir = DIR_VECTORS.right;
   } else if (isKeyDown(player2Controls.up)) {
     player2LastDir = DIR_VECTORS.up;
-  } else if (isKeyDown(player2Controls.down)) {
-    player2LastDir = DIR_VECTORS.down;
   }
 }
 
 onKeyPress(player1Controls.shoot, () => {
   if (canFire(lastFireTimePlayer1, player1Weapon.fireRate)) {
-    spawnBullet(player1, player1LastDir); // Shoot in the last direction the player was facing
-    lastFireTimePlayer1 = time(); // Update the last fire time for player 1
+    spawnBullet(player1, player1LastDir.vect);
+    isPlayer1Shooting = true;
+
+    // Play the appropriate shooting animation based on the direction
+    if (isKeyDown(player1Controls.left) || isKeyDown(player1Controls.right)) {
+      switch (player1LastDir.direction) {
+        case "left_up":
+        case "right_up":
+          player1.play("shoot45upRun");
+          break;
+        case "left_down":
+        case "right_down":
+          player1.play("shoot45downRun");
+          break;
+        default:
+          player1.play("run"); // Continue running animation if not in a 45-degree angle
+      }
+    } else {
+      switch (player1LastDir.direction) {
+        case "up":
+          player1.play("shootUp");
+          break;
+        case "left_up":
+        case "right_up":
+          player1.play("shoot45upIdle");
+          break;
+        case "left_down":
+        case "right_down":
+          player1.play("shoot45downIdle");
+          break;
+        default:
+          player1.play("shoot");
+      }
+    }
+
+    lastFireTimePlayer1 = time();
+
+    // Reset the shooting flag after a short delay (based on animation length or a fixed time)
+    wait(1, () => {
+      isPlayer1Shooting = false;
+    });
   }
 });
 
 let player2;
 // If 2 players, add the second player
 function addPlayer2() {
-  player2 = add([sprite("dino"), pos(180, 80), anchor("center"), area(), body(), "player2"]);
+  player2 = add([sprite("frog2"), pos(180, 80), anchor("center"), area(), body(), scale(0.5), "player2"]);
   player2.play("idle");
 
   player2.onGround(() => {
-    if (!isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right)) {
+    if (!isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right) && !isKeyDown(player2Controls.shoot)) {
       player2.play("idle");
     } else {
       player2.play("run");
@@ -216,44 +286,119 @@ function addPlayer2() {
     }
   });
 
-  onKeyDown(player2Controls.left, () => {
-    player2.move(-SPEED, 0);
-    player2.flipX = true;
-    if (player2.isGrounded() && player2.curAnim() !== "run") {
+  onKeyDown(player2Controls.right, () => {
+    player2.move(SPEED, 0);
+    player2.flipX = false;
+    if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
       player2.play("run");
     }
   });
 
-  onKeyDown(player2Controls.right, () => {
-    player2.move(SPEED, 0);
-    player2.flipX = false;
-    if (player2.isGrounded() && player2.curAnim() !== "run") {
+  onKeyDown(player2Controls.left, () => {
+    player2.move(-SPEED, 0);
+    player2.flipX = true;
+    if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
       player2.play("run");
     }
   });
 
   [player2Controls.left, player2Controls.right].forEach((key) => {
     onKeyRelease(key, () => {
-      if (player2.isGrounded() && !isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right)) {
+      if (
+        player2.isGrounded() &&
+        !isKeyDown(player2Controls.left) &&
+        !isKeyDown(player2Controls.right) &&
+        !isKeyDown(player2Controls.shoot)
+      ) {
         player2.play("idle");
       }
     });
   });
-  // Track the last direction Player 2 was facing
 
+  // Track the last direction Player 2 was facing
   onKeyPress(player2Controls.shoot, () => {
     if (canFire(lastFireTimePlayer2, player2Weapon.fireRate)) {
-      spawnBullet(player2, player2LastDir); // Shoot in the last direction the player was facing
-      lastFireTimePlayer2 = time(); // Update the last fire time for player 2
+      spawnBullet(player2, player2LastDir.vect);
+      isPlayer2Shooting = true;
+
+      // Play the appropriate shooting animation based on the direction
+      if (isKeyDown(player2Controls.left) || isKeyDown(player2Controls.right)) {
+        switch (player2LastDir.direction) {
+          case "left_up":
+          case "right_up":
+            player2.play("shoot45upRun");
+            break;
+          case "left_down":
+          case "right_down":
+            player2.play("shoot45downRun");
+            break;
+          default:
+            player2.play("run"); // Continue running animation if not in a 45-degree angle
+        }
+      } else {
+        switch (player2LastDir.direction) {
+          case "up":
+            player2.play("shootUp");
+            break;
+          case "left_up":
+          case "right_up":
+            player2.play("shoot45upIdle");
+            break;
+          case "left_down":
+          case "right_down":
+            player2.play("shoot45downIdle");
+            break;
+          default:
+            player2.play("shoot");
+        }
+      }
+
+      lastFireTimePlayer2 = time();
+
+      // Reset the shooting flag after a short delay (based on animation length or a fixed time)
+      wait(1, () => {
+        isPlayer2Shooting = false;
+      });
     }
   });
 }
 
+/**
+ * Starts tracking the direction of one or two players based on the number of players specified.
+ *
+ * @param {number} players - The number of players to track (1 or 2)
+ * @return {void}
+ */
 function startTrackingDir(players) {
   onUpdate(() => {
+    // Track direction and check idle state for Player 1
     updatePlayer1LastDir();
+    const isAnyKeyPressedPlayer1 =
+      isKeyDown(player1Controls.left) ||
+      isKeyDown(player1Controls.right) ||
+      isKeyDown(player1Controls.up) ||
+      isKeyDown(player1Controls.down) ||
+      isKeyDown(player1Controls.jump) ||
+      isKeyDown(player1Controls.shoot);
+
+    if (!isAnyKeyPressedPlayer1 && player1.isGrounded() && player1.curAnim() !== "idle") {
+      player1.play("idle");
+    }
+
+    // If two players, track direction and check idle state for Player 2
     if (players === 2) {
       updatePlayer2LastDir();
+      const isAnyKeyPressedPlayer2 =
+        isKeyDown(player2Controls.left) ||
+        isKeyDown(player2Controls.right) ||
+        isKeyDown(player2Controls.up) ||
+        isKeyDown(player2Controls.down) ||
+        isKeyDown(player2Controls.jump) ||
+        isKeyDown(player2Controls.shoot);
+
+      if (!isAnyKeyPressedPlayer2 && player2.isGrounded() && player2.curAnim() !== "idle") {
+        player2.play("idle");
+      }
     }
   });
 }
@@ -295,7 +440,7 @@ function createExplosion(position, radius, damage) {
   add([
     pos(position),
     circle(radius), // Use a circle with a given radius
-    color(255, 150, 0), // Explosion color
+    color(203, 53, 61), // Explosion color
     opacity(0.8),
     lifespan(0.3, { fade: 0.1 }), // Make the explosion fade out quickly
   ]);

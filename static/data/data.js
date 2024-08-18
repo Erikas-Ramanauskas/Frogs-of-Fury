@@ -198,12 +198,13 @@ const teamData = [
     linkedIn: "",
     gitHub: "https://github.com/D0bledore",
     imageUrl: "https://ca.slack-edge.com/T0L30B202-U06R4JLLMPC-38cac9d57747-512",
-    techStack: [],
+    techStack: ["HTML5", "CSS3", "JavaScript", "GitHub", "Git", "Visual Studio Code"],
   },
   {
     name: "Christian Borza",
     title: "",
-    description: "",
+    description:
+      "After 20 years in various sales roles, I’ve embarked on a new adventure in the fascinating world of coding. Participating in my first hackathon, I’ve discovered how much I enjoy building things from scratch with a team and tackling bugs like a detective solving mysteries. I never imagined this journey would excite me so much!",
     linkedIn: "https://www.linkedin.com/in/borzachristian/",
     gitHub: "https://github.com/ChrisCross1983",
     imageUrl: "https://ca.slack-edge.com/T0L30B202-U07BYQN24SV-7e88a79e8c9c-512",
@@ -211,8 +212,9 @@ const teamData = [
   },
   {
     name: "John Hummel",
-    title: "",
-    description: "",
+    title: "Junior Fullstack Software Developer",
+    description:
+      "After 20 years in customer-facing roles, I’ve transitioned to pursue my passion as a Junior Fullstack Software Developer. Enthusiastic and adaptable, I bring a strong foundation in web development and a commitment to crafting user-centered applications. Proficient in various technologies and frameworks, I excel in collaborative environments, leveraging my hands-on experience and continuous learning to deliver high-quality, engaging software solutions.",
     linkedIn: "https://www.linkedin.com/in/jjohnhumm/ ",
     gitHub: "https://github.com/Danger0101",
     imageUrl: "https://ca.slack-edge.com/T0L30B202-U055R5D43KP-f6c8e6bc24a0-512",
