@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/index.css" />
     <title>Team Page</title>
     <!-- Bootstrap CSS -->
     <link
@@ -56,33 +57,42 @@
       </nav>
     </header>
     <main>
-      <div
-        id="hero-image"
-        style="width: 100%; height: 600px; border: 1px, solid, black"
-      ></div>
+      <div id="hero-image" style="width: 100%; height: 400px"></div>
       <section>
         <div id="game_intro">
           <h1>Game Title</h1>
-          <p>Introduction of the game</p>
-          <img id="game_example_1" src="" alt="" />
-          <img id="game_example_2" src="" alt="" />
+          <p>
+            Welcome to [Game Name], a retro-inspired action game that pays
+            homage to the classic "Contra" while offering a fresh, vertical
+            challenge. In this game, players must navigate their way through an
+            endless vertical landscape by leaping from platform to platform, all
+            while avoiding or defeating various enemies. The higher you go, the
+            more perilous the journey becomes. But beware: the map dissolves
+            beneath you, so any missed jump or hesitation could lead to your
+            demise. Whether playing solo or with a friend in co-op mode, your
+            goal is to ascend as high as possible and survive the relentless
+            challenges thrown your way.
+          </p>
         </div>
-        <div id="play_game">
-          <h1>Play the game</h1>
-          <a href="/pages/game.html"><button>Let's start to play</button></a>
+        <div id="game-image">
+          <img src="/static/Images/Designer (12).webp" alt="frog is shooting">
+          <img src="/static/Images/crusader-game-character-animation-sprite-vector-illustration-fun-cute-frames-114283469.jpg" alt="frog is shooting">
+          <img src="/static/Images/Designer (14).webp" alt="frog is shooting">
         </div>
-        <div id="controls">
-          <h2>How to control the game</h2>
-          <a href="pages/controls.html"
-            ><button>Introduction of the game control</button></a
-          >
-        </div>
-        <div id="team">
-          <h2>The dev team behind the scenes</h2>
-          <a href="pages\team.html"
-            ><button>Introduction of the team members</button></a
-          >
-        </div>
+        <section id="flex-container">
+          <div id="play_game">
+            <h2>Play the game</h2>
+            <a href="/pages/game.html"><button>Start to play</button></a>
+          </div>
+          <div id="controls">
+            <h2>Controls & Rules</h2>
+            <a href="pages/controls.html"><button>How to play</button></a>
+          </div>
+          <div id="team">
+            <h2>The dev team</h2>
+            <a href="pages\team.html"><button>The Team</button></a>
+          </div>
+        </section>
       </section>
     </main>
     <!-- Bootstrap JS and Popper.js (optional) -->

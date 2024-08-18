@@ -2,7 +2,7 @@
 
 Welcome to [Game Name], a retro-inspired action game that pays homage to the classic "Contra" while offering a fresh, vertical challenge. In this game, players must navigate their way through an endless vertical landscape by leaping from platform to platform, all while avoiding or defeating various enemies. The higher you go, the more perilous the journey becomes. But beware: the map dissolves beneath you, so any missed jump or hesitation could lead to your demise. Whether playing solo or with a friend in co-op mode, your goal is to ascend as high as possible and survive the relentless challenges thrown your way.
 
-![Picture of Frog Game](/static/Images/frog_pic1.png)
+![Picture of Frog Game](/static/Images/frog_pic1.webp)
 
 # Objectives
 
@@ -50,7 +50,29 @@ This game is designed for retro game enthusiasts who enjoy fast-paced, skill-bas
 
 ## Game Page
 
-## Controls Page
+## Controls & Rules Page
+
+### Controls
+
+The game allows for two-player mode with distinct controls for each player. Below are the key mappings for Player 1 and Player 2:
+
+### Player 1 Controls
+- **Up**: `w`
+- **Down**: `s`
+- **Left**: `a`
+- **Right**: `d`
+- **Jump**: `c`
+- **Shoot**: `v`
+
+### Player 2 Controls
+- **Up**: `o`
+- **Down**: `l`
+- **Left**: `k`
+- **Right**: `;`
+- **Jump**: `down arrow`
+- **Shoot**: `left arrow`
+
+Please refer to this section to understand how to control your characters in the game.
 
 ## Team Page
 
