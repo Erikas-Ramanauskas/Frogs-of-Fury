@@ -72,7 +72,14 @@ The game allows for two-player mode with distinct controls for each player. Belo
 - **Jump**: `down arrow`
 - **Shoot**: `left arrow`
 
-Please refer to this section to understand how to control your characters in the game.
+### Rules of the game
+
+ 1. **Objective:** Ascend as high as possible by jumping from platform to platform. The higher you go, the tougher the enemies and the challenges.
+ 2. **Enemies:** Various enemies will try to stop your progress. Use different weapons to defeat them and clear your path upwards.
+ 3. **Falling:** If you miss a jump and fall off a platform, you can either land on a lower platform or fall into the abyss, leading to death.
+ 4. **Rising Abyss:** The abyss slowly rises from below, forcing you to keep moving upwards. Standing still for too long will result in being swallowed by the abyss.
+
+Please refer to this section to understand how to control your characters and face the rules in the game.
 
 ## Team Page
 
