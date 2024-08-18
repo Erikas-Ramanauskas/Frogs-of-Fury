@@ -125,7 +125,7 @@ loadSound("shotGunshot", "static/sounds/shot_gunshot.wav");
 loadSound("jump", "static/sounds/jump.wav");
 loadSound("ingameSlow", "static/sounds/ingame_slow.mp3");
 loadSound("ingameFaster", "static/sounds/ingame_faster.mp3");
-loadSound("hitHurt", "static/sounds/hitHurt.wav");
+loadSound("hit", "static/sounds/hitHurt.wav");
 loadSound("gameOver", "static/sounds/game_over.mp3");
 loadSound("footstepNormal", "static/sounds/footstep_normal.wav");
 loadSound("footstepFrog", "static/sounds/footstep_frog.wav");
@@ -1014,7 +1014,24 @@ scene("game", () => {
 
   // Example: Spawn enemies at regular intervals
   loop(5, () => {
-    spawnEnemy(vec2(rand(100, 500), rand(100, 300)));
+  loop(2.5, () => {
+    const spawnInterval = 0.5; // Time interval between enemy spawns
+    const spawnOffsetY = 500; // Distance above the players to spawn enemies
+    let lastSpawnedY = 0;
+    if (!player1 && !player2) return; // Check if no players exist
+    // Determine the highest Y position among the players
+      player1 ? player1.pos.y : -Infinity,
+      player2 ? player2.pos.y : -Infinity
+    );
+
+    // Calculate the spawn position based on the highest player position
+    const spawnY = highestPlayerY - spawnOffsetY;
+    const spawnX = rand(100, width() - 150); // Randomize X position within screen bounds
+    // Ensure enemies are not spawned too close to each other vertically
+    if (Math.abs(spawnY - lastSpawnedY) > 200) {
+      spawnEnemy(vec2(spawnX, spawnY));
+      lastSpawnedY = spawnY; // Update last spawned position
+    }
   });
 
   function displayPlayerHealth(player) {
