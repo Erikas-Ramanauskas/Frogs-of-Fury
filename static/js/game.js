@@ -42,7 +42,12 @@ const PICKUP_SACLE = 1.5;
 const SPAWN_WIDTH_P1 = 180;
 const SPAWN_WIDTH_P2 = 360;
 const SPAWN_HEIGHT = 400;
+const spawnInterval = 0.5; // Time interval between enemy spawns
+const spawnOffsetY = 500; // Distance above the players to spawn enemies
 
+let maxEnemies = 12; // Maximum number of enemies to spawn
+let spawnedEnemies = 0; // Number of enemies spawned
+let lastSpawnedY = 0;
 let lastY = 0; // Track the last Y position where platforms were generated in tile units
 let isFirstRow = true; // Flag to manage initial platform row
 let sections = []; // Array to keep track of current sections
@@ -443,37 +448,47 @@ scene("game", () => {
   // Create the initial lava using larger blocks
   createLava(lastY + TILE_HEIGHT * 20); // Push the lava much lower below the starting point
 
-  onUpdate(() => {
+ onUpdate(() => {
     // Ensure player1 is defined before trying to access it
     if (!player1) return;
 
     // Move lava up gradually
     const lavaTiles = get("lava");
     lavaTiles.forEach((lava) => {
-      lava.move(0, -LAVA_MOVE_SPEED * dt());
+        lava.move(0, -LAVA_MOVE_SPEED * dt());
     });
 
     // Destroy the player if they touch the lava
-    lavaTiles.forEach((lava) => {
-      const players = [];
-      if (playersCount === 1) {
+    const players = [];
+    if (playersCount === 1) {
         players.push(player1);
-      }
-      if (playersCount === 2) {
+    }
+    if (playersCount === 2) {
         players.push(player2);
-      }
+    }
 
-      players.forEach((player) => {
-        if (player.isColliding(lava)) {
-          destroy(player);
-          const index = players.indexOf(player);
-          if (index > -1) {
-            players.splice(index, 1);
-          }
-          checkGameOver();
-          return;
-        }
-      });
+    players.forEach((player) => {
+        lavaTiles.forEach((lava) => {
+            if (player.isColliding(lava)) {
+                destroy(player);
+                const index = players.indexOf(player);
+                if (index > -1) {
+                    players.splice(index, 1);
+                }
+                checkGameOver();
+                return;
+            }
+        });
+    });
+
+    // Destroy enemies if they touch the lava
+    const enemies = get("enemy");
+    enemies.forEach((enemy) => {
+        lavaTiles.forEach((lava) => {
+            if (enemy.isColliding(lava)) {
+                destroy(enemy);
+            }
+        });
     });
 
     // Gradually move the camera upwards
@@ -1013,13 +1028,10 @@ scene("game", () => {
   spawnWeaponPickup("laser", vec2(200, 150));
 
   // Example: Spawn enemies at regular intervals
-  loop(5, () => {
-  loop(2.5, () => {
-    const spawnInterval = 0.5; // Time interval between enemy spawns
-    const spawnOffsetY = 500; // Distance above the players to spawn enemies
-    let lastSpawnedY = 0;
+  loop(1, () => {
     if (!player1 && !player2) return; // Check if no players exist
     // Determine the highest Y position among the players
+    const highestPlayerY = Math.max(
       player1 ? player1.pos.y : -Infinity,
       player2 ? player2.pos.y : -Infinity
     );
@@ -1027,11 +1039,18 @@ scene("game", () => {
     // Calculate the spawn position based on the highest player position
     const spawnY = highestPlayerY - spawnOffsetY;
     const spawnX = rand(100, width() - 150); // Randomize X position within screen bounds
+
     // Ensure enemies are not spawned too close to each other vertically
-    if (Math.abs(spawnY - lastSpawnedY) > 200) {
+    if (Math.abs(spawnY - lastSpawnedY) > 200 && spawnedEnemies < maxEnemies) {
       spawnEnemy(vec2(spawnX, spawnY));
       lastSpawnedY = spawnY; // Update last spawned position
+      spawnedEnemies++; // Increment the number of spawned enemies
     }
+  });
+
+  // Monitor enemy count
+  onDestroy("enemy", () => {
+    spawnedEnemies--; // Decrement the number of spawned enemies
   });
 
   function displayPlayerHealth(player) {
