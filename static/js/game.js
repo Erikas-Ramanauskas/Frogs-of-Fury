@@ -145,6 +145,15 @@ for (const obj of enemies) {
   }
 }
 
+loadSprite("background", "../static/images/game_page.png");
+
+add([
+  sprite("background"),
+  pos(0, 0),
+  layer("background"), // Optional: If you are using layers
+  scale(width() / sprite("background").width, height() / sprite("background").height), // Scale to fit screen
+]);
+
 // Loading gun sprites
 loadSprite("bullet", "../static/sprites/bullet.png");
 loadSprite("bullet_split", "../static/sprites/bullet_split.png");
