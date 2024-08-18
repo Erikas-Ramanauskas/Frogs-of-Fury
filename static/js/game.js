@@ -37,7 +37,7 @@ const UNIT_TO_METERS = 0.08; // Conversion factor: 1 game unit = 0.08 meters
 const CAMERA_THRESHOLD = height() / 5; // Height threshold to start moving camera
 const DELETE_THRESHOLD = 900; // Distance below the camera to delete objects
 const CAMERA_MOVE_SPEED = 0; // Speed for slow upward camera movement
-const LAVA_MOVE_SPEED = 0; // Speed at which the lava moves up
+const LAVA_MOVE_SPEED = 650; // Speed at which the lava moves up
 const PICKUP_SACLE = 1.5;
 
 const SPAWN_WIDTH_P1 = 180;
@@ -432,27 +432,32 @@ scene("game", () => {
 
   // Function to create a block of scaled lava tiles (3x3) that covers the same area
   function createLava(y) {
-    const lavaTileWidth = 64 * 3; // Width of each lava block (3 tiles wide)
-    const lavaTileHeight = TILE_HEIGHT * 3; // Height of each lava block (3 tiles tall)
-    const numBlocks = Math.ceil(width() / lavaTileWidth); // Number of blocks needed to cover the width
-    const LAVA_HEIGHT_BLOCKS = Math.ceil(21 / 3); // Number of 3x3 blocks to cover the height
+    const originalTileSize = 64; // Original tile size (64x64)
+    const scaleFactor = 10; // Factor to scale tiles
 
-    for (let j = 0; j < LAVA_HEIGHT_BLOCKS; j++) {
-      // Loop to create a block of 7 blocks in height
-      for (let i = 0; i < numBlocks; i++) {
-        add([
-          sprite("lava"),
-          pos(i * lavaTileWidth, y - j * lavaTileHeight), // Position each block
-          area({ width: lavaTileWidth, height: lavaTileHeight }), // Set each block's size
-          scale(3), // Scale the lava sprite to 3x3 tiles
-          "lava",
-        ]);
-      }
+    const lavaTileWidth = originalTileSize * scaleFactor; // New width (640)
+    const lavaTileHeight = originalTileSize * scaleFactor; // New height (640)
+
+    // Calculate the number of tiles needed to cover the screen width and height
+    const numTilesAcross = Math.ceil(width() / lavaTileWidth); 
+    const numTilesDown = Math.ceil(height() / lavaTileHeight); 
+
+    for (let j = 0; j < numTilesDown; j++) {
+        // Loop to create tiles down the height
+        for (let i = 0; i < numTilesAcross; i++) {
+            add([
+                sprite("lava"),
+                pos(i * lavaTileWidth, y - j * lavaTileHeight), // Position each tile
+                area({ width: lavaTileWidth, height: lavaTileHeight }), // Set each tile's size
+                scale(scaleFactor), // Scale the sprite
+                "lava",
+            ]);
+        }
     }
   }
 
   // Create the initial lava using larger blocks
-  createLava(lastY + TILE_HEIGHT * 20); // Push the lava much lower below the starting point
+  createLava(lastY + TILE_HEIGHT * 5); // Push the lava much lower below the starting point
 
  onUpdate(() => {
     // Ensure player1 is defined before trying to access it
