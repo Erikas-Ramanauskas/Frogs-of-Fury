@@ -367,11 +367,9 @@ function createExplosion(position, radius, damage) {
   ]);
 
   // Use this for computer enemies
-
-  get("player").forEach((player) => {
-    if (player.pos.dist(position) < radius) {
-      // Apply damage to the player
-      player.hurt(damage);
+  get("enemy").forEach((enemy) => {
+    if (enemy.pos.dist(position) < radius) {
+      enemy.hurt(damage);
     }
   });
 }
@@ -1094,7 +1092,7 @@ scene("game", () => {
         destroy(bullet);
       }
     } else if (bullet.sprite === "bullet_rocket") {
-      createExplosion(bullet.pos, 50, bullet.damage);
+      createExplosion(bullet.pos, 100, bullet.damage);
       destroy(bullet);
     } else {
       destroy(bullet);
@@ -1121,7 +1119,7 @@ scene("game", () => {
     const spawnX = rand(100, width() - 150); // Randomize X position within screen bounds
 
     // Ensure enemies are not spawned too close to each other vertically
-    if (Math.abs(spawnY - lastSpawnedY) > 200 && spawnedEnemies < maxEnemies) {
+    if (Math.abs(spawnY - lastSpawnedY) > 150 && spawnedEnemies < maxEnemies) {
       spawnEnemy(vec2(spawnX, spawnY));
       lastSpawnedY = spawnY; // Update last spawned position
       spawnedEnemies++; // Increment the number of spawned enemies
