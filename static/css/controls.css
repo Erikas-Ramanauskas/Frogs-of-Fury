@@ -6,9 +6,6 @@
 body {
   font-family: Arial, sans-serif;
   /*background-color: #f0f0f0;*/
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 20px;
   /* Add the background */
   background-image: url("../Images/controls_page.png");
@@ -100,4 +97,19 @@ input[type="range"] {
 #saveButton:hover {
   outline: none;
   background-color: #e0e0e0;
+}
+
+.nav-link {
+  position: relative;
+  padding: 10px;
+  transition: border-color 0.3s ease;
+  border-bottom: rgba(255, 255, 255, 0.8) 2px solid;
+}
+
+.nav-link:hover {
+  border-bottom: 2px solid #00ff00;
+}
+
+.navbar-toggler:hover {
+  border: 2px solid #00ff00;
 }
