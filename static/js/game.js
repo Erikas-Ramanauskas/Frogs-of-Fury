@@ -71,7 +71,7 @@ const UNIT_TO_METERS = 0.08; // Conversion factor: 1 game unit = 0.08 meters
 const CAMERA_THRESHOLD = height() / 5; // Height threshold to start moving camera
 const DELETE_THRESHOLD = 900; // Distance below the camera to delete objects
 const CAMERA_MOVE_SPEED = 0; // Speed for slow upward camera movement
-const LAVA_MOVE_SPEED = 0; // Speed at which the lava moves up
+const LAVA_MOVE_SPEED = 650; // Speed at which the lava moves up
 const PICKUP_SACLE = 1.5;
 
 const SPAWN_WIDTH_P1 = 180;
@@ -79,6 +79,11 @@ const SPAWN_WIDTH_P2 = 360;
 const SPAWN_HEIGHT = 400;
 const spawnInterval = 0.5; // Time interval between enemy spawns
 const spawnOffsetY = 500; // Distance above the players to spawn enemies
+const LOOT_TYPES = [
+  { type: "split", chance: 0.33 },
+  { type: "laser", chance: 0.34 },
+  { type: "rocket", chance: 0.33 },
+];
 
 let maxEnemies = 12; // Maximum number of enemies to spawn
 let spawnedEnemies = 0; // Number of enemies spawned
@@ -305,6 +310,33 @@ function startTrackingDir(players) {
   });
 }
 
+// Function to handle weapon pickups with a random chance
+function maybeSpawnWeaponPickup(position) {
+  if (Math.random() < 0.3) {
+    // 30% chance to drop something
+    const lootType = chooseLootType();
+    if (lootType) {
+      spawnWeaponPickup(lootType, position);
+    }
+  }
+}
+
+// Function to choose a loot type based on their chances
+function chooseLootType() {
+  const totalChance = LOOT_TYPES.reduce((sum, loot) => sum + loot.chance, 0);
+  const randomChance = Math.random() * totalChance;
+
+  let cumulativeChance = 0;
+  for (const loot of LOOT_TYPES) {
+    cumulativeChance += loot.chance;
+    if (randomChance < cumulativeChance) {
+      return loot.type; // Return the selected loot type
+    }
+  }
+
+  return;
+}
+
 // Handle weapon pickups
 function spawnWeaponPickup(weaponType, position) {
   add([
@@ -441,19 +473,24 @@ scene("game", () => {
 
   // Function to create a block of scaled lava tiles (3x3) that covers the same area
   function createLava(y) {
-    const lavaTileWidth = 64 * 3; // Width of each lava block (3 tiles wide)
-    const lavaTileHeight = TILE_HEIGHT * 3; // Height of each lava block (3 tiles tall)
-    const numBlocks = Math.ceil(width() / lavaTileWidth); // Number of blocks needed to cover the width
-    const LAVA_HEIGHT_BLOCKS = Math.ceil(21 / 3); // Number of 3x3 blocks to cover the height
+    const originalTileSize = 64; // Original tile size (64x64)
+    const scaleFactor = 10; // Factor to scale tiles
 
-    for (let j = 0; j < LAVA_HEIGHT_BLOCKS; j++) {
-      // Loop to create a block of 7 blocks in height
-      for (let i = 0; i < numBlocks; i++) {
+    const lavaTileWidth = originalTileSize * scaleFactor; // New width (640)
+    const lavaTileHeight = originalTileSize * scaleFactor; // New height (640)
+
+    // Calculate the number of tiles needed to cover the screen width and height
+    const numTilesAcross = Math.ceil(width() / lavaTileWidth);
+    const numTilesDown = Math.ceil(height() / lavaTileHeight);
+
+    for (let j = 0; j < numTilesDown; j++) {
+      // Loop to create tiles down the height
+      for (let i = 0; i < numTilesAcross; i++) {
         add([
           sprite("lava"),
-          pos(i * lavaTileWidth, y - j * lavaTileHeight), // Position each block
-          area({ width: lavaTileWidth, height: lavaTileHeight }), // Set each block's size
-          scale(3), // Scale the lava sprite to 3x3 tiles
+          pos(i * lavaTileWidth, y - j * lavaTileHeight), // Position each tile
+          area({ width: lavaTileWidth, height: lavaTileHeight }), // Set each tile's size
+          scale(scaleFactor), // Scale the sprite
           "lava",
         ]);
       }
@@ -461,7 +498,7 @@ scene("game", () => {
   }
 
   // Create the initial lava using larger blocks
-  createLava(lastY + TILE_HEIGHT * 20); // Push the lava much lower below the starting point
+  createLava(lastY + TILE_HEIGHT * 5); // Push the lava much lower below the starting point
 
   onUpdate(() => {
     // Ensure player1 is defined before trying to access it
@@ -832,7 +869,6 @@ scene("game", () => {
   ];
 
   // Call this function after creating the player
-
   function spawnEnemy(position) {
     const randomEnemy = choose(listOfSpriteNames);
     const enemy = add([
@@ -846,27 +882,25 @@ scene("game", () => {
       {
         fly: randomEnemy.fly,
         speed: randomEnemy.speed,
+        direction: choose(ENEMY_DIRECTIONS), // Initialize with a random direction
       },
       randomEnemy.name,
       "enemy",
     ]);
 
-    // Set a random direction initially
-    let currentDirection = choose(ENEMY_DIRECTIONS);
-
-    // Define how often the direction should change (e.g., every 2-3 seconds)
-    loop(rand(2, 3), () => {
-      currentDirection = choose(ENEMY_DIRECTIONS); // Pick a new random direction
-    });
-
-    // Define the enemy's movement
+    // Update enemy movement
     enemy.onUpdate(() => {
-      if (enemy.fly) {
-        enemy.vel.y = 0; // Set vertical velocity to zero to counteract gravity
-        enemy.move(0, -enemy.speed); // Move upwards
+      // Move the enemy in the current direction
+      enemy.move(
+        enemy.direction.x * enemy.speed,
+        enemy.direction.y * enemy.speed
+      );
+
+      // Change direction randomly at intervals
+      if (Math.random() < 0.01) {
+        // Adjust this probability to control direction change frequency
+        enemy.direction = choose(ENEMY_DIRECTIONS);
       }
-      // Move in the current direction scaled by speed and dt()
-      enemy.move(currentDirection.scale(enemy.speed * dt()));
     });
 
     // Play the move animation
@@ -988,7 +1022,10 @@ scene("game", () => {
     if (bullet.sprite !== "bullet_laser") {
       destroy(bullet); // Destroy the bullet
     }
-    if (enemy.hp() <= 0) destroy(enemy); // Destroy the enemy if it's dead
+    if (enemy.hp() <= 0) {
+      destroy(enemy); // Destroy the enemy if it's dead
+      maybeSpawnWeaponPickup(enemy.pos); // Handle weapon pickup with a chance
+    }
   });
 
   function bounceOfTheWalls(bullet, obstacle) {
