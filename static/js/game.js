@@ -3,6 +3,7 @@ import kaplay from "https://unpkg.com/kaplay@3001.0.0-alpha.20/dist/kaplay.mjs";
 
 import { player1Controls, player2Controls, loadPlayerControls } from "./controlKeys.js";
 import { WEAPONS } from "./weapons.js";
+import { enemies } from "./enemies.js";
 
 // This function loads controls from localStorage and updates the global control variables.
 loadPlayerControls();
@@ -87,14 +88,19 @@ loadSprite("frog2", "../static/sprites/player_2_sprite.png", {
   },
 });
 
-loadSprite("snake", "../static/sprites/snake_sprite.png", {
-  sliceX: 3,
-  sliceY: 1,
-  anims: {
-    idle: 2,
-    move: { from: 0, to: 1, speed: 8, loop: true },
-  },
-});
+const listOfSpriteNames = [];
+
+for (const obj of enemies) {
+  loadSprite(obj.name, `../static/sprites/${obj.name}_sprite.png`, {
+    sliceX: obj.sliceX,
+    sliceY: obj.sliceY,
+    anims: obj.anims,
+    scale: obj.scale,
+  });
+  for (const obj of enemies) {
+    listOfSpriteNames.push(obj);
+  }
+}
 
 // Loading gun sprites
 loadSprite("bullet", "../static/sprites/bullet.png");
@@ -698,28 +704,48 @@ scene("game", () => {
     }
   }
 
+  const ENEMY_DIRECTIONS = [
+    vec2(-1, 0), // Left
+    vec2(1, 0), // Right
+  ];
+
   // Call this function after creating the player
 
   function spawnEnemy(position) {
+    const randomEnemy = choose(listOfSpriteNames);
+    console.log(randomEnemy);
     const enemy = add([
-      sprite("snake"),
+      sprite(randomEnemy.name),
       pos(position),
       anchor("center"),
       area(),
       body(),
-      health(100),
-      "snake",
+      health(randomEnemy.health),
+      scale(randomEnemy.scale),
+      {
+        fly: randomEnemy.fly,
+        speed: randomEnemy.speed,
+      },
+      randomEnemy.name,
       "enemy",
     ]);
 
+    // Set a random direction initially
+    let currentDirection = choose(ENEMY_DIRECTIONS);
+
+    // Define how often the direction should change (e.g., every 2-3 seconds)
+    loop(rand(2, 3), () => {
+      currentDirection = choose(ENEMY_DIRECTIONS); // Pick a new random direction
+    });
+
     // Define the enemy's movement
     enemy.onUpdate(() => {
-      // Example AI movement: move left and right
-      if (enemy.pos.x > position.x + 50) {
-        enemy.move(-SPEED / 2, 0);
-      } else if (enemy.pos.x < position.x - 50) {
-        enemy.move(SPEED / 2, 0);
+      if (enemy.fly) {
+        enemy.vel.y = 0; // Set vertical velocity to zero to counteract gravity
+        enemy.move(0, -enemy.speed); // Move upwards
       }
+      // Move in the current direction scaled by speed and dt()
+      enemy.move(currentDirection.scale(enemy.speed * dt()));
     });
 
     // Play the move animation
