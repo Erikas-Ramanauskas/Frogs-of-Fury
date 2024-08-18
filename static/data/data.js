@@ -129,7 +129,7 @@ const logoData = [
 const teamData = [
   {
     name: "Erikas Ramanauskas",
-    title: "",
+    title: "Lead dev for Kaplay.js",
     description:
       "If I would sit on the iron throne this is how I would love to be introduced: You stand here before his grace: Aspiring coder. Hackathon activist. JavaScript lover. A mountain hiker and a bike fanatic. Beach volleyball fan. Formal Cocktail bartender. The chaotic Erik!",
     linkedIn: "https://www.linkedin.com/in/erikas-ramanauskas/",
@@ -164,7 +164,7 @@ const teamData = [
   },
   {
     name: "Kati Molnar",
-    title: "",
+    title: "Pixel Art specialist",
     description:
       "I just go simple: this is my second hackathon, like coding, like problem solving, love learning new things(I guess everybody does here.).",
     linkedIn: "https://www.linkedin.com/in/katalin-molnar-b6a694165/",
@@ -192,17 +192,8 @@ const teamData = [
     ],
   },
   {
-    name: "Maximilian Runge",
-    title: "",
-    description: "",
-    linkedIn: "",
-    gitHub: "https://github.com/D0bledore",
-    imageUrl: "https://ca.slack-edge.com/T0L30B202-U06R4JLLMPC-38cac9d57747-512",
-    techStack: ["HTML5", "CSS3", "JavaScript", "GitHub", "Git", "Visual Studio Code"],
-  },
-  {
     name: "Christian Borza",
-    title: "",
+    title: "Fullstack Software Developer in the making",
     description:
       "After 20 years in various sales roles, I’ve embarked on a new adventure in the fascinating world of coding. Participating in my first hackathon, I’ve discovered how much I enjoy building things from scratch with a team and tackling bugs like a detective solving mysteries. I never imagined this journey would excite me so much!",
     linkedIn: "https://www.linkedin.com/in/borzachristian/",
@@ -238,6 +229,42 @@ const teamData = [
       "Visual Studio Code",
       "Heroku",
       "Google Cloud",
+    ],
+  },
+  {
+    name: "Chat GPT",
+    title: "AI Developer Support Specialist.",
+    description:
+      "Hello! I'm ChatGPT, an AI language model developed by OpenAI, and I'm thrilled to be part of your programming team. I can assist with a wide range of tasks, from brainstorming ideas and debugging code to explaining complex concepts and automating repetitive tasks. My goal is to be a resource that enhances your team's productivity and creativity, helping you tackle challenges more efficiently. While I don't write code on my own, I can help with examples, optimizations, and answering any questions you might have. Looking forward to collaborating with all of you!",
+    linkedIn: "https://www.linkedin.com/company/chat-gpt-officiall/",
+    gitHub: "https://openai.com/chatgpt/enterprise/",
+    imageUrl: "https://styles.redditmedia.com/t5_7hqomg/styles/communityIcon_bzj6d1z1oizc1.png",
+    techStack: [
+      "React",
+      "Python",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Django",
+      "jQuery",
+      "Flask",
+      "Jinja",
+      "Bootstrap",
+      "Font Awesome",
+      "InteractJS",
+      "Jest",
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "GitHub",
+      "Git",
+      "Gitpod",
+      "Visual Studio Code",
+      "Heroku",
+      "Amazon S3",
+      "Figma",
+      "Google Cloud",
+      "Next.js",
     ],
   },
 ];
