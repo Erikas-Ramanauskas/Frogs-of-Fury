@@ -85,7 +85,7 @@ const LOOT_TYPES = [
   { type: "rocket", chance: 0.33 },
 ];
 
-let maxEnemies = 12; // Maximum number of enemies to spawn
+let maxEnemies = 32; // Maximum number of enemies to spawn
 let spawnedEnemies = 0; // Number of enemies spawned
 let lastSpawnedY = 0;
 let lastY = 0; // Track the last Y position where platforms were generated in tile units
@@ -149,6 +149,15 @@ for (const obj of enemies) {
     listOfSpriteNames.push(obj);
   }
 }
+
+loadSprite("background", "../static/images/game_page.png");
+
+add([
+  sprite("background"),
+  pos(0, 0),
+  layer("background"), // Optional: If you are using layers
+  scale(width() / sprite("background").width, height() / sprite("background").height), // Scale to fit screen
+]);
 
 // Loading gun sprites
 loadSprite("bullet", "../static/sprites/bullet.png");
@@ -574,7 +583,7 @@ scene("game", () => {
   });
 
   function checkGameOver() {
-    if ((!player1 || player1.health() <= 0) && (!player2 || player2.health() <= 0)) {
+    if ((!player1 || player1.hp() <= 0) && (!player2 || player2.hp() <= 0)) {
       go("lose", { maxHeight: (startY - highestCamPosY) * UNIT_TO_METERS });
     }
   }
@@ -594,6 +603,8 @@ scene("game", () => {
       "player1",
     ]);
     player1.play("idle");
+
+    addDeathListener(player1); // Add the death listener
 
     // Switch to "idle" or "run" animation when player1 hits ground
     player1.onGround(() => {
@@ -724,6 +735,7 @@ scene("game", () => {
       "player2",
     ]);
     player2.play("idle");
+    addDeathListener(player2);
 
     player2.onGround(() => {
       if (!isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right)) {
@@ -841,17 +853,24 @@ scene("game", () => {
 
   function hurtPlayer(player, damage) {
     if (player.exists()) {
-      player.health -= damage; // Directly reduce the player's health by the damage amount
+      player.hurt(damage); // Directly reduce the player's health by the damage amount
 
       // Optional: Add visual feedback or sound effects on hurt
       shake(2); // Screen shake effect
       play("hit"); // Play a hit sound
 
       // Check if player's health is zero or less
-      if (player.health <= 0) {
+      if (player.hp() <= 0) {
         player.trigger("death");
       }
     }
+  }
+
+  function addDeathListener(player) {
+    player.on("death", () => {
+      destroy(player);
+      checkGameOver();
+    });
   }
 
   const ENEMY_DIRECTIONS = [
@@ -882,10 +901,7 @@ scene("game", () => {
     // Update enemy movement
     enemy.onUpdate(() => {
       // Move the enemy in the current direction
-      enemy.move(
-        enemy.direction.x * enemy.speed,
-        enemy.direction.y * enemy.speed
-      );
+      enemy.move(enemy.direction.x * enemy.speed, enemy.direction.y * enemy.speed);
 
       // Change direction randomly at intervals
       if (Math.random() < 0.01) {
@@ -1086,8 +1102,6 @@ scene("game", () => {
   onCollide("bullet", "platform", (bullet, obstacle) => {
     bounceOfTheWalls(bullet, obstacle);
   });
-
-  spawnWeaponPickup("laser", vec2(200, 150));
 
   // Example: Spawn enemies at regular intervals
   loop(1, () => {
