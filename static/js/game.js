@@ -1,11 +1,7 @@
 import kaplay from "https://unpkg.com/kaplay@3001.0.0-alpha.20/dist/kaplay.mjs";
 // start kaplay
 
-import {
-  player1Controls,
-  player2Controls,
-  loadPlayerControls,
-} from "./controlKeys.js";
+import { player1Controls, player2Controls, loadPlayerControls } from "./controlKeys.js";
 import { WEAPONS } from "./weapons.js";
 import { enemies } from "./enemies.js";
 
@@ -13,6 +9,7 @@ import { enemies } from "./enemies.js";
 loadPlayerControls();
 
 kaplay({
+  backgroundAudio: true,
   background: [141, 183, 255],
   scale: 1,
   font: "monospace",
@@ -21,6 +18,43 @@ kaplay({
   height: 500,
   letterbox: true,
 });
+
+let GLOBAL_VOLUME = 0.1;
+
+// Function to set and save global volume
+function setGlobalVolume(value) {
+  GLOBAL_VOLUME = Math.max(0, Math.min(1, GLOBAL_VOLUME + value)); // Clamp the volume between 0 and 1
+  localStorage.setItem("globalVolume", GLOBAL_VOLUME); // Save to local storage
+
+  // Display the volume on the screen
+  displayVolume();
+}
+
+// Function to display the current volume on the screen
+function displayVolume() {
+  const volumeText = add([
+    text(`Volume: ${Math.round(GLOBAL_VOLUME * 100)}%`, { size: 24 }),
+    pos(width() / 2, height() / 2),
+    fixed(),
+    layer("ui"),
+  ]);
+
+  // Remove the volume display after a short delay
+  wait(1, () => {
+    destroy(volumeText);
+  });
+}
+
+// Load global volume from local storage on initialization
+function loadGlobalVolume() {
+  const savedVolume = localStorage.getItem("globalVolume");
+  if (savedVolume !== null) {
+    GLOBAL_VOLUME = parseFloat(savedVolume);
+  }
+}
+
+// Load the volume when the script starts
+loadGlobalVolume();
 
 const SPEED = 240;
 const JUMP_FORCE = 600;
@@ -134,24 +168,21 @@ loadSprite("dirt", "../static/Images/tiles/dirt-tile-32x32-2.png");
 
 // Load sounds
 // Load sounds
-loadSound("shotMachineGun", "static/sounds/shot_machine_gun.wav");
-loadSound("shotLaser", "static/sounds/shot_laser.wav");
-loadSound("shotLaser2", "static/sounds/shot_laser_2.wav");
-loadSound("shotGunshot", "static/sounds/shot_gunshot.wav");
-loadSound("jump", "static/sounds/jump.wav");
-loadSound("ingameSlow", "static/sounds/ingame_slow.mp3");
-loadSound("ingameFaster", "static/sounds/ingame_faster.mp3");
-loadSound("hit", "static/sounds/hitHurt.wav");
-loadSound("gameOver", "static/sounds/game_over.mp3");
-loadSound("footstepNormal", "static/sounds/footstep_normal.wav");
-loadSound("footstepFrog", "static/sounds/footstep_frog.wav");
-loadSound("explosion", "static/sounds/explosion.wav");
-loadSound("backgroundTeamPage", "static/sounds/background_team_page.mp3");
-loadSound("backgroundHomePage", "static/sounds/background_home_page.mp3");
-loadSound(
-  "backgroundControlsPage",
-  "static/sounds/background_controls_page.mp3"
-);
+loadSound("shotMachineGun", "../static/sounds/shot_mashine_gun.wav");
+loadSound("shotLaser", "../static/sounds/shot_laser.wav");
+loadSound("shotLaser2", "../static/sounds/shot_laser_2.wav");
+loadSound("shotGunshot", "../static/sounds/shot_gunshot.wav");
+loadSound("jump", "../static/sounds/jump.wav");
+loadSound("ingameSlow", "../static/sounds/ingame_slow.mp3");
+loadSound("ingameFaster", "../static/sounds/ingame_faster.mp3");
+loadSound("hit", "../static/sounds/hitHurt.wav");
+loadSound("gameOver", "../static/sounds/game_over.mp3");
+loadSound("footstepNormal", "../static/sounds/footstep_normal.wav");
+loadSound("footstepFrog", "../static/sounds/footstep_frog.wav");
+loadSound("explosion", "../static/sounds/explosion.wav");
+loadMusic("backgroundTeamPage", "../static/sounds/background_team_page.mp3");
+loadMusic("backgroundHomePage", "../static/sounds/background_home_page.mp3");
+loadMusic("backgroundControlsPage", "../static/sounds/background_controls_page.mp3");
 
 // Track the current weapon for each player
 let player1Weapon = WEAPONS.standard;
@@ -197,20 +228,11 @@ let player2;
 function updatePlayer1LastDir() {
   if (isKeyDown(player1Controls.left) && isKeyDown(player1Controls.up)) {
     player1LastDir = DIR_VECTORS.left_up;
-  } else if (
-    isKeyDown(player1Controls.left) &&
-    isKeyDown(player1Controls.down)
-  ) {
+  } else if (isKeyDown(player1Controls.left) && isKeyDown(player1Controls.down)) {
     player1LastDir = DIR_VECTORS.left_down;
-  } else if (
-    isKeyDown(player1Controls.right) &&
-    isKeyDown(player1Controls.up)
-  ) {
+  } else if (isKeyDown(player1Controls.right) && isKeyDown(player1Controls.up)) {
     player1LastDir = DIR_VECTORS.right_up;
-  } else if (
-    isKeyDown(player1Controls.right) &&
-    isKeyDown(player1Controls.down)
-  ) {
+  } else if (isKeyDown(player1Controls.right) && isKeyDown(player1Controls.down)) {
     player1LastDir = DIR_VECTORS.right_down;
   } else if (isKeyDown(player1Controls.left)) {
     player1LastDir = DIR_VECTORS.left;
@@ -224,20 +246,11 @@ function updatePlayer1LastDir() {
 function updatePlayer2LastDir() {
   if (isKeyDown(player2Controls.left) && isKeyDown(player2Controls.up)) {
     player2LastDir = DIR_VECTORS.left_up;
-  } else if (
-    isKeyDown(player2Controls.left) &&
-    isKeyDown(player2Controls.down)
-  ) {
+  } else if (isKeyDown(player2Controls.left) && isKeyDown(player2Controls.down)) {
     player2LastDir = DIR_VECTORS.left_down;
-  } else if (
-    isKeyDown(player2Controls.right) &&
-    isKeyDown(player2Controls.up)
-  ) {
+  } else if (isKeyDown(player2Controls.right) && isKeyDown(player2Controls.up)) {
     player2LastDir = DIR_VECTORS.right_up;
-  } else if (
-    isKeyDown(player2Controls.right) &&
-    isKeyDown(player2Controls.down)
-  ) {
+  } else if (isKeyDown(player2Controls.right) && isKeyDown(player2Controls.down)) {
     player2LastDir = DIR_VECTORS.right_down;
   } else if (isKeyDown(player2Controls.left)) {
     player2LastDir = DIR_VECTORS.left;
@@ -266,11 +279,7 @@ function startTrackingDir(players) {
       isKeyDown(player1Controls.jump) ||
       isKeyDown(player1Controls.shoot);
 
-    if (
-      !isAnyKeyPressedPlayer1 &&
-      player1.isGrounded() &&
-      player1.curAnim() !== "idle"
-    ) {
+    if (!isAnyKeyPressedPlayer1 && player1.isGrounded() && player1.curAnim() !== "idle") {
       player1.play("idle");
     }
 
@@ -285,11 +294,7 @@ function startTrackingDir(players) {
         isKeyDown(player2Controls.jump) ||
         isKeyDown(player2Controls.shoot);
 
-      if (
-        !isAnyKeyPressedPlayer2 &&
-        player2.isGrounded() &&
-        player2.curAnim() !== "idle"
-      ) {
+      if (!isAnyKeyPressedPlayer2 && player2.isGrounded() && player2.curAnim() !== "idle") {
         player2.play("idle");
       }
     }
@@ -357,7 +362,7 @@ function createExplosion(position, radius, damage) {
   get("player").forEach((player) => {
     if (player.pos.dist(position) < radius) {
       // Apply damage to the player
-      player.hurt(damage); // Assuming players have a `hurt` method
+      player.hurt(damage);
     }
   });
 }
@@ -462,12 +467,7 @@ scene("game", () => {
   createInitialPlatformsAndWalls();
 
   // Display height achieved at the top of the screen
-  const heightLabel = add([
-    text("Height: 0.0 meters"),
-    pos(24, 24),
-    fixed(),
-    layer("ui"),
-  ]);
+  const heightLabel = add([text("0.0 meters"), pos(width() / 2 - 200, 24), fixed(), layer("ui")]);
 
   // Function to create a block of scaled lava tiles (3x3) that covers the same area
   function createLava(y) {
@@ -545,10 +545,7 @@ scene("game", () => {
     const currentCamPos = camPos();
     camPos(currentCamPos.x, currentCamPos.y + CAMERA_MOVE_SPEED * dt());
 
-    const lowestPlayerPosition =
-      playersCount === 2
-        ? Math.max(player1.pos.y, player2.pos.y)
-        : player1.pos.y;
+    const lowestPlayerPosition = playersCount === 2 ? Math.max(player1.pos.y, player2.pos.y) : player1.pos.y;
 
     // Camera only moves up when the player is near the top of the screen
     if (lowestPlayerPosition < highestCamPosY) {
@@ -574,7 +571,7 @@ scene("game", () => {
 
     // Calculate the height climbed in meters
     const heightClimbed = (startY - player1.pos.y) * UNIT_TO_METERS;
-    heightLabel.text = `Height: ${heightClimbed.toFixed(1)} meters`;
+    heightLabel.text = `${heightClimbed.toFixed(1)} meters`;
 
     // Check if player falls below the screen
     if (player1.pos.y > camPos().y + height() / 2) {
@@ -584,10 +581,7 @@ scene("game", () => {
   });
 
   function checkGameOver() {
-    if (
-      (!player1 || player1.health() <= 0) &&
-      (!player2 || player2.health() <= 0)
-    ) {
+    if ((!player1 || player1.health() <= 0) && (!player2 || player2.health() <= 0)) {
       go("lose", { maxHeight: (startY - highestCamPosY) * UNIT_TO_METERS });
     }
   }
@@ -599,12 +593,7 @@ scene("game", () => {
       pos(SPAWN_WIDTH_P1, SPAWN_HEIGHT),
       anchor("center"),
       area({
-        shape: new Polygon([
-          vec2(-13, -10),
-          vec2(17, -10),
-          vec2(17, 33),
-          vec2(-13, 33),
-        ]),
+        shape: new Polygon([vec2(-13, -10), vec2(17, -10), vec2(17, 33), vec2(-13, 33)]),
       }),
       body(),
       scale(1),
@@ -615,13 +604,13 @@ scene("game", () => {
 
     // Switch to "idle" or "run" animation when player1 hits ground
     player1.onGround(() => {
-      if (
-        !isKeyDown(player1Controls.left) &&
-        !isKeyDown(player1Controls.right)
-      ) {
+      if (!isKeyDown(player1Controls.left) && !isKeyDown(player1Controls.right)) {
         player1.play("idle");
       } else {
         player1.play("run");
+        play("footstepFrog", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
@@ -629,30 +618,31 @@ scene("game", () => {
       if (player1.isGrounded()) {
         player1.jump(JUMP_FORCE);
         player1.play("jump");
+        play("jump", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
     onKeyDown(player1Controls.right, () => {
       player1.move(SPEED, 0);
       player1.flipX = false;
-      if (
-        player1.isGrounded() &&
-        !isPlayer1Shooting &&
-        player1.curAnim() !== "run"
-      ) {
+      if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
         player1.play("run");
+        play("footstepFrog", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
     onKeyDown(player1Controls.left, () => {
       player1.move(-SPEED, 0);
       player1.flipX = true;
-      if (
-        player1.isGrounded() &&
-        !isPlayer1Shooting &&
-        player1.curAnim() !== "run"
-      ) {
+      if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
         player1.play("run");
+        play("footstepFrog", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
@@ -674,21 +664,28 @@ scene("game", () => {
         isPlayer1Shooting = true;
 
         // Play the appropriate shooting animation based on the direction
-        if (
-          isKeyDown(player1Controls.left) ||
-          isKeyDown(player1Controls.right)
-        ) {
+        if (isKeyDown(player1Controls.left) || isKeyDown(player1Controls.right)) {
           switch (player1LastDir.direction) {
             case "left_up":
             case "right_up":
               player1.play("shoot45upRun");
+              play("footstepFrog", {
+                volume: GLOBAL_VOLUME,
+              });
+
               break;
             case "left_down":
             case "right_down":
               player1.play("shoot45downRun");
+              play("footstepFrog", {
+                volume: GLOBAL_VOLUME,
+              });
               break;
             default:
-              player1.play("run"); // Continue running animation if not in a 45-degree angle
+              player1.play("run");
+              play("footstepFrog", {
+                volume: GLOBAL_VOLUME,
+              }); // Continue running animation if not in a 45-degree angle
           }
         } else {
           switch (player1LastDir.direction) {
@@ -726,12 +723,7 @@ scene("game", () => {
       pos(SPAWN_WIDTH_P2, SPAWN_HEIGHT),
       anchor("center"),
       area({
-        shape: new Polygon([
-          vec2(-13, -10),
-          vec2(17, -10),
-          vec2(17, 33),
-          vec2(-13, 33),
-        ]),
+        shape: new Polygon([vec2(-13, -10), vec2(17, -10), vec2(17, 33), vec2(-13, 33)]),
       }),
       body(),
       scale(1),
@@ -741,14 +733,13 @@ scene("game", () => {
     player2.play("idle");
 
     player2.onGround(() => {
-      if (
-        !isKeyDown(player2Controls.left) &&
-        !isKeyDown(player2Controls.right) &&
-        !isKeyDown(player2Controls.shoot)
-      ) {
+      if (!isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right)) {
         player2.play("idle");
       } else {
         player2.play("run");
+        play("footstepFrog", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
@@ -756,30 +747,31 @@ scene("game", () => {
       if (player2.isGrounded()) {
         player2.jump(JUMP_FORCE);
         player2.play("jump");
+        play("jump", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
     onKeyDown(player2Controls.right, () => {
       player2.move(SPEED, 0);
       player2.flipX = false;
-      if (
-        player2.isGrounded() &&
-        !isPlayer2Shooting &&
-        player2.curAnim() !== "run"
-      ) {
+      if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
         player2.play("run");
+        play("footstepFrog", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
     onKeyDown(player2Controls.left, () => {
       player2.move(-SPEED, 0);
       player2.flipX = true;
-      if (
-        player2.isGrounded() &&
-        !isPlayer2Shooting &&
-        player2.curAnim() !== "run"
-      ) {
+      if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
         player2.play("run");
+        play("footstepFrog", {
+          volume: GLOBAL_VOLUME,
+        });
       }
     });
 
@@ -796,28 +788,33 @@ scene("game", () => {
       });
     });
 
-    // Track the last direction Player 2 was facing
     onKeyPress(player2Controls.shoot, () => {
       if (canFire(lastFireTimePlayer2, player2Weapon.fireRate)) {
         spawnBullet(player2, player2LastDir.vect);
         isPlayer2Shooting = true;
 
         // Play the appropriate shooting animation based on the direction
-        if (
-          isKeyDown(player2Controls.left) ||
-          isKeyDown(player2Controls.right)
-        ) {
+        if (isKeyDown(player2Controls.left) || isKeyDown(player2Controls.right)) {
           switch (player2LastDir.direction) {
             case "left_up":
             case "right_up":
               player2.play("shoot45upRun");
+              play("footstepFrog", {
+                volume: GLOBAL_VOLUME,
+              });
               break;
             case "left_down":
             case "right_down":
               player2.play("shoot45downRun");
+              play("footstepFrog", {
+                volume: GLOBAL_VOLUME,
+              });
               break;
             default:
-              player2.play("run"); // Continue running animation if not in a 45-degree angle
+              player2.play("run");
+              play("footstepFrog", {
+                volume: GLOBAL_VOLUME,
+              }); // Continue running animation if not in a 45-degree angle
           }
         } else {
           switch (player2LastDir.direction) {
@@ -845,6 +842,7 @@ scene("game", () => {
         });
       }
     });
+
     displayPlayerHealth(player2);
   }
 
@@ -871,7 +869,6 @@ scene("game", () => {
   // Call this function after creating the player
   function spawnEnemy(position) {
     const randomEnemy = choose(listOfSpriteNames);
-    console.log(randomEnemy);
     const enemy = add([
       sprite(randomEnemy.name),
       pos(position),
@@ -936,6 +933,24 @@ scene("game", () => {
       // Set the initial movement
       bullet.move(bullet.dir);
     };
+
+    if (weapon.bulletSprite === "bullet_laser") {
+      play("shotLaser", {
+        volume: GLOBAL_VOLUME,
+      });
+    } else if (weapon.bulletSprite === "bullet_split") {
+      play("shotGunshot", {
+        volume: GLOBAL_VOLUME,
+      });
+    } else if (weapon.bulletSprite === "bullet_rocket") {
+      play("shotLaser2", {
+        volume: GLOBAL_VOLUME,
+      });
+    } else {
+      play("shotMachineGun", {
+        volume: GLOBAL_VOLUME,
+      });
+    }
 
     // For the "split" weapon, fire three bullets at different angles
     if (weapon.bulletSprite === "bullet_split") {
@@ -1024,29 +1039,13 @@ scene("game", () => {
     const obstacleBR = obstacle.pos.add([TILE_WIDTH / 2, 0]);
     let shootingDirection;
 
-    if (
-      obstacleTL.x > bullet.pos.x &&
-      obstacleTL.y < bullet.pos.y &&
-      obstacleBR.y > bullet.pos.y
-    ) {
+    if (obstacleTL.x > bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
       shootingDirection = "left";
-    } else if (
-      obstacleTL.x < bullet.pos.x &&
-      obstacleTL.y > bullet.pos.y &&
-      obstacleBR.x > bullet.pos.x
-    ) {
+    } else if (obstacleTL.x < bullet.pos.x && obstacleTL.y > bullet.pos.y && obstacleBR.x > bullet.pos.x) {
       shootingDirection = "top";
-    } else if (
-      obstacleBR.x < bullet.pos.x &&
-      obstacleTL.y < bullet.pos.y &&
-      obstacleBR.y > bullet.pos.y
-    ) {
+    } else if (obstacleBR.x < bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
       shootingDirection = "right";
-    } else if (
-      obstacleTL.x < bullet.pos.x &&
-      obstacleBR.y < bullet.pos.y &&
-      obstacleBR.x > bullet.pos.x
-    ) {
+    } else if (obstacleTL.x < bullet.pos.x && obstacleBR.y < bullet.pos.y && obstacleBR.x > bullet.pos.x) {
       shootingDirection = "bottom";
     } else {
       shootingDirection = null;
@@ -1101,10 +1100,7 @@ scene("game", () => {
   loop(1, () => {
     if (!player1 && !player2) return; // Check if no players exist
     // Determine the highest Y position among the players
-    const highestPlayerY = Math.max(
-      player1 ? player1.pos.y : -Infinity,
-      player2 ? player2.pos.y : -Infinity
-    );
+    const highestPlayerY = Math.max(player1 ? player1.pos.y : -Infinity, player2 ? player2.pos.y : -Infinity);
 
     // Calculate the spawn position based on the highest player position
     const spawnY = highestPlayerY - spawnOffsetY;
@@ -1124,24 +1120,47 @@ scene("game", () => {
   });
 
   function displayPlayerHealth(player) {
+    const playerData = {
+      pos: player === player1 ? 50 : width() - 200, // Position for each player
+      colorR: player === player1 ? 0 : 255,
+      colorG: player === player1 ? 255 : 0, // Red color for player 1, // Position for each player
+    };
     const healthLabel = add([
       text(`Health: ${player.hp()}`),
-      pos(24, player === player1 ? 24 : 48), // Position for each player
+      pos(playerData.pos, 24), // Position for each player
       fixed(), // Fixed to camera
       layer("ui"), // Display on the UI layer
+      color(playerData.colorR, playerData.colorG, 0), // Color for each player
       {
         update() {
-          this.text = `Health: ${player.health}`;
+          this.text = `${player.hp()}`;
         },
       },
     ]);
   }
 
+  function setMusic() {
+    const music = play("backgroundHomePage", {
+      loop: true,
+      volume: GLOBAL_VOLUME,
+    });
+
+    volume(GLOBAL_VOLUME);
+    // Example usage: Increase or decrease volume
+    onKeyPressRepeat("]", () => {
+      setGlobalVolume(0.01);
+      music.volume = GLOBAL_VOLUME; // Adjust the music volume
+    });
+
+    onKeyPressRepeat("[", () => {
+      setGlobalVolume(-0.01);
+      music.volume = GLOBAL_VOLUME; // Adjust the music volume
+    });
+  }
+
   // Show the modal on page load
   function openModal() {
-    const playerSelectModal = new bootstrap.Modal(
-      document.getElementById("playerSelectModal")
-    );
+    const playerSelectModal = new bootstrap.Modal(document.getElementById("playerSelectModal"));
     playerSelectModal.show();
 
     document.getElementById("onePlayerBtn").addEventListener("click", () => {
@@ -1149,6 +1168,7 @@ scene("game", () => {
       startTrackingDir(1);
       playersCountFinction(1);
       addPlayer1();
+      setMusic();
     });
 
     document.getElementById("twoPlayersBtn").addEventListener("click", () => {
@@ -1157,8 +1177,13 @@ scene("game", () => {
       playersCountFinction(2);
       addPlayer1();
       addPlayer2();
+      setMusic();
     });
   }
+
+  onKeyPressRepeat("=", () => (music.volume += 0.1));
+  onKeyPressRepeat("-", () => (music.volume -= 0.1));
+
   openModal();
 });
 
@@ -1166,11 +1191,7 @@ scene("game", () => {
 go("game");
 
 scene("lose", ({ maxHeight }) => {
-  add([
-    text(`You Lose! Height Achieved: ${maxHeight.toFixed(1)} meters`),
-    pos(width() / 2, height() / 2),
-    anchor("center"),
-  ]);
+  add([text(`You Lose! Height Achieved: ${maxHeight.toFixed(1)} meters`), pos(center()), anchor("center")]);
 
   onKeyPress(() => go("game"));
 });
