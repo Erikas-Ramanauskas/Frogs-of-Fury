@@ -2,22 +2,50 @@ import kaplay from "https://unpkg.com/kaplay@3001.0.0-alpha.20/dist/kaplay.mjs";
 // start kaplay
 
 import { player1Controls, player2Controls, loadPlayerControls } from "./controlKeys.js";
+import { sprites } from "./assets.js";
+import { WEAPONS } from "./weapons.js";
 
 // This function loads controls from localStorage and updates the global control variables.
 loadPlayerControls();
 
 kaplay({
-  scale: 4,
+  background: [141, 183, 255],
+  scale: 1,
   font: "monospace",
   debug: true,
-  width: 500,
-  height: 250,
+  width: 1100,
+  height: 500,
   letterbox: true,
 });
 
-const SPEED = 120;
-const JUMP_FORCE = 240;
+const SPEED = 240;
+const JUMP_FORCE = 600;
 setGravity(640);
+const TILE_WIDTH = 64;
+const TILE_HEIGHT = 64;
+const WALL_HEIGHT_TILES = 3; // Height of wall sections in tiles
+const PLATFORM_HEIGHT_TILES = 1; // Platform height in tiles
+const PLATFORM_GAP_TILES = 3; // Vertical gap between platforms in tiles
+const PLATFORMS_PER_ROW = 14; // Number of platforms per row
+const WALLS_WIDTH = 2; // Width of walls in tiles
+const TOTAL_TILES = PLATFORMS_PER_ROW + WALLS_WIDTH * 2; // Total tiles width (platforms + walls)
+const UNIT_TO_METERS = 0.08; // Conversion factor: 1 game unit = 0.08 meters
+const CAMERA_THRESHOLD = height() / 3; // Height threshold to start moving camera
+const DELETE_THRESHOLD = 900; // Distance below the camera to delete objects
+const CAMERA_MOVE_SPEED = 0; // Speed for slow upward camera movement
+const LAVA_MOVE_SPEED = 500; // Speed at which the lava moves up
+
+let lastY = 0; // Track the last Y position where platforms were generated in tile units
+let isFirstRow = true; // Flag to manage initial platform row
+let sections = []; // Array to keep track of current sections
+
+// Initialize startY with the initial Y position of player1 after it's added
+let startY = 30;
+
+let playersCount;
+function playersCountFinction(number) {
+  playersCount = number;
+}
 
 // Loading a multi-frame sprite
 loadSprite("frog1", "../static/sprites/player_1_sprite.png", {
@@ -54,6 +82,7 @@ loadSprite("frog2", "../static/sprites/player_2_sprite.png", {
   },
 });
 
+// Loading gun sprites
 loadSprite("bullet", "../static/sprites/bullet.png");
 loadSprite("bullet_split", "../static/sprites/bullet_split.png");
 loadSprite("bullet_laser", "../static/sprites/bullet_laser.png");
@@ -63,35 +92,16 @@ loadSprite("pickup_laser", "../static/sprites/pickup_laser.png");
 loadSprite("pickup_split", "../static/sprites/pickup_split.png");
 loadSprite("pickup_rocket", "../static/sprites/pickup_rocket.png");
 
-// Define weapon types
-const WEAPONS = {
-  standard: { speed: 300, bulletSprite: "bullet", damage: 1, fireRate: 600, collisionArea: [4, 4] }, // 300 shots per minute (1 per second)
-  split: {
-    speed: 300,
-    pickupSprite: "pickup_split",
-    bulletSprite: "bullet_split",
-    damage: 2,
-    fireRate: 300,
-    collisionArea: [10, 10],
-  },
-  laser: {
-    speed: 600,
-    pickupSprite: "pickup_laser",
-    bulletSprite: "bullet_laser",
-    damage: 2,
-    fireRate: 400,
-    collisionArea: [15, 3],
-  },
-  rocket: {
-    speed: 200,
-    pickupSprite: "pickup_rocket",
-    bulletSprite: "bullet_rocket",
-    damage: 4,
-    fireRate: 100,
-    collisionArea: [23, 9],
-    explosionArea: 50,
-  },
-};
+// Load level sprites
+loadSprite("lava", sprites.lava); // moved all sprites assets to assets.js
+loadSprite("wall", sprites.wall);
+loadSprite("platform", sprites.platform);
+loadSprite("dirt", sprites.dirt);
+
+// Load sounds
+loadSound("blip", "/examples/sounds/blip.mp3");
+loadSound("hit", "/examples/sounds/hit.mp3");
+loadSound("portal", "/examples/sounds/portal.mp3");
 
 // Track the current weapon for each player
 let player1Weapon = WEAPONS.standard;
@@ -130,57 +140,7 @@ const DIR_VECTORS = {
 let player1LastDir = DIR_VECTORS.right;
 let player2LastDir = DIR_VECTORS.left;
 
-// Add our player1 character
-const player1 = add([sprite("frog1"), pos(120, 80), anchor("center"), area(), body(), scale(0.5), "player1"]);
-player1.play("idle");
-
-// Add a platform
-add([rect(width(), 24), area(), outline(1), pos(0, height() - 10), body({ isStatic: true })]);
-
-// Switch to "idle" or "run" animation when player1 hits ground
-player1.onGround(() => {
-  if (!isKeyDown(player1Controls.left) && !isKeyDown(player1Controls.right)) {
-    player1.play("idle");
-  } else {
-    player1.play("run");
-  }
-});
-
-onKeyPress(player1Controls.jump, () => {
-  if (player1.isGrounded()) {
-    player1.jump(JUMP_FORCE);
-    player1.play("jump");
-  }
-});
-
-onKeyDown(player1Controls.right, () => {
-  player1.move(SPEED, 0);
-  player1.flipX = false;
-  if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
-    player1.play("run");
-  }
-});
-
-onKeyDown(player1Controls.left, () => {
-  player1.move(-SPEED, 0);
-  player1.flipX = true;
-  if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
-    player1.play("run");
-  }
-});
-
-[player1Controls.left, player1Controls.right].forEach((key) => {
-  onKeyRelease(key, () => {
-    if (
-      player1.isGrounded() &&
-      !isKeyDown(player1Controls.left) &&
-      !isKeyDown(player1Controls.right) &&
-      !isKeyDown(player1Controls.shoots)
-    ) {
-      player1.play("idle");
-    }
-  });
-});
+let player1;
 
 // Track the last direction Player 1 was facing
 function updatePlayer1LastDir() {
@@ -219,56 +179,115 @@ function updatePlayer2LastDir() {
   }
 }
 
-onKeyPress(player1Controls.shoot, () => {
-  if (canFire(lastFireTimePlayer1, player1Weapon.fireRate)) {
-    spawnBullet(player1, player1LastDir.vect);
-    isPlayer1Shooting = true;
+function addPlayer1() {
+  // Add our player1 character
+  player1 = add([
+    sprite("frog1"),
+    pos(180, 80),
+    anchor("center"),
+    area({ shape: new Polygon([vec2(-15, -10), vec2(20, -10), vec2(20, 33), vec2(-15, 33)]) }),
+    body(),
+    scale(1),
+    "player1",
+  ]);
+  player1.play("idle");
 
-    // Play the appropriate shooting animation based on the direction
-    if (isKeyDown(player1Controls.left) || isKeyDown(player1Controls.right)) {
-      switch (player1LastDir.direction) {
-        case "left_up":
-        case "right_up":
-          player1.play("shoot45upRun");
-          break;
-        case "left_down":
-        case "right_down":
-          player1.play("shoot45downRun");
-          break;
-        default:
-          player1.play("run"); // Continue running animation if not in a 45-degree angle
-      }
+  // Switch to "idle" or "run" animation when player1 hits ground
+  player1.onGround(() => {
+    console.log(player1);
+    if (!isKeyDown(player1Controls.left) && !isKeyDown(player1Controls.right)) {
+      player1.play("idle");
     } else {
-      switch (player1LastDir.direction) {
-        case "up":
-          player1.play("shootUp");
-          break;
-        case "left_up":
-        case "right_up":
-          player1.play("shoot45upIdle");
-          break;
-        case "left_down":
-        case "right_down":
-          player1.play("shoot45downIdle");
-          break;
-        default:
-          player1.play("shoot");
-      }
+      player1.play("run");
     }
+  });
 
-    lastFireTimePlayer1 = time();
+  onKeyPress(player1Controls.jump, () => {
+    if (player1.isGrounded()) {
+      player1.jump(JUMP_FORCE);
+      player1.play("jump");
+    }
+  });
 
-    // Reset the shooting flag after a short delay (based on animation length or a fixed time)
-    wait(1, () => {
-      isPlayer1Shooting = false;
+  onKeyDown(player1Controls.right, () => {
+    player1.move(SPEED, 0);
+    player1.flipX = false;
+    if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
+      player1.play("run");
+    }
+  });
+
+  onKeyDown(player1Controls.left, () => {
+    player1.move(-SPEED, 0);
+    player1.flipX = true;
+    if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
+      player1.play("run");
+    }
+  });
+
+  [player1Controls.left, player1Controls.right].forEach((key) => {
+    onKeyRelease(key, () => {
+      if (
+        player1.isGrounded() &&
+        !isKeyDown(player1Controls.left) &&
+        !isKeyDown(player1Controls.right) &&
+        !isKeyDown(player1Controls.shoots)
+      ) {
+        player1.play("idle");
+      }
     });
-  }
-});
+  });
+  onKeyPress(player1Controls.shoot, () => {
+    if (canFire(lastFireTimePlayer1, player1Weapon.fireRate)) {
+      spawnBullet(player1, player1LastDir.vect);
+      isPlayer1Shooting = true;
+
+      // Play the appropriate shooting animation based on the direction
+      if (isKeyDown(player1Controls.left) || isKeyDown(player1Controls.right)) {
+        switch (player1LastDir.direction) {
+          case "left_up":
+          case "right_up":
+            player1.play("shoot45upRun");
+            break;
+          case "left_down":
+          case "right_down":
+            player1.play("shoot45downRun");
+            break;
+          default:
+            player1.play("run"); // Continue running animation if not in a 45-degree angle
+        }
+      } else {
+        switch (player1LastDir.direction) {
+          case "up":
+            player1.play("shootUp");
+            break;
+          case "left_up":
+          case "right_up":
+            player1.play("shoot45upIdle");
+            break;
+          case "left_down":
+          case "right_down":
+            player1.play("shoot45downIdle");
+            break;
+          default:
+            player1.play("shoot");
+        }
+      }
+
+      lastFireTimePlayer1 = time();
+
+      // Reset the shooting flag after a short delay (based on animation length or a fixed time)
+      wait(1, () => {
+        isPlayer1Shooting = false;
+      });
+    }
+  });
+}
 
 let player2;
 // If 2 players, add the second player
 function addPlayer2() {
-  player2 = add([sprite("frog2"), pos(180, 80), anchor("center"), area(), body(), scale(0.5), "player2"]);
+  player2 = add([sprite("frog2"), pos(180, 80), anchor("center"), area(), body(), scale(1), "player2"]);
   player2.play("idle");
 
   player2.onGround(() => {
@@ -595,11 +614,210 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("onePlayerBtn").addEventListener("click", () => {
     playerSelectModal.hide();
     startTrackingDir(1);
+    playersCountFinction(1);
+    addPlayer1();
   });
 
   document.getElementById("twoPlayersBtn").addEventListener("click", () => {
     playerSelectModal.hide();
     startTrackingDir(2);
+    playersCountFinction(2);
+    addPlayer1();
     addPlayer2();
   });
 });
+
+// Code for generating levels
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Function to generate multiple platforms in a row
+function spawnPlatformRowWithGaps(y) {
+  const startX = WALLS_WIDTH;
+  const endX = TOTAL_TILES - WALLS_WIDTH;
+
+  if (isFirstRow) {
+    isFirstRow = false;
+    for (let i = startX; i < endX; i++) {
+      const platform = add([
+        sprite("dirt"),
+        pos(i * TILE_WIDTH, y),
+        area({ width: TILE_WIDTH, height: TILE_HEIGHT }),
+        body({ isStatic: true }),
+        anchor("bot"),
+        "platform",
+      ]);
+      sections.push(platform); // Add to sections array
+    }
+  } else {
+    const numGaps = Math.floor((endX - startX) / 3);
+    const gapPositions = [];
+
+    while (gapPositions.length < numGaps) {
+      const pos = Math.floor(rand(startX, endX - 1) / 2) * 2;
+      if (!gapPositions.includes(pos) && !gapPositions.includes(pos + 1)) {
+        gapPositions.push(pos);
+      }
+    }
+
+    for (let i = startX; i < endX; i++) {
+      if (!gapPositions.includes(i) && !gapPositions.includes(i + 1)) {
+        const platform = add([
+          sprite("platform"),
+          pos(i * TILE_WIDTH, y),
+          area({ width: TILE_WIDTH, height: TILE_HEIGHT }),
+          body({ isStatic: true }),
+          anchor("bot"),
+          "platform",
+        ]);
+        sections.push(platform); // Add to sections array
+      }
+    }
+  }
+}
+
+// Function to create continuous side walls without gaps
+function spawnSideWalls(y) {
+  const wallWidth = TILE_WIDTH * WALLS_WIDTH;
+  const wallHeight = TILE_HEIGHT * WALL_HEIGHT_TILES;
+
+  for (let i = 0; i < WALL_HEIGHT_TILES; i++) {
+    const leftWall = add([
+      sprite("wall"),
+      pos(TILE_WIDTH, y - i * TILE_HEIGHT),
+      area({ width: wallWidth, height: TILE_HEIGHT }),
+      body({ isStatic: true }),
+      anchor("bot"),
+      "wall",
+    ]);
+    sections.push(leftWall); // Add to sections array
+
+    const rightWall = add([
+      sprite("wall"),
+      pos((TOTAL_TILES - WALLS_WIDTH) * TILE_WIDTH, y - i * TILE_HEIGHT),
+      area({ width: wallWidth, height: TILE_HEIGHT }),
+      body({ isStatic: true }),
+      anchor("bot"),
+      "wall",
+    ]);
+    sections.push(rightWall); // Add to sections array
+  }
+}
+
+// Function to create the initial floor with platforms and walls
+function createInitialPlatformsAndWalls() {
+  const platformHeight = Math.floor(height() / TILE_HEIGHT) * TILE_HEIGHT;
+
+  spawnPlatformRowWithGaps(platformHeight);
+
+  for (let i = 0; i < WALL_HEIGHT_TILES; i++) {
+    spawnSideWalls(platformHeight - i * TILE_HEIGHT);
+  }
+}
+
+scene("game", () => {
+  // Reset sections array and lastY position on restart
+  sections = [];
+  lastY = Math.floor(height() / TILE_HEIGHT) * TILE_HEIGHT;
+  isFirstRow = true; // Reset flag for platform generation
+
+  // Create the initial row of platforms and walls
+  createInitialPlatformsAndWalls();
+
+  // Display height achieved at the top of the screen
+  const heightLabel = add([text("Height: 0.0 meters"), pos(24, 24), fixed(), layer("ui")]);
+
+  // Function to create a block of scaled lava tiles (3x3) that covers the same area
+  function createLava(y) {
+    const lavaTileWidth = 64 * 3; // Width of each lava block (3 tiles wide)
+    const lavaTileHeight = TILE_HEIGHT * 3; // Height of each lava block (3 tiles tall)
+    const numBlocks = Math.ceil(width() / lavaTileWidth); // Number of blocks needed to cover the width
+    const LAVA_HEIGHT_BLOCKS = Math.ceil(21 / 3); // Number of 3x3 blocks to cover the height
+
+    for (let j = 0; j < LAVA_HEIGHT_BLOCKS; j++) {
+      // Loop to create a block of 7 blocks in height
+      for (let i = 0; i < numBlocks; i++) {
+        add([
+          sprite("lava"),
+          pos(i * lavaTileWidth, y - j * lavaTileHeight), // Position each block
+          area({ width: lavaTileWidth, height: lavaTileHeight }), // Set each block's size
+          scale(3), // Scale the lava sprite to 3x3 tiles
+          "lava",
+        ]);
+      }
+    }
+  }
+
+  // Create the initial lava using larger blocks
+  createLava(lastY + TILE_HEIGHT * 20); // Push the lava much lower below the starting point
+
+  onUpdate(() => {
+    // Ensure player1 is defined before trying to access it
+    if (!player1) return;
+
+    // Move lava up gradually
+    const lavaTiles = get("lava");
+    lavaTiles.forEach((lava) => {
+      lava.move(0, -LAVA_MOVE_SPEED * dt());
+    });
+
+    // Destroy the player if they touch the lava
+    lavaTiles.forEach((lava) => {
+      const players = [];
+      if (playersCount === 1) {
+        players.push(player1);
+      }
+      if (playersCount === 2) {
+        players.push(player2);
+      }
+
+      players.forEach((player) => {
+        if (player.isColliding(lava)) {
+          destroy(player);
+          const index = players.indexOf(player);
+          if (index > -1) {
+            players.splice(index, 1);
+          }
+          checkGameOver();
+          return;
+        }
+      });
+    });
+
+    // Gradually move the camera upwards
+    const currentCamPos = camPos();
+    camPos(currentCamPos.x, currentCamPos.y + CAMERA_MOVE_SPEED * dt());
+
+    // Camera only moves up when the player is near the top of the screen
+    if (player1 && player1.pos.y < currentCamPos.y - CAMERA_THRESHOLD) {
+      camPos(width() / 2, player1.pos.y + CAMERA_THRESHOLD);
+    }
+
+    // Remove old sections below the camera
+    sections.forEach((section, index) => {
+      if (section.pos.y > camPos().y + DELETE_THRESHOLD) {
+        section.destroy();
+        sections.splice(index, 1);
+      }
+    });
+
+    // Generate new sections as the camera moves up
+    while (lastY > camPos().y - height()) {
+      spawnPlatformRowWithGaps(lastY - PLATFORM_GAP_TILES * TILE_HEIGHT);
+      spawnSideWalls(lastY - PLATFORM_GAP_TILES * TILE_HEIGHT);
+      lastY -= PLATFORM_GAP_TILES * TILE_HEIGHT;
+    }
+
+    // Calculate the height climbed in meters
+    const heightClimbed = (startY - player1.pos.y) * UNIT_TO_METERS;
+    heightLabel.text = `Height: ${heightClimbed.toFixed(1)} meters`;
+
+    // Check if player falls below the screen
+    if (player1.pos.y > camPos().y + height() / 2) {
+      destroy(player1);
+      // checkGameOver(); // Check if game is over
+    }
+  });
+});
+
+// Start the game
+go("game");
