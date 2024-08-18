@@ -154,12 +154,16 @@ This is a guide on how to clone a repository from GitHub.
 
 ## Media
 
+### Pictures
+
+- [canva](https://www.canva.com/) - Styling the team banner
+
 ### Effects and sounds
 
-- [soundsnap](https://www.soundsnap.com/)
-- [uppbeat](https://www.uppbeat.io/)
-- [jsfxr](https://www.sfxr.me/)
-- [fesliyanstudios](https://www.fesliyanstudios.com/)
+- [soundsnap](https://www.soundsnap.com/) - Effects in the gameplay
+- [uppbeat](https://www.uppbeat.io/) - Background music
+- [jsfxr](https://www.sfxr.me/) - Sound effects in the gameplay
+- [fesliyanstudios](https://www.fesliyanstudios.com/) - Background music
 
 ## Code
 

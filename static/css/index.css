@@ -56,6 +56,7 @@ section {
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    margin: 20px 0;
     width: 100%;
     background-color: rgba(255, 255, 255, 0.8);
     border: 2px solid #00FF00;
@@ -68,6 +69,7 @@ section {
     justify-content: space-evenly;
     align-items: center;
     padding: 20px;
+    height: 300px;
 }
 
 #play_game {
@@ -80,8 +82,8 @@ section {
     justify-content: center;
     align-items: center;
     text-align: center;
-    max-width: 225px;
-    max-height: 225px;
+    max-width: 300px;
+    height: 250px;
     box-shadow: 0 0 15px rgba(0, 255, 0, 0.9);
     backdrop-filter: blur(5px);
 }
@@ -96,8 +98,8 @@ section {
     justify-content: center;
     align-items: center;
     text-align: center;
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 300px;
+    max-height: 250px;
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
@@ -105,20 +107,21 @@ section {
     order: -1;
 }
 
-button {
+.button {
     background-color: #007bff;
     border-radius: 5px !important;
     border: none;
+    text-decoration: none;
     color: white;
-    padding: 10px 20px;
+    padding: 10px;
     cursor: pointer;
     display: block;
     width: 80%;
-    width: 150px;
+    max-width: 200px;
     margin: 10px auto;
     font-size: 1em;
 }
 
-button:hover {
+.button:hover {
     background-color: green;
 }
