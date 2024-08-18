@@ -118,3 +118,18 @@ section {
 #play_game .button:hover {
   background-color: #ff00ff;
 }
+
+.nav-link {
+  position: relative;
+  padding: 10px;
+  transition: border-color 0.3s ease;
+  border-bottom: rgba(255, 255, 255, 0.8) 2px solid;
+}
+
+.nav-link:hover {
+  border-bottom: 2px solid #00ff00;
+}
+
+.navbar-toggler:hover {
+  border: 2px solid #00ff00;
+}
