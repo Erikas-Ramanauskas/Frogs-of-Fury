@@ -83,6 +83,13 @@ Please refer to this section to understand how to control your characters and fa
 
 ## Team Page
 
+| Name | Linkedin | GitHub |
+|------|----------|--------|
+|Erikas Ramanauskas | [Link to his Linkedin Profile](https://www.linkedin.com/in/erikas-ramanauskas/) | [Link to his GitHub repositories](https://github.com/Erikas-Ramanauskas) |
+|Kati Molnar |[Link to her Linkedin Profile](https://www.linkedin.com/in/katalin-molnar-b6a694165/) | [Link to her GitHub repositories](https://github.com/molnarlin)|
+|Christian Borza | [Link to his Linkedin Profile](https://www.linkedin.com/in/borzachristian/) | [Link to his GitHub repositories](https://github.com/ChrisCross1983)|
+|John Hummel | [Link to his Linkedin Profile](https://www.linkedin.com/in/jjohnhumm/)|[Link to his GitHub repositories](https://github.com/Danger0101)|
+
 # Future Features
 
 # Technologies Used
