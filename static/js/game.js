@@ -339,7 +339,7 @@ function chooseLootType() {
 
 // Handle weapon pickups
 function spawnWeaponPickup(weaponType, position) {
-  add([
+  const pickup = add([
     sprite("pickup_" + weaponType),
     pos(position),
     area(),
@@ -347,6 +347,13 @@ function spawnWeaponPickup(weaponType, position) {
     scale(PICKUP_SACLE),
     { weaponType: weaponType },
   ]);
+
+  // Set a timer to destroy the pickup if it is not collected within 20 seconds
+  wait(20, () => {
+    if (pickup) {
+      destroy(pickup);
+    }
+  });
 }
 
 function createExplosion(position, radius, damage) {
