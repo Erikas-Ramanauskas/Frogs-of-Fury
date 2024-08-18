@@ -1,7 +1,11 @@
 import kaplay from "https://unpkg.com/kaplay@3001.0.0-alpha.20/dist/kaplay.mjs";
 // start kaplay
 
-import { player1Controls, player2Controls, loadPlayerControls } from "./controlKeys.js";
+import {
+  player1Controls,
+  player2Controls,
+  loadPlayerControls,
+} from "./controlKeys.js";
 import { WEAPONS } from "./weapons.js";
 
 // This function loads controls from localStorage and updates the global control variables.
@@ -113,9 +117,25 @@ loadSprite("platform", "../static/Images/tiles/platform-tile-32x16.png");
 loadSprite("dirt", "../static/Images/tiles/dirt-tile-32x32-2.png");
 
 // Load sounds
-loadSound("blip", "/examples/sounds/blip.mp3");
-loadSound("hit", "/examples/sounds/hit.mp3");
-loadSound("portal", "/examples/sounds/portal.mp3");
+// Load sounds
+loadSound("shotMachineGun", "static/sounds/shot_machine_gun.wav");
+loadSound("shotLaser", "static/sounds/shot_laser.wav");
+loadSound("shotLaser2", "static/sounds/shot_laser_2.wav");
+loadSound("shotGunshot", "static/sounds/shot_gunshot.wav");
+loadSound("jump", "static/sounds/jump.wav");
+loadSound("ingameSlow", "static/sounds/ingame_slow.mp3");
+loadSound("ingameFaster", "static/sounds/ingame_faster.mp3");
+loadSound("hitHurt", "static/sounds/hitHurt.wav");
+loadSound("gameOver", "static/sounds/game_over.mp3");
+loadSound("footstepNormal", "static/sounds/footstep_normal.wav");
+loadSound("footstepFrog", "static/sounds/footstep_frog.wav");
+loadSound("explosion", "static/sounds/explosion.wav");
+loadSound("backgroundTeamPage", "static/sounds/background_team_page.mp3");
+loadSound("backgroundHomePage", "static/sounds/background_home_page.mp3");
+loadSound(
+  "backgroundControlsPage",
+  "static/sounds/background_controls_page.mp3"
+);
 
 // Track the current weapon for each player
 let player1Weapon = WEAPONS.standard;
@@ -161,11 +181,20 @@ let player2;
 function updatePlayer1LastDir() {
   if (isKeyDown(player1Controls.left) && isKeyDown(player1Controls.up)) {
     player1LastDir = DIR_VECTORS.left_up;
-  } else if (isKeyDown(player1Controls.left) && isKeyDown(player1Controls.down)) {
+  } else if (
+    isKeyDown(player1Controls.left) &&
+    isKeyDown(player1Controls.down)
+  ) {
     player1LastDir = DIR_VECTORS.left_down;
-  } else if (isKeyDown(player1Controls.right) && isKeyDown(player1Controls.up)) {
+  } else if (
+    isKeyDown(player1Controls.right) &&
+    isKeyDown(player1Controls.up)
+  ) {
     player1LastDir = DIR_VECTORS.right_up;
-  } else if (isKeyDown(player1Controls.right) && isKeyDown(player1Controls.down)) {
+  } else if (
+    isKeyDown(player1Controls.right) &&
+    isKeyDown(player1Controls.down)
+  ) {
     player1LastDir = DIR_VECTORS.right_down;
   } else if (isKeyDown(player1Controls.left)) {
     player1LastDir = DIR_VECTORS.left;
@@ -179,11 +208,20 @@ function updatePlayer1LastDir() {
 function updatePlayer2LastDir() {
   if (isKeyDown(player2Controls.left) && isKeyDown(player2Controls.up)) {
     player2LastDir = DIR_VECTORS.left_up;
-  } else if (isKeyDown(player2Controls.left) && isKeyDown(player2Controls.down)) {
+  } else if (
+    isKeyDown(player2Controls.left) &&
+    isKeyDown(player2Controls.down)
+  ) {
     player2LastDir = DIR_VECTORS.left_down;
-  } else if (isKeyDown(player2Controls.right) && isKeyDown(player2Controls.up)) {
+  } else if (
+    isKeyDown(player2Controls.right) &&
+    isKeyDown(player2Controls.up)
+  ) {
     player2LastDir = DIR_VECTORS.right_up;
-  } else if (isKeyDown(player2Controls.right) && isKeyDown(player2Controls.down)) {
+  } else if (
+    isKeyDown(player2Controls.right) &&
+    isKeyDown(player2Controls.down)
+  ) {
     player2LastDir = DIR_VECTORS.right_down;
   } else if (isKeyDown(player2Controls.left)) {
     player2LastDir = DIR_VECTORS.left;
@@ -212,7 +250,11 @@ function startTrackingDir(players) {
       isKeyDown(player1Controls.jump) ||
       isKeyDown(player1Controls.shoot);
 
-    if (!isAnyKeyPressedPlayer1 && player1.isGrounded() && player1.curAnim() !== "idle") {
+    if (
+      !isAnyKeyPressedPlayer1 &&
+      player1.isGrounded() &&
+      player1.curAnim() !== "idle"
+    ) {
       player1.play("idle");
     }
 
@@ -227,7 +269,11 @@ function startTrackingDir(players) {
         isKeyDown(player2Controls.jump) ||
         isKeyDown(player2Controls.shoot);
 
-      if (!isAnyKeyPressedPlayer2 && player2.isGrounded() && player2.curAnim() !== "idle") {
+      if (
+        !isAnyKeyPressedPlayer2 &&
+        player2.isGrounded() &&
+        player2.curAnim() !== "idle"
+      ) {
         player2.play("idle");
       }
     }
@@ -366,7 +412,12 @@ scene("game", () => {
   createInitialPlatformsAndWalls();
 
   // Display height achieved at the top of the screen
-  const heightLabel = add([text("Height: 0.0 meters"), pos(24, 24), fixed(), layer("ui")]);
+  const heightLabel = add([
+    text("Height: 0.0 meters"),
+    pos(24, 24),
+    fixed(),
+    layer("ui"),
+  ]);
 
   // Function to create a block of scaled lava tiles (3x3) that covers the same area
   function createLava(y) {
@@ -429,7 +480,10 @@ scene("game", () => {
     const currentCamPos = camPos();
     camPos(currentCamPos.x, currentCamPos.y + CAMERA_MOVE_SPEED * dt());
 
-    const lowestPlayerPosition = playersCount === 2 ? Math.max(player1.pos.y, player2.pos.y) : player1.pos.y;
+    const lowestPlayerPosition =
+      playersCount === 2
+        ? Math.max(player1.pos.y, player2.pos.y)
+        : player1.pos.y;
 
     // Camera only moves up when the player is near the top of the screen
     if (lowestPlayerPosition < highestCamPosY) {
@@ -465,7 +519,10 @@ scene("game", () => {
   });
 
   function checkGameOver() {
-    if ((!player1 || player1.health() <= 0) && (!player2 || player2.health() <= 0)) {
+    if (
+      (!player1 || player1.health() <= 0) &&
+      (!player2 || player2.health() <= 0)
+    ) {
       go("lose", { maxHeight: (startY - highestCamPosY) * UNIT_TO_METERS });
     }
   }
@@ -476,7 +533,14 @@ scene("game", () => {
       sprite("frog1"),
       pos(SPAWN_WIDTH_P1, SPAWN_HEIGHT),
       anchor("center"),
-      area({ shape: new Polygon([vec2(-13, -10), vec2(17, -10), vec2(17, 33), vec2(-13, 33)]) }),
+      area({
+        shape: new Polygon([
+          vec2(-13, -10),
+          vec2(17, -10),
+          vec2(17, 33),
+          vec2(-13, 33),
+        ]),
+      }),
       body(),
       scale(1),
       health(100),
@@ -486,7 +550,10 @@ scene("game", () => {
 
     // Switch to "idle" or "run" animation when player1 hits ground
     player1.onGround(() => {
-      if (!isKeyDown(player1Controls.left) && !isKeyDown(player1Controls.right)) {
+      if (
+        !isKeyDown(player1Controls.left) &&
+        !isKeyDown(player1Controls.right)
+      ) {
         player1.play("idle");
       } else {
         player1.play("run");
@@ -503,7 +570,11 @@ scene("game", () => {
     onKeyDown(player1Controls.right, () => {
       player1.move(SPEED, 0);
       player1.flipX = false;
-      if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
+      if (
+        player1.isGrounded() &&
+        !isPlayer1Shooting &&
+        player1.curAnim() !== "run"
+      ) {
         player1.play("run");
       }
     });
@@ -511,7 +582,11 @@ scene("game", () => {
     onKeyDown(player1Controls.left, () => {
       player1.move(-SPEED, 0);
       player1.flipX = true;
-      if (player1.isGrounded() && !isPlayer1Shooting && player1.curAnim() !== "run") {
+      if (
+        player1.isGrounded() &&
+        !isPlayer1Shooting &&
+        player1.curAnim() !== "run"
+      ) {
         player1.play("run");
       }
     });
@@ -534,7 +609,10 @@ scene("game", () => {
         isPlayer1Shooting = true;
 
         // Play the appropriate shooting animation based on the direction
-        if (isKeyDown(player1Controls.left) || isKeyDown(player1Controls.right)) {
+        if (
+          isKeyDown(player1Controls.left) ||
+          isKeyDown(player1Controls.right)
+        ) {
           switch (player1LastDir.direction) {
             case "left_up":
             case "right_up":
@@ -582,7 +660,14 @@ scene("game", () => {
       sprite("frog2"),
       pos(SPAWN_WIDTH_P2, SPAWN_HEIGHT),
       anchor("center"),
-      area({ shape: new Polygon([vec2(-13, -10), vec2(17, -10), vec2(17, 33), vec2(-13, 33)]) }),
+      area({
+        shape: new Polygon([
+          vec2(-13, -10),
+          vec2(17, -10),
+          vec2(17, 33),
+          vec2(-13, 33),
+        ]),
+      }),
       body(),
       scale(1),
       health(100),
@@ -591,7 +676,11 @@ scene("game", () => {
     player2.play("idle");
 
     player2.onGround(() => {
-      if (!isKeyDown(player2Controls.left) && !isKeyDown(player2Controls.right) && !isKeyDown(player2Controls.shoot)) {
+      if (
+        !isKeyDown(player2Controls.left) &&
+        !isKeyDown(player2Controls.right) &&
+        !isKeyDown(player2Controls.shoot)
+      ) {
         player2.play("idle");
       } else {
         player2.play("run");
@@ -608,7 +697,11 @@ scene("game", () => {
     onKeyDown(player2Controls.right, () => {
       player2.move(SPEED, 0);
       player2.flipX = false;
-      if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
+      if (
+        player2.isGrounded() &&
+        !isPlayer2Shooting &&
+        player2.curAnim() !== "run"
+      ) {
         player2.play("run");
       }
     });
@@ -616,7 +709,11 @@ scene("game", () => {
     onKeyDown(player2Controls.left, () => {
       player2.move(-SPEED, 0);
       player2.flipX = true;
-      if (player2.isGrounded() && !isPlayer2Shooting && player2.curAnim() !== "run") {
+      if (
+        player2.isGrounded() &&
+        !isPlayer2Shooting &&
+        player2.curAnim() !== "run"
+      ) {
         player2.play("run");
       }
     });
@@ -641,7 +738,10 @@ scene("game", () => {
         isPlayer2Shooting = true;
 
         // Play the appropriate shooting animation based on the direction
-        if (isKeyDown(player2Controls.left) || isKeyDown(player2Controls.right)) {
+        if (
+          isKeyDown(player2Controls.left) ||
+          isKeyDown(player2Controls.right)
+        ) {
           switch (player2LastDir.direction) {
             case "left_up":
             case "right_up":
@@ -839,13 +939,29 @@ scene("game", () => {
     const obstacleBR = obstacle.pos.add([TILE_WIDTH / 2, 0]);
     let shootingDirection;
 
-    if (obstacleTL.x > bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
+    if (
+      obstacleTL.x > bullet.pos.x &&
+      obstacleTL.y < bullet.pos.y &&
+      obstacleBR.y > bullet.pos.y
+    ) {
       shootingDirection = "left";
-    } else if (obstacleTL.x < bullet.pos.x && obstacleTL.y > bullet.pos.y && obstacleBR.x > bullet.pos.x) {
+    } else if (
+      obstacleTL.x < bullet.pos.x &&
+      obstacleTL.y > bullet.pos.y &&
+      obstacleBR.x > bullet.pos.x
+    ) {
       shootingDirection = "top";
-    } else if (obstacleBR.x < bullet.pos.x && obstacleTL.y < bullet.pos.y && obstacleBR.y > bullet.pos.y) {
+    } else if (
+      obstacleBR.x < bullet.pos.x &&
+      obstacleTL.y < bullet.pos.y &&
+      obstacleBR.y > bullet.pos.y
+    ) {
       shootingDirection = "right";
-    } else if (obstacleTL.x < bullet.pos.x && obstacleBR.y < bullet.pos.y && obstacleBR.x > bullet.pos.x) {
+    } else if (
+      obstacleTL.x < bullet.pos.x &&
+      obstacleBR.y < bullet.pos.y &&
+      obstacleBR.x > bullet.pos.x
+    ) {
       shootingDirection = "bottom";
     } else {
       shootingDirection = null;
@@ -917,7 +1033,9 @@ scene("game", () => {
 
   // Show the modal on page load
   function openModal() {
-    const playerSelectModal = new bootstrap.Modal(document.getElementById("playerSelectModal"));
+    const playerSelectModal = new bootstrap.Modal(
+      document.getElementById("playerSelectModal")
+    );
     playerSelectModal.show();
 
     document.getElementById("onePlayerBtn").addEventListener("click", () => {
