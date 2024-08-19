@@ -224,6 +224,13 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 6. Created a repository and deployed the live project with [GitHub](https://github.com/)
 7. Content for set up the basic gameplay taken form [kaplayjs](https://kaplayjs.com/)
 
+### Collaborative tools
+
+1. Agile project management organisation using [trello](https://trello.com/)
+2. Agile project management visualisation using [miro](https://miro.com/)
+3. Sharing files with [goole drive](https://drive.google.com/)
+4. For the daily project communication, sharing screens for problem solving etc. using [Slack](https://slack.com/)
+
 # Deployment
 
 ## Project Deployment via GitHub
@@ -384,7 +391,7 @@ This is a guide on how to clone a repository from GitHub.
 
 ### Pictures
 
-- [canva](https://www.canva.com/) - Styling the team banner
+- Styling the team banner with [canva](https://www.canva.com/) 
 
 ### Effects and sounds
 
@@ -395,10 +402,11 @@ This is a guide on how to clone a repository from GitHub.
 
 ### Video tutorial
 
+- How to [Tutorial how to use kaplayjs JavaScript](https://www.youtube.com/watch?v=FdEYxGoy5_c)
 - How to [Convert an image to pixel art](https://www.youtube.com/watch?v=ijp2TqR2x2A)
 
 # Acknowledgments
 
-A big shoutout to the amazing team that brought "Frogs of Fury" to life during this Hackathon! Kati, John, Erikas, and Chris—what a wild ride it’s been! From late-night coding sessions to endless cups of coffee, we've tackled every challenge with humor and determination.
+A big shoutout to the amazing team that brought "Frogs of Fury" to life during this Hackathon! Kati, John, Erikas, and Chris - what a wild ride it’s been! From late-night coding sessions to endless cups of coffee, we've tackled every challenge with humor and determination.
 
 It’s been a whirlwind of ideas, laughter, and a few too many bugs, but we made it through as a team. Thanks to everyone for their hard work, creativity, and the occasional meme that kept our spirits high. Here's to more late nights and epic games in the future!
