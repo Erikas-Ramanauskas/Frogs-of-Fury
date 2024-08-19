@@ -261,6 +261,8 @@ This is a guide on how to clone a repository from GitHub.
 
 "Frogs of Fury" is designed primarily for desktop play with a keyboard, providing the best experience when used in this setup. While the game can technically be accessed on mobile devices, the gameplay might not be fully optimized for touch controls, and players could encounter difficulties navigating and performing actions. For an optimal experience on mobile, it's recommended to connect a keyboard to your smartphone. This way, you can enjoy the game as intended, with the full range of controls and responsiveness.
 
+![Frogs of Fury on different screen sizes](static/Readme/Frogs of Fury mock.png)
+
 ## Manual Testing
 
 **1. Test Plan Table for Microsoft Edge on Desktop for Home page**
