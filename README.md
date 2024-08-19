@@ -376,11 +376,11 @@ This is a guide on how to clone a repository from GitHub.
 - **Map not created above the player**
 - **Platforms not spawning as intended (single platforms and no multiple platforms on map)**
 - **Game tiles were too large**
-
-## Unsolved Bugs
 - **Rocket explosion deals no damage**
 - **Rockets destroyed when hitting enemies so no AOE**
 - **Multiple sprites of players on restart**
+
+## Unsolved Bugs
 - **Game needs to be clicked after initiation**
 - **Pop-up disappears and can't be opened once gone to select player count.**
 - **Volume controls crash game**
