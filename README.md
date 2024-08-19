@@ -36,7 +36,44 @@ This game is designed for retro game enthusiasts who enjoy fast-paced, skill-bas
 
 ## Color Scheme
 
+The HTML pages for "Frog of Fury" employ a dark and vibrant color scheme designed to enhance the game's retro atmosphere while maintaining readability and focus.
+
+### HTML pages
+
+- **Primary Colors:** The overall background uses a deep, almost black shade (#00000b), creating a stark contrast with bright elements.
+- **Accent Colors:** Vivid green (#00ff00) is used for borders and highlights, adding a neon-like glow that emphasizes interactive elements.
+- **Text and Backgrounds:** White (#ffffff) and slightly off-white tones are used for text and background panels to ensure clarity against the dark background, with subtle shadow effects adding depth.
+
+### Characters
+
+The characters in "Frog of Fury" are designed with distinct color palettes that emphasize their roles and enhance the visual contrast against the game’s environments.
+
+- **Player 1:** The character sprites use dark tones (#02060A) with vibrant highlights, ensuring visibility against diverse backgrounds.
+- **Player 2 Variant:** This sprite has a unique color scheme dominated by dark purples (#390062), differentiating it from the primary character.
+- **Mosquito:** The mosquito sprites feature sharp contrasts with black (#000000) and light cyan tones (#E3F7EB) to stand out as enemies.
+- **Snake:** The snake sprite combines deep blacks (#000000) with electric blues (#0A50FF), giving it a cold, mechanical feel.
+
+### Gameplay Map
+
+The color scheme for "Frog of Fury" draws heavily from natural and earthy tones, combined with bright, contrasting colors that enhance the retro gaming feel. 
+
+- **Dirt Tile:** A range of warm browns (e.g., #9C5A3C) gives the game environment a grounded, earthy feel. These shades provide a natural look, reminiscent of soil and dirt.
+- **Lava Tile:** Vivid oranges and reds (e.g., #EF6C00, #FFA726) dominate this tile, capturing the intense heat and danger associated with lava. These colors contrast sharply with the other more muted tones.
+- **Platform Tile:** Shades of green (e.g., #4CAF50, #22B14C) are used, evoking the lushness of nature. This green palette is critical for representing the platforms and safe zones the player interacts with.
+- **Wall Tile:** Muted browns and dark grays (e.g., #4A312B, #6B473D) provide a solid, sturdy appearance, reinforcing the feeling of immovable obstacles in the game.
+
+<details>
+<summary>See all our used color schemes screenshots</summary>
+
+![HTML Color Scheme](/static/Readme/HTML_pages.png)
+![Character Color Scheme](/static/Readme/Charcters.png)
+![Map Color Scheme](/static/Readme/Map.png)
+
+</details>
+
 ## Typography
+
+The game’s typography is straightforward and functional, adhering to a clean and modern sans-serif style. The primary font used is Arial, which provides clarity and readability across various screen sizes. The use of sans-serif fonts complements the retro aesthetic of the game, ensuring that text elements do not distract from the intense action of the gameplay. Buttons and navigation links feature bold, uppercase text, enhancing the game's retro feel while making controls easily recognizable.
 
 ## Wireframes
 
