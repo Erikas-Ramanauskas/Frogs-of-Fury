@@ -4,7 +4,7 @@ Welcome to Frogs of Fury, a retro-inspired action game that pays homage to the c
 
 The live link for Frogs of Fury can be found here - [Frogs of Fury](https://erikas-ramanauskas.github.io/team_9_august_2024/)
 
-![Picture of Frog Game](/static/Images/rambo-frog1.png)
+![Picture of Frog Game](static/Images/rambo-frog1.png)
 
 # Objectives
 
@@ -67,9 +67,9 @@ The color scheme for "Frog of Fury" draws heavily from natural and earthy tones,
 <details>
 <summary>See all our used color schemes screenshots</summary>
 
-![HTML Color Scheme](/static/readme/HTML_pages.png)
-![Character Color Scheme](/static/readme/Charcters.png)
-![Map Color Scheme](/static/readme/Map.png)
+![HTML Color Scheme](static/readme/HTML_pages.png)
+![Character Color Scheme](static/readme/Charcters.png)
+![Map Color Scheme](static/readme/Map.png)
 
 </details>
 
@@ -80,6 +80,8 @@ The game’s typography is straightforward and functional, adhering to a clean a
 ## Wireframes
 
 # Features
+
+Welcome to "Frogs of Fury," where retro gaming meets relentless action. In this section, you'll discover everything that makes our game an exhilarating experience. From navigating the home screen to mastering the game mechanics, controlling your frog hero, and getting to know the team behind the game, we've got you covered. Dive in to explore the core features that bring "Frogs of Fury" to life and prepare yourself for an unforgettable adventure!
 
 ## Gameplay
 
@@ -98,30 +100,32 @@ The game’s typography is straightforward and functional, adhering to a clean a
 "Frogs of Fury" is all about testing your skills in a race against time and the ever-looming threat from below. Only the most agile and daring frogs will reach the top and earn their place in the "Frogs of Fury" hall of fame!
 
 <details>
-<summary>Gameplay pictures</summary>
+<summary>Gameplay screeenshots</summary>
 
-![Gameplay one player](/static/readme/game2_page.png)
-![Gameplay two player](/static/readme/game3_page.png)
+![Gameplay one player](static/readme/game2_page.png)
+![Gameplay two player](static/readme/game3_page.png)
+![Gameplay two player](static/readme/game4_page.png)
 
 </details>
 
 ## Navigation
 
-The navigation bar on the "Frog of Fury" website is designed for seamless user experience, ensuring easy access to all key sections of the site. Located at the top of every page, it provides quick links to the Home, Game, Controls, and Team pages. The navbar features a collapsible menu for mobile users, maintaining a clean and organized look across all devices. With a subtle yet stylish design—using a semi-transparent white background, neon green borders, and a slight shadow effect—the navigation bar blends functionality with the game's retro aesthetic, making it easy for players to explore the game and related content.
+The navigation bar on the "Frog of Fury" website is designed for seamless user experience, ensuring easy access to all key sections of the site. Located at the top of every page, it provides quick links to the Home, Game, Controls, and Team pages. The navbar features a collapsible menu for mobile users, maintaining a clean and organized look across all devices. With a subtle yet stylish design-using a semi-transparent white background, neon green borders, and a slight shadow effect - the navigation bar blends functionality with the game's retro aesthetic, making it easy for players to explore the game and related content.
 
-![Navigation Bar](/static/readme/nav_bar.png)
+![Navigation Bar](static/readme/nav_bar.png)
+![Navigation Bar](static/readme/mobile_navbar.png)
 
 ## Home Page
 
 The "Home" page of "Frog of Fury" warmly welcomes all visitors and provides a quick introduction to the game. It sets the stage with a brief overview of the gameplay, highlighting the retro-inspired action and the thrilling vertical challenge. Two striking hero images featuring our Rambo Frog take center stage, capturing the essence of the game's intense vibe. From here, players can easily navigate to explore more about the development team, jump straight into the game, or get familiar with the controls and rules.
 
-![Home Page](/static/readme/home_page.png)
+![Home Page](static/readme/home_page.png)
 
 ## Game Page
 
 The "Game" page of "Frog of Fury" immerses players right from the start. Upon landing on this page, a modal window immediately pops up at the top of the screen, prompting the user to choose between single-player or two-player mode. Once the selection is made, the game map, along with the player character, appears, and the action begins. This straightforward setup allows players to quickly dive into the gameplay, ensuring an engaging and seamless start to their adventure.
 
-![Gameplay start](/static/readme/game1_page.png)
+![Gameplay start](static/readme/game1_page.png)
 
 ## Controls & Rules Page
 
@@ -160,7 +164,7 @@ The "Controls" page is your go-to spot for setting up your game experience in "F
 
 Please refer to this section to understand how to control your characters and face the rules in the game.
 
-![Controls Page](/static/readme/controls_page.png)
+![Controls Page](static/readme/controls_page.png)
 
 ## Team Page
 
@@ -173,7 +177,7 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 | Christian Borza    | [Link to his Linkedin Profile](https://www.linkedin.com/in/borzachristian/)           | [Link to his GitHub repositories](https://github.com/ChrisCross1983)     |
 | John Hummel        | [Link to his Linkedin Profile](https://www.linkedin.com/in/jjohnhumm/)                | [Link to his GitHub repositories](https://github.com/Danger0101)         |
 
-![Team Page](/static/readme/team_page.png)
+![Team Page](static/readme/team_page.png)
 
 # Future Features
 
@@ -181,20 +185,19 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 
 ### Languages used
 
-HTML
-CSS
-JavaScript
-GitHub
-VanillaJS
+- HTML
+- CSS
+- JavaScript
+- VanillaJS
 
 ### Frameworks, Libaries & Programs used
 
 1. Generated images for graphics with MS Copilot.
 2. Edited the images to a spritesheet with MS Paint.
 3. Converted and corrected the images to pixel art with [Pixilart.com](https://www.pixilart.com).
-4. Pixelart
-5. ChatGPT
-7. ConvertCloud
+4. Inspiration and help creating readable text with [ChatGPT](https://chatgpt.com/)
+5. Converted images to webp fomrat with [ConvertCloud](https://cloudconvert.com/)
+6. Created a repository and deployed the live project with [GitHub](https://github.com/)
 
 # Deployment
 
@@ -233,7 +236,7 @@ This is a guide on how to clone a repository from GitHub.
 
 ## Responsive Testing
 
-Only Desktop Game set up
+"Frogs of Fury" is designed primarily for desktop play with a keyboard, providing the best experience when used in this setup. While the game can technically be accessed on mobile devices, the gameplay might not be fully optimized for touch controls, and players could encounter difficulties navigating and performing actions. For an optimal experience on mobile, it's recommended to connect a keyboard to your smartphone. This way, you can enjoy the game as intended, with the full range of controls and responsiveness.
 
 ## Manual Testing
 
