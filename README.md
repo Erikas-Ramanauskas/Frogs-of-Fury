@@ -85,10 +85,12 @@ The project templates and wireframes for Frogs for Fury were designed using [Bal
 <summary>See all our wireframes</summary>
 
 ![Home page](static/Readme/wireframe_home.png)
+![Controls page](static/Readme/wireframe_controls_page.png)
 ![Game map](static/Readme/wireframe_map.png)
 ![Game shooting](static/Readme/wireframe_fire_directions.png)
 ![Game guns](static/Readme/wireframe_guns.png)
 ![Game enemies](static/Readme/wireframe_enemies.png)
+![Team page](static/Readme/wireframe_team_page.png)
 
 </details>
 
@@ -211,7 +213,6 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 - HTML
 - CSS
 - JavaScript
-- VanillaJS
 
 ### Frameworks, Libaries & Programs used
 
@@ -221,6 +222,7 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 4. Inspiration and help to create readable text with [ChatGPT](https://chatgpt.com/)
 5. Converted images to webp format with [ConvertCloud](https://cloudconvert.com/)
 6. Created a repository and deployed the live project with [GitHub](https://github.com/)
+7. Content for set up the basic gameplay taken form [kaplayjs](https://kaplayjs.com/)
 
 # Deployment
 
@@ -378,8 +380,6 @@ This is a guide on how to clone a repository from GitHub.
 
 # Credits
 
-## Content
-
 ## Media
 
 ### Pictures
@@ -397,6 +397,8 @@ This is a guide on how to clone a repository from GitHub.
 
 - How to [Convert an image to pixel art](https://www.youtube.com/watch?v=ijp2TqR2x2A)
 
-## Code
-
 # Acknowledgments
+
+A big shoutout to the amazing team that brought "Frogs of Fury" to life during this Hackathon! Kati, John, Erikas, and Chris—what a wild ride it’s been! From late-night coding sessions to endless cups of coffee, we've tackled every challenge with humor and determination.
+
+It’s been a whirlwind of ideas, laughter, and a few too many bugs, but we made it through as a team. Thanks to everyone for their hard work, creativity, and the occasional meme that kept our spirits high. Here's to more late nights and epic games in the future!
