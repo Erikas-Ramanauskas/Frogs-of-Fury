@@ -84,9 +84,9 @@ const SPAWN_HEIGHT = 400;
 const spawnInterval = 0.5; // Time interval between enemy spawns
 const spawnOffsetY = 500; // Distance above the players to spawn enemies
 const LOOT_TYPES = [
-  { type: "split", chance: 0.01 },
-  { type: "laser", chance: 0.01 },
-  { type: "rocket", chance: 0.98 },
+  { type: "split", chance: 0.55 },
+  { type: "laser", chance: 0.25 },
+  { type: "rocket", chance: 0.2 },
 ];
 
 let maxEnemies = 32; // Maximum number of enemies to spawn
@@ -407,7 +407,7 @@ function createExplosion(position, radius, damage) {
     if (enemy.pos.dist(position) < radius) {
       enemy.hurt(damage);
     }
-     if (enemy.hp() <= 0) {
+    if (enemy.hp() <= 0) {
       destroy(enemy); // Destroy the enemy if it's dead
       maybeSpawnWeaponPickup(enemy.pos); // Handle weapon pickup with a chance
     }
