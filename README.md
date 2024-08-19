@@ -79,6 +79,19 @@ The game’s typography is straightforward and functional, adhering to a clean a
 
 ## Wireframes
 
+The project templates and wireframes for Frogs for Fury were designed using [Balsamiq](https://balsamiq.com/), [Google Drive Drawing](https://docs.google.com/drawings/). The designs vary from the end layout in some places due to creative decisions made throughout the development process.
+
+<details>
+<summary>See all our wireframes</summary>
+
+![Home page](static/readme/wireframe_home.png)
+![Game map](static/readme/wireframe_map.png)
+![Game shooting](static/readme/wireframe_fire_directions.png)
+![Game guns](static/readme/wireframe_guns.png)
+![Game enemies](static/readme/wireframe_enemies.png)
+
+</details>
+
 # Features
 
 Welcome to "Frogs of Fury," where retro gaming meets relentless action. In this section, you'll discover everything that makes our game an exhilarating experience. From navigating the home screen to mastering the game mechanics, controlling your frog hero, and getting to know the team behind the game, we've got you covered. Dive in to explore the core features that bring "Frogs of Fury" to life and prepare yourself for an unforgettable adventure!
@@ -180,6 +193,17 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 ![Team Page](static/readme/team_page.png)
 
 # Future Features
+
+- More tile types with unique effects
+- More weapon options
+- More enemy types
+- Enemies more advanced pathing
+- Enemies target and shoot or attack players
+- Health item pickups
+- Other unique item pickups
+- New and improved tile set
+- Animating the Ai to change directions based on movement
+- Add methods to pause game to change controls or take a short break 
 
 # Technologies Used
 
