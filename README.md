@@ -29,7 +29,7 @@ This game is designed for retro game enthusiasts who enjoy fast-paced, skill-bas
 
 ## Site Aims
 
-- **Simple and Fun**: Deliver a straightforward, enjoyable game that is easy to pick up and play for all users.
+- **Simple and Fun**: Deliver a straightforward, enjoyable game that is easy for all users to pick up and play.
 - **Challenge**: Provide a steadily increasing difficulty to keep players engaged and motivated to improve.
 - **Retro Appeal**: Capture the essence of classic arcade games with a nostalgic visual and audio design.
 - **Accessibility**: Ensure the game is intuitive, with simple controls and clear objectives, so players can focus on the action.
@@ -43,7 +43,7 @@ This game is designed for retro game enthusiasts who enjoy fast-paced, skill-bas
 The HTML pages for "Frog of Fury" employ a dark and vibrant color scheme designed to enhance the game's retro atmosphere while maintaining readability and focus.
 
 - **Primary Colors:** The overall background uses a deep, almost black shade (#00000b), creating a stark contrast with bright elements.
-- **Accent Colors:** Vivid green (#00ff00) is used for borders and highlights, adding a neon-like glow that emphasizes interactive elements.
+- **Accent Colors:** Vivid green (#00ff00) is used for borders and highlights, adding a neon-like glow emphasizing interactive elements.
 - **Text and Backgrounds:** White (#ffffff) and slightly off-white tones are used for text and background panels to ensure clarity against the dark background, with subtle shadow effects adding depth.
 
 ### Characters
@@ -67,9 +67,9 @@ The color scheme for "Frog of Fury" draws heavily from natural and earthy tones,
 <details>
 <summary>See all our used color schemes screenshots</summary>
 
-![HTML Color Scheme](static/readme/HTML_pages.png)
-![Character Color Scheme](static/readme/Charcters.png)
-![Map Color Scheme](static/readme/Map.png)
+![HTML Color Scheme](static/Readme/HTML_pages.png)
+![Character Color Scheme](static/Readme/Charcters.png)
+![Map Color Scheme](static/Readme/Map.png)
 
 </details>
 
@@ -84,11 +84,11 @@ The project templates and wireframes for Frogs for Fury were designed using [Bal
 <details>
 <summary>See all our wireframes</summary>
 
-![Home page](static/readme/wireframe_home.png)
-![Game map](static/readme/wireframe_map.png)
-![Game shooting](static/readme/wireframe_fire_directions.png)
-![Game guns](static/readme/wireframe_guns.png)
-![Game enemies](static/readme/wireframe_enemies.png)
+![Home page](static/Readme/wireframe_home.png)
+![Game map](static/Readme/wireframe_map.png)
+![Game shooting](static/Readme/wireframe_fire_directions.png)
+![Game guns](static/Readme/wireframe_guns.png)
+![Game enemies](static/Readme/wireframe_enemies.png)
 
 </details>
 
@@ -115,30 +115,30 @@ Welcome to "Frogs of Fury," where retro gaming meets relentless action. In this 
 <details>
 <summary>Gameplay screeenshots</summary>
 
-![Gameplay one player](static/readme/game2_page.png)
-![Gameplay two player](static/readme/game3_page.png)
-![Gameplay two player](static/readme/game4_page.png)
+![Gameplay one player](static/Readme/game2_page.png)
+![Gameplay two player](static/Readme/game3_page.png)
+![Gameplay two player](static/Readme/game4_page.png)
 
 </details>
 
 ## Navigation
 
-The navigation bar on the "Frog of Fury" website is designed for seamless user experience, ensuring easy access to all key sections of the site. Located at the top of every page, it provides quick links to the Home, Game, Controls, and Team pages. The navbar features a collapsible menu for mobile users, maintaining a clean and organized look across all devices. With a subtle yet stylish design-using a semi-transparent white background, neon green borders, and a slight shadow effect - the navigation bar blends functionality with the game's retro aesthetic, making it easy for players to explore the game and related content.
+The navigation bar on the "Frog of Fury" website is designed for a seamless user experience, ensuring easy access to all key sections of the site. Located at the top of every page, it provides quick links to the Home, Game, Controls, and Team pages. The navbar features a collapsible menu for mobile users, maintaining a clean and organized look across all devices. With a subtle yet stylish design - using a semi-transparent white background, neon green borders, and a slight shadow effect - the navigation bar blends functionality with the game's retro aesthetic, making it easy for players to explore the game and related content.
 
-![Navigation Bar](static/readme/nav_bar.png)
-![Navigation Bar](static/readme/mobile_navbar.png)
+![Navigation Bar](static/Readme/nav_bar.png)
+![Navigation Bar](static/Readme/mobile_navbar.png)
 
 ## Home Page
 
 The "Home" page of "Frog of Fury" warmly welcomes all visitors and provides a quick introduction to the game. It sets the stage with a brief overview of the gameplay, highlighting the retro-inspired action and the thrilling vertical challenge. Two striking hero images featuring our Rambo Frog take center stage, capturing the essence of the game's intense vibe. From here, players can easily navigate to explore more about the development team, jump straight into the game, or get familiar with the controls and rules.
 
-![Home Page](static/readme/home_page.png)
+![Home Page](static/Readme/home_page.png)
 
 ## Game Page
 
 The "Game" page of "Frog of Fury" immerses players right from the start. Upon landing on this page, a modal window immediately pops up at the top of the screen, prompting the user to choose between single-player or two-player mode. Once the selection is made, the game map, along with the player character, appears, and the action begins. This straightforward setup allows players to quickly dive into the gameplay, ensuring an engaging and seamless start to their adventure.
 
-![Gameplay start](static/readme/game1_page.png)
+![Gameplay start](static/Readme/game1_page.png)
 
 ## Controls & Rules Page
 
@@ -177,7 +177,7 @@ The "Controls" page is your go-to spot for setting up your game experience in "F
 
 Please refer to this section to understand how to control your characters and face the rules in the game.
 
-![Controls Page](static/readme/controls_page.png)
+![Controls Page](static/Readme/controls_page.png)
 
 ## Team Page
 
@@ -190,7 +190,7 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 | Christian Borza    | [Link to his Linkedin Profile](https://www.linkedin.com/in/borzachristian/)           | [Link to his GitHub repositories](https://github.com/ChrisCross1983)     |
 | John Hummel        | [Link to his Linkedin Profile](https://www.linkedin.com/in/jjohnhumm/)                | [Link to his GitHub repositories](https://github.com/Danger0101)         |
 
-![Team Page](static/readme/team_page.png)
+![Team Page](static/Readme/team_page.png)
 
 # Future Features
 - **More tile types with unique effects**
@@ -202,18 +202,7 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 - **Other unique item pickups**
 - **New and improved tile set**
 - **Animating the Ai to change directions based on movement**
-- **Add methods to pause game to change controls or take a short break**
-
-- More tile types with unique effects
-- More weapon options
-- More enemy types
-- Enemies more advanced pathing
-- Enemies target and shoot or attack players
-- Health item pickups
-- Other unique item pickups
-- New and improved tile set
-- Animating the Ai to change directions based on movement
-- Add methods to pause game to change controls or take a short break 
+- **Add methods to pause the game to change controls or take a short break**
 
 # Technologies Used
 
@@ -229,20 +218,20 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 1. Generated images for graphics with MS Copilot.
 2. Edited the images to a spritesheet with MS Paint.
 3. Converted and corrected the images to pixel art with [Pixilart.com](https://www.pixilart.com).
-4. Inspiration and help creating readable text with [ChatGPT](https://chatgpt.com/)
-5. Converted images to webp fomrat with [ConvertCloud](https://cloudconvert.com/)
+4. Inspiration and help to create readable text with [ChatGPT](https://chatgpt.com/)
+5. Converted images to webp format with [ConvertCloud](https://cloudconvert.com/)
 6. Created a repository and deployed the live project with [GitHub](https://github.com/)
 
 # Deployment
 
 ## Project Deployment via GitHub
 
-The Frogs of Fury repository is stored on GitHub. The site was created using GitPod and the live site is hosted on GitHub Pages. This is a guide to deploy a site on GitHub Pages using GitHub.
+The Frogs of Fury repository is stored on GitHub. The site was created using GitPod and the live site is hosted on GitHub Pages. This is a guide to deploying a site on GitHub Pages using GitHub.
 
 1. Sign in to GitHub and find the repository in the repositories menu.
 2. Click to open the repository and click on the settings icon to open the settings menu for the repository.
 3. In the settings menu, click on the pages tab on the left side of the screen.
-4. Under source, select branch:main, leave the folder on root and click save.
+4. Under source, select branch: main, leave the folder on the root, and click save.
 5. The page will then automatically refresh and provide a link to the published site when it has finished processing.
 
 The live link for Frogs of Fury can be found here - [Link to deployed live site](https://erikas-ramanauskas.github.io/team_9_august_2024/)
@@ -251,18 +240,18 @@ The live link for Frogs of Fury can be found here - [Link to deployed live site]
 
 A copy of a local GitHub repository can be made by forking the GitHub repository. The purpose of this is to allow changes to be made to the copy without affecting the original repository. This is a guide to forking a repository on GitHub.
 
-1. Sign in to GitHub, locate the repository and click to open the repository.
-2. On the right hand side of the repository menu there is a button called fork. Click the button to make a copy of the repository into your GitHub account.
+1. Sign in to GitHub, locate the repository, and click to open the repository.
+2. On the right-hand side of the repository menu there is a button called fork. Click the button to make a copy of the repository into your GitHub account.
 
 ## How to create a local clone of a project
 
 This is a guide on how to clone a repository from GitHub.
 
-1. Sign in to GitHub, locate the repository and click to open the repository.
-2. On the repository main page, click the code button above where the files are located. This will open a drop down menu.
+1. Sign in to GitHub, locate the repository, and click to open the repository.
+2. On the repository main page, click the code button above where the files are located. This will open a drop-down menu.
 3. In the dropdown menu stay on the HTTPS option and click the copy icon button next to the URL to copy it.
-4. Now minimise/close your browser and open your local IDE, e.g Visual Studio Code or Brackets.
-5. Open Git Bash and change the current working directory to the file location you want the cloned directory to be made in.
+4. Now minimize/close your browser and open your local IDE, e.g. Visual Studio Code or Brackets.
+5. Open Git Bash and change the current working directory to the file location you want the cloned directory to be made.
 6. Type git clone into the command line and then paste the URL copied from GitHub.
 7. Press enter and the local repository clone will be created.
 
@@ -291,7 +280,7 @@ This is a guide on how to clone a repository from GitHub.
 |Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
 |--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
 |Alert appears|It's easy to navigate|Alert appears|As expected|Pass|19/08/24|None
-|Alert buttons appears|Website is easy to navigate|When you move the mouse over the button, text is darker.|As expected|Pass|19/08/24|None
+|Alert buttons appear |Website is easy to navigate|When you move the mouse over the button, the text is darker.|As expected|Pass|19/08/24|None
 |Alert buttons works|Website is easy to navigate|Button is clickable|As expected|Pass|19/08/24|None
 *************************************
 **Test Plan Table for Microsoft Edge on Desktop for Controls page**
@@ -373,16 +362,16 @@ This is a guide on how to clone a repository from GitHub.
 - **Bullets not moving**
 - **Bullets double ricocheting**
 - **Map not deleting correctly below player**
-- **Map not creating above the player**
+- **Map not created above the player**
 - **Platforms not spawning as intended (single platforms and no multiple platforms on map)**
 - **Game tiles were too large**
 
 ## Unsolved Bugs
 - **Rocket explosion deals no damage**
 - **Rockets destroyed when hitting enemies so no AOE**
-- **Multiple sprite of players on restart**
-- **Game need to be clicked after initiation**
-- **Pop up disappears and cant be opened once gone to select player count.**
+- **Multiple sprites of players on restart**
+- **Game needs to be clicked after initiation**
+- **Pop-up disappears and can't be opened once gone to select player count.**
 - **Volume controls crash game**
 
 # Credits
