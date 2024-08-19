@@ -137,6 +137,8 @@ The "Controls" page is your go-to spot for setting up your game experience in "F
 - **Right**: `d`
 - **Jump**: `c`
 - **Shoot**: `v`
+- **Volume up**: `]`
+- **Volume down**: `[`
 
 ### Player 2 Controls
 
@@ -146,6 +148,8 @@ The "Controls" page is your go-to spot for setting up your game experience in "F
 - **Right**: `;`
 - **Jump**: `down arrow`
 - **Shoot**: `left arrow`
+- **Volume up**: `]`
+- **Volume down**: `[`
 
 ### Rules of the game
 
@@ -185,9 +189,12 @@ VanillaJS
 
 ### Frameworks, Libaries & Programs used
 
-Pixelart
-ChatGPT
-ConvertCloud
+1. Generated images for graphics with MS Copilot.
+2. Edited the images to a spritesheet with MS Paint.
+3. Converted and corrected the images to pixel art with [Pixilart.com](https://www.pixilart.com).
+4. Pixelart
+5. ChatGPT
+7. ConvertCloud
 
 # Deployment
 
@@ -259,6 +266,10 @@ Only Desktop Game set up
 - [uppbeat](https://www.uppbeat.io/) - Background music
 - [jsfxr](https://www.sfxr.me/) - Sound effects in the gameplay
 - [fesliyanstudios](https://www.fesliyanstudios.com/) - Background music
+
+### Video tutorial
+
+- How to [Convert an image to pixel art](https://www.youtube.com/watch?v=ijp2TqR2x2A)
 
 ## Code
 
