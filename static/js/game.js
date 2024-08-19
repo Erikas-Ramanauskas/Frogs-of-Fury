@@ -84,9 +84,9 @@ const SPAWN_HEIGHT = 400;
 const spawnInterval = 0.5; // Time interval between enemy spawns
 const spawnOffsetY = 500; // Distance above the players to spawn enemies
 const LOOT_TYPES = [
-  { type: "split", chance: 0.33 },
-  { type: "laser", chance: 0.34 },
-  { type: "rocket", chance: 0.33 },
+  { type: "split", chance: 0.01 },
+  { type: "laser", chance: 0.01 },
+  { type: "rocket", chance: 0.98 },
 ];
 
 let maxEnemies = 32; // Maximum number of enemies to spawn
@@ -406,6 +406,10 @@ function createExplosion(position, radius, damage) {
   get("enemy").forEach((enemy) => {
     if (enemy.pos.dist(position) < radius) {
       enemy.hurt(damage);
+    }
+     if (enemy.hp() <= 0) {
+      destroy(enemy); // Destroy the enemy if it's dead
+      maybeSpawnWeaponPickup(enemy.pos); // Handle weapon pickup with a chance
     }
   });
 }
@@ -1115,10 +1119,18 @@ scene("game", () => {
   }
 
   onCollide("bullet", "enemy", (bullet, enemy) => {
-    enemy.hurt(bullet.damage); // Reduce the enemy's health
-    if (bullet.sprite !== "bullet_laser") {
-      destroy(bullet); // Destroy the bullet
+    if (bullet.sprite === "bullet_rocket") {
+      // Trigger explosion effect and apply AoE damage
+      createExplosion(bullet.pos, 100, bullet.damage); // Adjust radius and damage as needed
+    } else {
+      // For other bullet types, apply single-target damage
+      enemy.hurt(bullet.damage);
     }
+
+    // Destroy the bullet after handling the collision
+    destroy(bullet);
+
+    // Destroy the enemy if its health drops to 0 or below
     if (enemy.hp() <= 0) {
       destroy(enemy); // Destroy the enemy if it's dead
       maybeSpawnWeaponPickup(enemy.pos); // Handle weapon pickup with a chance
