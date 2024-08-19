@@ -190,9 +190,10 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 | Christian Borza    | [Link to his Linkedin Profile](https://www.linkedin.com/in/borzachristian/)           | [Link to his GitHub repositories](https://github.com/ChrisCross1983)     |
 | John Hummel        | [Link to his Linkedin Profile](https://www.linkedin.com/in/jjohnhumm/)                | [Link to his GitHub repositories](https://github.com/Danger0101)         |
 
-![Team Page](static/readme/team_page.png)
+![Team Page](./static/readme/team_page.png)
 
 # Future Features
+
 - **More tile types with unique effects**
 - **More weapon options**
 - **More Enemy types**
@@ -204,17 +205,6 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 - **Animating the Ai to change directions based on movement**
 - **Add methods to pause game to change controls or take a short break**
 
-- More tile types with unique effects
-- More weapon options
-- More enemy types
-- Enemies more advanced pathing
-- Enemies target and shoot or attack players
-- Health item pickups
-- Other unique item pickups
-- New and improved tile set
-- Animating the Ai to change directions based on movement
-- Add methods to pause game to change controls or take a short break 
-
 # Technologies Used
 
 ### Languages used
@@ -222,7 +212,6 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 - HTML
 - CSS
 - JavaScript
-- VanillaJS
 
 ### Frameworks, Libaries & Programs used
 
@@ -232,6 +221,7 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 4. Inspiration and help creating readable text with [ChatGPT](https://chatgpt.com/)
 5. Converted images to webp fomrat with [ConvertCloud](https://cloudconvert.com/)
 6. Created a repository and deployed the live project with [GitHub](https://github.com/)
+7. Gameplay code features taken from [Kaplay](https://kaplayjs.com/)
 
 # Deployment
 
@@ -367,6 +357,7 @@ This is a guide on how to clone a repository from GitHub.
 # Bugs
 
 ## Solved Bugs
+
 - **Sound not playing**
 - **Lava not killing enemies**
 - **Lava not killing players**
@@ -378,6 +369,7 @@ This is a guide on how to clone a repository from GitHub.
 - **Game tiles were too large**
 
 ## Unsolved Bugs
+
 - **Rocket explosion deals no damage**
 - **Rockets destroyed when hitting enemies so no AOE**
 - **Multiple sprite of players on restart**
@@ -387,25 +379,19 @@ This is a guide on how to clone a repository from GitHub.
 
 # Credits
 
-## Content
-
-## Media
-
-### Pictures
+## Pictures
 
 - [canva](https://www.canva.com/) - Styling the team banner
 
-### Effects and sounds
+## Effects and sounds
 
 - [soundsnap](https://www.soundsnap.com/) - Effects in the gameplay
 - [uppbeat](https://www.uppbeat.io/) - Background music
 - [jsfxr](https://www.sfxr.me/) - Sound effects in the gameplay
 - [fesliyanstudios](https://www.fesliyanstudios.com/) - Background music
 
-### Video tutorial
+## Video tutorial
 
 - How to [Convert an image to pixel art](https://www.youtube.com/watch?v=ijp2TqR2x2A)
-
-## Code
 
 # Acknowledgments
