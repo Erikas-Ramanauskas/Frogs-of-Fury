@@ -190,7 +190,7 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 | Christian Borza    | [Link to his Linkedin Profile](https://www.linkedin.com/in/borzachristian/)           | [Link to his GitHub repositories](https://github.com/ChrisCross1983)     |
 | John Hummel        | [Link to his Linkedin Profile](https://www.linkedin.com/in/jjohnhumm/)                | [Link to his GitHub repositories](https://github.com/Danger0101)         |
 
-![Team Page](./static/readme/team_page.png)
+![Team Page](../team_9_august_2024_chris/static/readme/team_page.png)
 
 # Future Features
 
