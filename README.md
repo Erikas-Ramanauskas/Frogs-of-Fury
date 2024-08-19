@@ -1,6 +1,6 @@
 # team_9_august_2024
 
-Welcome to [Game Name], a retro-inspired action game that pays homage to the classic "Contra" while offering a fresh, vertical challenge. In this game, players must navigate their way through an endless vertical landscape by leaping from platform to platform, all while avoiding or defeating various enemies. The higher you go, the more perilous the journey becomes. But beware: the map dissolves beneath you, so any missed jump or hesitation could lead to your demise. Whether playing solo or with a friend in co-op mode, your goal is to ascend as high as possible and survive the relentless challenges thrown your way.
+Welcome to Frogs of Fury, a retro-inspired action game that pays homage to the classic "Contra" while offering a fresh, vertical challenge. In this game, players must navigate their way through an endless vertical landscape by leaping from platform to platform, all while avoiding or defeating various enemies. The higher you go, the more perilous the journey becomes. But beware: the map dissolves beneath you, so any missed jump or hesitation could lead to your demise. Whether playing solo or with a friend in co-op mode, your goal is to ascend as high as possible and survive the relentless challenges thrown your way.
 
 ![Picture of Frog Game](/static/Images/frog_pic1.webp)
 
@@ -194,12 +194,95 @@ This is a guide on how to clone a repository from GitHub.
 
 ## Manual Testing
 
-- Navigation Menu
-- Home Page
-- Game Page
-- Controls Page
-- Team Page
-- Footer
+**1. Test Plan Table for Microsoft Edge on Desktop for Home page**
+**********
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Nav-bar appears|Website is easy to navigate|Nav-bar appears|As expected|Pass|19/08/24|None
+|Nav-bar hyperlinks work|Website is easy to navigate|When you move the mouse over, it will become green and underlined.|As expected|Pass|19/08/24|None
+|Text appears|Text is visible|Text is readable|As expected|Pass|19/08/24|None
+|Card appears|Card is visible|Card appears|As expected|Pass|19/08/24|None
+|Pictures render|Pictures are visible|Pictures are next to eachother|As expected|Pass|19/08/24|None
+|Card button appears|Website is easy to navigate|When you move the mouse over the button, it will become brighter.|As expected|Pass|19/08/24|None
+|Card button works|Website is easy to navigate|Button is clickable|As expected|Pass|19/08/24|None
+*************************************
+**Test Plan Table for Microsoft Edge on Desktop for Game page**
+****************
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Alert appears|It's easy to navigate|Alert appears|As expected|Pass|19/08/24|None
+|Alert buttons appears|Website is easy to navigate|When you move the mouse over the button, text is darker.|As expected|Pass|19/08/24|None
+|Alert buttons works|Website is easy to navigate|Button is clickable|As expected|Pass|19/08/24|None
+*************************************
+**Test Plan Table for Microsoft Edge on Desktop for Controls page**
+****************
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Nav-bar appears|Website is easy to navigate|Nav-bar appears|As expected|Pass|19/08/24|None
+|Nav-bar hyperlinks work|Website is easy to navigate|When you move the mouse over, it will become green and underlined.|As expected|Pass|19/08/24|None
+|Text appears|Text is visible|Text is readable|As expected|Pass|19/08/24|None
+|Buttons appear|Website is easy to navigate|When you move the mouse over the button, it will become darker.|As expected|Pass|19/08/24|None
+|Buttons work|Website is easy to navigate|Button is clickable, modals appear|As expected|Pass|19/08/24|None
+|Music volume control bar appears|Website is easy to navigate|Control bar appears|As expected|Pass|19/08/24|None
+|Music volume control bar works|Website is easy to navigate|Control bar change the volume of the music|As expected|Pass|19/08/24|None
+|Save Button appears|Website is easy to navigate|When you move the mouse over the button, it will become darker.|As expected|Pass|19/08/24|None
+|Save Button works|Website is easy to navigate|Button is clickable, modals appear|As expected|Pass|19/08/24|None
+*************************************
+**Test Plan Table for Microsoft Edge on Desktop for Team page**
+****************
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Nav-bar appears|Website is easy to navigate|Nav-bar appears|As expected|Pass|19/08/24|None
+|Nav-bar hyperlinks work|Website is easy to navigate|When you move the mouse over, it will become green and underlined.|As expected|Pass|19/08/24|None
+|Text appears|Text is visible|Text is readable|As expected|Pass|19/08/24|None
+|Buttons appear|Website is easy to navigate|When you move the mouse over the button, it will become white.|As expected|Pass|19/08/24|None
+|Buttons work|Website is easy to navigate|Button is clickable|As expected|Pass|19/08/24|None
+*************************************
+
+**2. Test Plan Table for Google Chrome on Desktop for Home page**
+**********
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Nav-bar appears|Website is easy to navigate|Nav-bar appears|As expected|Pass|19/08/24|None
+|Nav-bar hyperlinks work|Website is easy to navigate|When you move the mouse over, it will become green and underlined.|As expected|Pass|19/08/24|None
+|Text appears|Text is visible|Text is readable|As expected|Pass|19/08/24|None
+|Card appears|Card is visible|Card appears|As expected|Pass|19/08/24|None
+|Pictures render|Pictures are visible|Pictures are next to eachother|As expected|Pass|19/08/24|None
+|Card button appears|Website is easy to navigate|When you move the mouse over the button, it will become brighter.|As expected|Pass|19/08/24|None
+|Card button works|Website is easy to navigate|Button is clickable|As expected|Pass|19/08/24|None
+*************************************
+**Test Plan Table for Google Chrome on Desktop for Game page**
+****************
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Alert appears|It's easy to navigate|Alert appears|As expected|Pass|19/08/24|None
+|Alert buttons appears|Website is easy to navigate|When you move the mouse over the button, text is darker.|As expected|Pass|19/08/24|None
+|Alert buttons works|Website is easy to navigate|Button is clickable|As expected|Pass|19/08/24|None
+*************************************
+**Test Plan Table for Google Chrome on Desktop for Controls page**
+****************
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Nav-bar appears|Website is easy to navigate|Nav-bar appears|As expected|Pass|19/08/24|None
+|Nav-bar hyperlinks work|Website is easy to navigate|When you move the mouse over, it will become green and underlined.|As expected|Pass|19/08/24|None
+|Text appears|Text is visible|Text is readable|As expected|Pass|19/08/24|None
+|Buttons appear|Website is easy to navigate|When you move the mouse over the button, it will become darker.|As expected|Pass|19/08/24|None
+|Buttons work|Website is easy to navigate|Button is clickable, modals appear|As expected|Pass|19/08/24|None
+|Music volume control bar appears|Website is easy to navigate|Control bar appears|As expected|Pass|19/08/24|None
+|Music volume control bar works|Website is easy to navigate|Control bar change the volume of the music|As expected|Pass|19/08/24|None
+|Save Button appears|Website is easy to navigate|When you move the mouse over the button, it will become darker.|As expected|Pass|19/08/24|None
+|Save Button works|Website is easy to navigate|Button is clickable, modals appear|As expected|Pass|19/08/24|None
+*************************************
+**Test Plan Table for Google Chrome on Desktop for Team page**
+****************
+|Test| User requirement addressed | Expected result | Actual result | Pass / Fail | Date | Corrective Action
+|--------------:|:--------------------------:|:---------------:|:-------------:|:-----------:|:----:|:-----------------
+|Nav-bar appears|Website is easy to navigate|Nav-bar appears|As expected|Pass|19/08/24|None
+|Nav-bar hyperlinks work|Website is easy to navigate|When you move the mouse over, it will become green and underlined.|As expected|Pass|19/08/24|None
+|Text appears|Text is visible|Text is readable|As expected|Pass|19/08/24|None
+|Buttons appear|Website is easy to navigate|When you move the mouse over the button, it will become white.|As expected|Pass|19/08/24|None
+|Buttons work|Website is easy to navigate|Button is clickable|As expected|Pass|19/08/24|None
+*************************************
 
 # Bugs
 
