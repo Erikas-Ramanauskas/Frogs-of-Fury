@@ -228,7 +228,7 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 
 1. Agile project management organisation using [trello](https://trello.com/)
 2. Agile project management visualisation using [miro](https://miro.com/)
-3. Sharing files with [goole drive](https://drive.google.com/)
+3. Sharing files with [google drive](https://drive.google.com/)
 4. For the daily project communication, sharing screens for problem solving etc. using [Slack](https://slack.com/)
 
 # Deployment
@@ -384,6 +384,7 @@ This is a guide on how to clone a repository from GitHub.
 - **Game needs to be clicked after initiation**
 - **Pop-up disappears and can't be opened once gone to select player count.**
 - **Volume controls crash game**
+- **Music isn't looping after 3min**
 
 # Credits
 
@@ -395,10 +396,10 @@ This is a guide on how to clone a repository from GitHub.
 
 ### Effects and sounds
 
-- [soundsnap](https://www.soundsnap.com/) - Effects in the gameplay
-- [uppbeat](https://www.uppbeat.io/) - Background music
-- [jsfxr](https://www.sfxr.me/) - Sound effects in the gameplay
-- [fesliyanstudios](https://www.fesliyanstudios.com/) - Background music
+- Effects in the gameplay from [soundsnap](https://www.soundsnap.com/)
+- Background music from [uppbeat](https://www.uppbeat.io/) 
+- Sound effects in the gameplay create by [jsfxr](http://www.sfxr.me/)
+- Background music with [fesliyanstudios](https://www.fesliyanstudios.com/)
 
 ### Video tutorial
 
