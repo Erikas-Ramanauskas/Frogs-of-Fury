@@ -1100,6 +1100,11 @@ scene("game", () => {
     knockback(player, enemy.pos); // Optional: Apply a knockback effect
   });
 
+  onCollide("enemy", "player", (enemy, player) => {
+    hurtPlayer(player, 20); // Reduce player's health by 20
+    knockback(player, enemy.pos); // Optional: Apply a knockback effect
+  });
+
   function knockback(player, sourcePosition, strength = 400) {
     // Calculate the direction of the knockback
     const knockbackDirection = player.pos.sub(sourcePosition).unit();
