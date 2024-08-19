@@ -180,6 +180,16 @@ The "Team" page gives you a closer look at the people behind "Frog of Fury." Eac
 ![Team Page](static/readme/team_page.png)
 
 # Future Features
+- **More tile types with unique effects**
+- **More weapon options**
+- **More Enemy types**
+- **Enemies more advanced pathing**
+- **Enemies target and shoot or attack players**
+- **Health item pickups**
+- **Other unique item pickups**
+- **New and improved tile set**
+- **Animating the Ai to change directions based on movement**
+- **Add methods to pause game to change controls or take a short break**
 
 # Technologies Used
 
@@ -333,8 +343,23 @@ This is a guide on how to clone a repository from GitHub.
 # Bugs
 
 ## Solved Bugs
+- **Sound not playing**
+- **Lava not killing enemies**
+- **Lava not killing players**
+- **Bullets not moving**
+- **Bullets double ricocheting**
+- **Map not deleting correctly below player**
+- **Map not creating above the player**
+- **Platforms not spawning as intended (single platforms and no multiple platforms on map)**
+- **Game tiles were too large**
 
 ## Unsolved Bugs
+- **Rocket explosion deals no damage**
+- **Rockets destroyed when hitting enemies so no AOE**
+- **Multiple sprite of players on restart**
+- **Game need to be clicked after initiation**
+- **Pop up disappears and cant be opened once gone to select player count.**
+- **Volume controls crash game**
 
 # Credits
 
