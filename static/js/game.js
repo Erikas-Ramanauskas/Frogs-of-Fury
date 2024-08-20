@@ -89,7 +89,7 @@ const LOOT_TYPES = [
   { type: "rocket", chance: 0.2 },
 ];
 
-let maxEnemies = 32; // Maximum number of enemies to spawn
+let maxEnemies = 100; // Maximum number of enemies to spawn
 let spawnedEnemies = 0; // Number of enemies spawned
 let lastSpawnedY = 0;
 let lastY = 0; // Track the last Y position where platforms were generated in tile units
@@ -1248,7 +1248,7 @@ scene("game", () => {
   });
 
   // Example: Spawn enemies at regular intervals
-  loop(1, () => {
+  loop(0.5, () => {
     // Check if both players are present
     if (!player1 && !player2) return;
 
