@@ -591,17 +591,48 @@ scene("game", () => {
     // Gradually move the camera upwards
     const currentCamPos = camPos();
     camPos(currentCamPos.x, currentCamPos.y + CAMERA_MOVE_SPEED * dt());
+    const getPlayerY = (player) =>
+      player && player.hp() > 0 ? player.pos.y : null;
 
-    const lowestPlayerPosition =
-      playersCount === 2
-        ? Math.max(player1.pos.y, player2.pos.y)
-        : player1.pos.y;
+    // Calculate the lowest player position safely
+    let lowestPlayerPosition = -Infinity; // Initialize with -Infinity
+
+    if (playersCount === 2) {
+      const y1 = getPlayerY(player1);
+      const y2 = getPlayerY(player2);
+
+      // Calculate the maximum Y position of alive players
+      if (y1 !== null && y2 !== null) {
+        lowestPlayerPosition = Math.max(y1, y2);
+      } else if (y1 !== null) {
+        lowestPlayerPosition = y1;
+      } else if (y2 !== null) {
+        lowestPlayerPosition = y2;
+      }
+    } else {
+      const y1 = getPlayerY(player1);
+      if (y1 !== null) {
+        lowestPlayerPosition = y1;
+      }
+    }
+
+    // Debugging output to track values
+    console.log("Lowest Player Position:", lowestPlayerPosition);
+    console.log("Highest Camera Position Y:", highestCamPosY);
 
     // Camera only moves up when the player is near the top of the screen
-    if (lowestPlayerPosition < highestCamPosY) {
-      camPos(width() / 2, lowestPlayerPosition + CAMERA_THRESHOLD);
+    if (
+      lowestPlayerPosition > -Infinity &&
+      lowestPlayerPosition < highestCamPosY
+    ) {
+      const currentCamPos = camPos();
 
-      highestCamPosY = lowestPlayerPosition + CAMERA_THRESHOLD;
+      if (currentCamPos) {
+        camPos(width() / 2, lowestPlayerPosition + CAMERA_THRESHOLD);
+        highestCamPosY = lowestPlayerPosition + CAMERA_THRESHOLD;
+      } else {
+        console.error("Error: camPos() returned invalid position.");
+      }
     }
 
     // Remove old sections below the camera
