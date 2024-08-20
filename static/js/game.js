@@ -1307,23 +1307,73 @@ scene("game", () => {
   }
 
   function setMusic() {
-    const music = play("backgroundHomePage", {
-      loop: true,
-      volume: GLOBAL_VOLUME,
-    });
+    const interval = 192000; // 192 seconds (3 minutes and 12 seconds) in milliseconds
+
+    // Function to start playing the music
+    function playMusic() {
+      // Stop any existing music if needed
+      if (window.music) {
+        window.music.stop(); // Assuming `stop` is a method to stop the current music
+      }
+
+      // Play the music
+      window.music = play("backgroundHomePage", {
+        loop: false, // No internal looping
+        volume: GLOBAL_VOLUME,
+      });
+    }
+
+    // Start playing the music initially
+    playMusic();
+
+    // Set up an interval to restart the music every 3 minutes and 12 seconds
+    setInterval(() => {
+      playMusic();
+    }, interval);
+
+    // Function to update volume
+    function updateVolume() {
+      // Ensure volume is within valid range
+      GLOBAL_VOLUME = Math.max(0, Math.min(GLOBAL_VOLUME, 1));
+      if (window.music) {
+        window.music.volume = GLOBAL_VOLUME; // Update the music volume
+      }
+    }
 
     volume(GLOBAL_VOLUME);
-    // Example usage: Increase or decrease volume
+
+    // Handle key press to increase volume
     onKeyPressRepeat("]", () => {
-      setGlobalVolume(0.01);
-      music.volume = GLOBAL_VOLUME; // Adjust the music volume
+      GLOBAL_VOLUME += 0.01; // Increase volume
+      updateVolume(); // Update volume
     });
 
+    // Handle key press to decrease volume
     onKeyPressRepeat("[", () => {
-      setGlobalVolume(-0.01);
-      music.volume = GLOBAL_VOLUME; // Adjust the music volume
+      GLOBAL_VOLUME -= 0.01; // Decrease volume
+      updateVolume(); // Update volume
     });
   }
+
+  // old code
+  // function setMusic() {
+  //   const music = play("backgroundHomePage", {
+  //     loop: true,
+  //     volume: GLOBAL_VOLUME,
+  //   });
+
+  //   volume(GLOBAL_VOLUME);
+  //   // Example usage: Increase or decrease volume
+  //   onKeyPressRepeat("]", () => {
+  //     setGlobalVolume(0.01);
+  //     music.volume = GLOBAL_VOLUME; // Adjust the music volume
+  //   });
+
+  //   onKeyPressRepeat("[", () => {
+  //     setGlobalVolume(-0.01);
+  //     music.volume = GLOBAL_VOLUME; // Adjust the music volume
+  //   });
+  // }
 
   // Show the modal on page load
   function openModal() {
