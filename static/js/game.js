@@ -591,6 +591,7 @@ scene("game", () => {
     // Gradually move the camera upwards
     const currentCamPos = camPos();
     camPos(currentCamPos.x, currentCamPos.y + CAMERA_MOVE_SPEED * dt());
+    // Helper function to get player's Y position if they are alive
     const getPlayerY = (player) =>
       player && player.hp() > 0 ? player.pos.y : null;
 
@@ -616,10 +617,6 @@ scene("game", () => {
       }
     }
 
-    // Debugging output to track values
-    console.log("Lowest Player Position:", lowestPlayerPosition);
-    console.log("Highest Camera Position Y:", highestCamPosY);
-
     // Camera only moves up when the player is near the top of the screen
     if (
       lowestPlayerPosition > -Infinity &&
@@ -630,8 +627,6 @@ scene("game", () => {
       if (currentCamPos) {
         camPos(width() / 2, lowestPlayerPosition + CAMERA_THRESHOLD);
         highestCamPosY = lowestPlayerPosition + CAMERA_THRESHOLD;
-      } else {
-        console.error("Error: camPos() returned invalid position.");
       }
     }
 
@@ -1254,21 +1249,34 @@ scene("game", () => {
 
   // Example: Spawn enemies at regular intervals
   loop(1, () => {
-    if (!player1 && !player2) return; // Check if no players exist
-    // Determine the highest Y position among the players
-    const highestPlayerY = Math.max(
-      player1 ? player1.pos.y : -Infinity,
-      player2 ? player2.pos.y : -Infinity
-    );
+    // Check if both players are present
+    if (!player1 && !player2) return;
 
-    // Calculate the spawn position based on the highest player position
-    const spawnY = highestPlayerY - spawnOffsetY;
+    // Get the camera position
+    const currentCamPos = camPos();
+    if (!currentCamPos) {
+      return;
+    }
+
+    // Calculate the highest Y position among the players
+    const getPlayerY = (player) =>
+      player && player.hp() > 0 ? player.pos.y : -Infinity;
+    const highestPlayerY = Math.max(getPlayerY(player1), getPlayerY(player2));
+
+    // Calculate the spawn position relative to the camera
+    const spawnY = highestPlayerY - spawnOffsetY - currentCamPos.y; // Relative to camera
     const spawnX = rand(100, width() - 150); // Randomize X position within screen bounds
 
     // Ensure enemies are not spawned too close to each other vertically
-    if (Math.abs(spawnY - lastSpawnedY) > 150 && spawnedEnemies < maxEnemies) {
-      spawnEnemy(vec2(spawnX, spawnY));
-      lastSpawnedY = spawnY; // Update last spawned position
+    // Convert spawnY back to world position for comparison
+    const worldSpawnY = spawnY + currentCamPos.y;
+
+    if (
+      Math.abs(worldSpawnY - lastSpawnedY) > 150 &&
+      spawnedEnemies < maxEnemies
+    ) {
+      spawnEnemy(vec2(spawnX, worldSpawnY)); // Use world position for spawning
+      lastSpawnedY = worldSpawnY; // Update last spawned position
       spawnedEnemies++; // Increment the number of spawned enemies
     }
   });
