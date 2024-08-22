@@ -205,7 +205,7 @@ const teamData = [
     name: "John Hummel",
     title: "Junior Fullstack Software Developer",
     description:
-      "After 20 years in customer-facing roles, I’ve transitioned to pursue my passion as a Junior Fullstack Software Developer. Enthusiastic and adaptable, I bring a strong foundation in web development and a commitment to crafting user-centered applications. Proficient in various technologies and frameworks, I excel in collaborative environments, leveraging my hands-on experience and continuous learning to deliver high-quality, engaging software solutions.",
+      "After 15 years in customer-facing roles, I’ve transitioned to pursue my passion as a Junior Fullstack Software Developer. Enthusiastic and adaptable, I bring a strong foundation in web development and a commitment to crafting user-centered applications. Proficient in various technologies and frameworks, I excel in collaborative environments, leveraging my hands-on experience and continuous learning to deliver high-quality, engaging software solutions.",
     linkedIn: "https://www.linkedin.com/in/jjohnhumm/ ",
     gitHub: "https://github.com/Danger0101",
     imageUrl: "https://ca.slack-edge.com/T0L30B202-U055R5D43KP-f6c8e6bc24a0-512",
