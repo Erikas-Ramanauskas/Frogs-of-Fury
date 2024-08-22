@@ -6,6 +6,15 @@ The live link for Frogs of Fury can be found here - [Frogs of Fury](https://erik
 
 ![Picture of Frog Game](static/Images/rambo-frog1.png)
 
+## Software Developer Team
+
+| Name               | Linkedin                                                                              | GitHub                                                                   |
+| ------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Erikas Ramanauskas | [Link to his Linkedin Profile](https://www.linkedin.com/in/erikas-ramanauskas-full-stack-developer/)       | [Link to his GitHub repositories](https://github.com/Erikas-Ramanauskas) |
+| Kati Molnar        | [Link to her Linkedin Profile](https://www.linkedin.com/in/katalin-molnar-b6a694165/) | [Link to her GitHub repositories](https://github.com/molnarlin)          |
+| Christian Borza    | [Link to his Linkedin Profile](https://www.linkedin.com/in/borzachristian/)           | [Link to his GitHub repositories](https://github.com/ChrisCross1983)     |
+| John Hummel        | [Link to his Linkedin Profile](https://www.linkedin.com/in/jjohnhumm/)                | [Link to his GitHub repositories](https://github.com/Danger0101)         |
+
 # Objectives
 
 - **Climb the vertical landscape** by leaping across platforms.
@@ -184,13 +193,6 @@ Please refer to this section to understand how to control your characters and fa
 ## Team Page
 
 The "Team" page gives you a closer look at the people behind "Frog of Fury." Each team member is introduced with a brief bio, along with links to their GitHub and LinkedIn profiles. You'll also see a visual representation of their programming skills, making it easy to get a sense of the expertise that went into creating the game.
-
-| Name               | Linkedin                                                                              | GitHub                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Erikas Ramanauskas | [Link to his Linkedin Profile](https://www.linkedin.com/in/erikas-ramanauskas-full-stack-developer/)       | [Link to his GitHub repositories](https://github.com/Erikas-Ramanauskas) |
-| Kati Molnar        | [Link to her Linkedin Profile](https://www.linkedin.com/in/katalin-molnar-b6a694165/) | [Link to her GitHub repositories](https://github.com/molnarlin)          |
-| Christian Borza    | [Link to his Linkedin Profile](https://www.linkedin.com/in/borzachristian/)           | [Link to his GitHub repositories](https://github.com/ChrisCross1983)     |
-| John Hummel        | [Link to his Linkedin Profile](https://www.linkedin.com/in/jjohnhumm/)                | [Link to his GitHub repositories](https://github.com/Danger0101)         |
 
 ![Team Page](static/Readme/team_page.png)
 
