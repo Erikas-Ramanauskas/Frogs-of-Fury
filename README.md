@@ -2,7 +2,7 @@
 
 Welcome to Frogs of Fury, a retro-inspired action game that pays homage to the classic "Contra" while offering a fresh, vertical challenge. In this game, players must navigate their way through an endless vertical landscape by leaping from platform to platform, all while avoiding or defeating various enemies. The higher you go, the more perilous the journey becomes. But beware: the map dissolves beneath you, so any missed jump or hesitation could lead to your demise. Whether playing solo or with a friend in co-op mode, your goal is to ascend as high as possible and survive the relentless challenges thrown your way.
 
-The live link for Frogs of Fury can be found here - [Frogs of Fury](https://erikas-ramanauskas.github.io/team_9_august_2024/)
+The live link for Frogs of Fury can be found here - [Frogs of Fury](https://erikas-ramanauskas.github.io/Frogs-of-Fury/)
 
 ![Picture of Frog Game](static/Images/rambo-frog1.png)
 
@@ -245,7 +245,7 @@ The Frogs of Fury repository is stored on GitHub. The site was created using Git
 4. Under source, select branch: main, leave the folder on the root, and click save.
 5. The page will then automatically refresh and provide a link to the published site when it has finished processing.
 
-The live link for Frogs of Fury can be found here - [Link to deployed live site](https://erikas-ramanauskas.github.io/team_9_august_2024/)
+The live link for Frogs of Fury can be found here - [Link to deployed live site](https://erikas-ramanauskas.github.io/Frogs-of-Fury/)
 
 ## How to fork a repository via GitHub
 
